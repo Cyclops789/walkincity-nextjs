@@ -24,6 +24,7 @@ function Notification({ open, type, text, duration, setNotify }: INotificationTy
 
     return (
         <div 
+            onClick={() => setShow(false)}
             style={{
                 transition: 'all 0.4s ease',
                 transform: show ? 'translate(0, 247px)' : 'translate(100%, 247px)',
