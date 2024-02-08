@@ -2,9 +2,9 @@
   "name": "next-tailwind-typescript-starter",
   "version": "1.0.0",
   "scripts": {
-    "dev": "PORT=4000 next dev",
+    "dev": "next dev -p 4000",
     "build": "next build",
-    "start": "PORT=4000 next start",
+    "start": "next start -p 4000",
     "stage": "yarn build; yarn start",
     "type-check": "tsc"
   },
