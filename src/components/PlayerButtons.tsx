@@ -78,7 +78,7 @@ function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVid
                     defaultValue={0}
                     onChange={changeVolume}
                     type="range"
-                    className={`${!openVolume && 'hidden'} w-[150px] mr-2`}
+                    className={`${!openVolume && 'hidden'} w-[170px] mr-6`}
                 />
             </div>     
 

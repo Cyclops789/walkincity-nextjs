@@ -22,7 +22,7 @@ function UserProfile({ open, user } : { open: boolean, user: IUserWithoutPasswor
                 transition: 'all 0.4s ease',
                 transform: show ? 'translate(0, 0)' : 'translate(100%, 0)',
             }} 
-            className={`${!show ? 'right-0' : 'right-2'} fixed top-12 z-20 text-white h-auto w-[250px] bg-[#626060] rounded-lg border-2 border-[var(--primary-text-color)]`}
+            className={`${!show ? 'right-0' : 'right-[55px]'} fixed top-6 z-20 text-white h-auto w-[250px] bg-[#626060] rounded-lg border-2 border-[var(--primary-text-color)]`}
         >
             <div className='p-3 flex space-x-1'>
                 <Image
@@ -30,7 +30,7 @@ function UserProfile({ open, user } : { open: boolean, user: IUserWithoutPasswor
                   height={40}
                   width={50}
                   alt={'User picture'}
-                  src={'/storage/users/placeholder.png'}
+                  src={user.image}
                 />
                 <div className=''>
                     <div className='capitalize text-blue-400'>@{user.username}</div>

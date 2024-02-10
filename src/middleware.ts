@@ -1,20 +1,27 @@
-//export { default } from "next-auth/middleware"
 import { withAuth } from "next-auth/middleware"
+import { NextResponse } from "next/server";
 
-export default withAuth({
-    pages: {
-        signIn: '/auth/login',
-    }
-})
+export default withAuth(
+    function middleware(req) {
+        if(req.url?.endsWith('/admin')) {
+            return NextResponse.redirect(new URL('/admin/dashboard', req.url))
+        }
+    },
+    {
+        pages: {
+            signIn: '/auth/login',
+        }
+    })
 
 export const config = {
     matcher: [
-        /*
-         * Match:
-         * - api requests for admin section
-         * - admin paths except '/admin/login' | '/admin/register'
+        /**
+         * Match all requests inside:
+         * 
+         * - /api/admin
+         * - /admin
          */
-        '/api/((?!admin/login|admin/register).*)',
-        '/admin/((?!login|register).*)',
+        '/api/admin/:path*',
+        '/admin/:path*',
     ],
 };

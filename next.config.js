@@ -1,5 +1,5 @@
 module.exports = {
   images: {
-    domains: ['upload.wikimedia.org'],
+    domains: ['gravatar.com'],
   },
 };
