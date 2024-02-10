@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
+import { ICountryRes } from '@/components/SideBar';
 
 export interface IVideosRes {
     id: number;
@@ -18,20 +19,42 @@ export interface IVideosRes {
     created_on: string;
 }
 
-interface IVideos {
-    videos: IVideosRes[]
-}
+const Layout = dynamic(import('@/components/Layouts/Dashboard'));
 
-const //DarkMode = dynamic(import('@/components/Dashboard/darkMode')),
-    Layout = dynamic(import('@/components/Layouts/Dashboard'));
-
-export default function videos({ videos }: IVideos) {
+export default function videos({ videos, countries }: { videos: IVideosRes[], countries: ICountryRes[] }) {
     const [currentPage, setCurrentPage] = useState(1);
-    const videosPerPage = 7;
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+    const [filteredVideos, setFilteredVideos] = useState<IVideosRes[]>([]);
 
-    const startIndex = (currentPage - 1) * videosPerPage;
-    const endIndex = currentPage * videosPerPage;
-    const currentVideos = videos?.slice(startIndex, endIndex);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredVideos.slice(indexOfFirstItem, indexOfLastItem);
+
+    useEffect(() => {
+        if (selectedCountry) {
+            const filteredData = videos.filter(
+                (video) => video.country.toLowerCase() === selectedCountry.toLowerCase()
+            );
+            setFilteredVideos(filteredData);
+            setCurrentPage(1);
+        } else {
+            setFilteredVideos(videos);
+        }
+    }, [videos, selectedCountry]);
+
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handleItemsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setItemsPerPage(Number(event.target.value));
+        setCurrentPage(1);
+    };
+
+    const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedCountry(event.target.value || null);
+    };
 
     return (
         <Layout title={'Videos'}>
@@ -42,8 +65,50 @@ export default function videos({ videos }: IVideos) {
             </div>
 
             <div className="relative overflow-x-auto mt-3 rounded-lg">
+                <div className="border-b bg-[#262626] border-[#383838] text-xs uppercase  text-gray-300">
+                    <div className='flex justify-between p-3 space-x-2'>
+                        <div className='flex justify-start'>
+                            <select
+                                className='p-2 text-base rounded-lg w-auto bg-[#383838] border border-[#212121]'
+                                value={selectedCountry || ''}
+                                onChange={handleCountryChange}
+                            >
+                                <option value={''}>
+                                    All countries
+                                </option>
+
+                                {countries?.map((country) => (
+                                    <option value={country.long_name}>
+                                        {country.long_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <select
+                            className='p-2 text-base rounded-lg w-auto bg-[#383838] border border-[#212121]'
+                            onChange={handleItemsPerPageChange}
+                            value={itemsPerPage}
+                        >
+                            <option value={10}>
+                                10
+                            </option>
+                            <option value={20}>
+                                20
+                            </option>
+                            <option value={30}>
+                                30
+                            </option>
+                            <option value={40}>
+                                40
+                            </option>
+                            <option value={50}>
+                                50
+                            </option>
+                        </select>
+                    </div>
+                </div>
                 <table className="w-full text-sm text-left text-gray-500">
-                    <thead style={{ backgroundColor: 'hsl(0, 0%, 22%)'}} className="text-xs uppercase  text-gray-300">
+                    <thead style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className="text-xs uppercase  text-gray-300">
                         <tr className='rounded'>
                             <th scope="col" className="px-6 py-3">
                                 Video ID
@@ -66,7 +131,7 @@ export default function videos({ videos }: IVideos) {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentVideos?.map((video) => (
+                        {currentItems?.map((video) => (
                             <tr key={video.vid} className="border-b bg-[#262626] border-[#383838]">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-300 whitespace-nowrap">
                                     <a
@@ -101,11 +166,11 @@ export default function videos({ videos }: IVideos) {
                         ))}
                     </tbody>
                 </table>
-                {videos.length >= videosPerPage && (
+                {filteredVideos.length >= itemsPerPage && (
                     <div className={'justify-center items-center flex space-x-3 mt-3'}>
                         <button
                             className='p-2 rounded-lg bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] disabled:bg-[#383838]'
-                            onClick={() => setCurrentPage(currentPage - 1)}
+                            onClick={() => handlePageChange(currentPage - 1)} 
                             disabled={currentPage === 1}
                         >
                             Previous
@@ -113,8 +178,8 @@ export default function videos({ videos }: IVideos) {
                         <span> Page {currentPage} </span>
                         <button
                             className='p-2 rounded-lg bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] disabled:bg-[#383838]'
-                            onClick={() => setCurrentPage(currentPage + 1)}
-                            disabled={endIndex >= videos.length}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={indexOfLastItem >= filteredVideos.length}
                         >
                             Next
                         </button>
@@ -131,11 +196,15 @@ export const getServerSideProps = (async () => {
         values: [],
     }) as IVideosRes[];
 
-
+    const countries = await executeQueryReturnsJSON({
+        query: query.getAllCountries,
+        values: [],
+    }) as ICountryRes[];
 
     return {
         props: {
-            videos: videos
+            videos: videos,
+            countries: countries
         }
     }
-}) satisfies GetServerSideProps<{ videos: IVideosRes[] }>
+}) satisfies GetServerSideProps<{ videos: IVideosRes[], countries: ICountryRes[] }>

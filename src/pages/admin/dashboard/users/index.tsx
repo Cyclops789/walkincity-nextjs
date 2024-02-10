@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
-
+import { useEffect } from 'react';
 export interface IUserReturns {
     id: number;
     username: string;
@@ -19,20 +19,42 @@ export interface IRoleReturns {
     name: string;
 }
 
-interface IUsers {
-    users: IUserReturns[]
-}
+const Layout = dynamic(import('@/components/Layouts/Dashboard'));
 
-const //DarkMode = dynamic(import('@/components/Dashboard/darkMode')),
-    Layout = dynamic(import('@/components/Layouts/Dashboard'));
-
-export default function users({ users }: IUsers) {
+export default function users({ users, roles }: { users: IUserReturns[], roles: IRoleReturns[] }) {
     const [currentPage, setCurrentPage] = useState(1);
-    const usersPerPage = 7;
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [selectedRole, setSelectedRole] = useState<number | null>(null);
+    const [filteredUsers, setFilteredUsers] = useState<IUserReturns[]>([]);
 
-    const startIndex = (currentPage - 1) * usersPerPage;
-    const endIndex = currentPage * usersPerPage;
-    const currentUsers = users?.slice(startIndex, endIndex);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+
+    useEffect(() => {
+        if (selectedRole) {
+            const filteredData = users.filter(
+                (user) => user.role === selectedRole
+            );
+            setFilteredUsers(filteredData);
+            setCurrentPage(1);
+        } else {
+            setFilteredUsers(users);
+        }
+    }, [users, selectedRole]);
+
+    const handlePageChange = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
+
+    const handleItemsPerPageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setItemsPerPage(Number(event.target.value));
+        setCurrentPage(1);
+    };
+
+    const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedRole(Number(event.target.value) || null);
+    };
 
     return (
         <Layout title={'Users'}>
@@ -43,8 +65,50 @@ export default function users({ users }: IUsers) {
             </div>
 
             <div className="relative overflow-x-auto mt-3 rounded-lg">
+                <div className="border-b bg-[#262626] border-[#383838] text-xs uppercase  text-gray-300">
+                    <div className='flex justify-between p-3 space-x-2'>
+                        <div className='flex justify-start'>
+                            <select
+                                className='p-2 text-base rounded-lg w-auto bg-[#383838] border border-[#212121]'
+                                value={selectedRole || 0}
+                                onChange={handleRoleChange}
+                            >
+                                <option value={0}>
+                                    All roles
+                                </option>
+
+                                {roles?.map((role) => (
+                                    <option value={role.id}>
+                                        {role.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <select
+                            className='p-2 text-base rounded-lg w-auto bg-[#383838] border border-[#212121]'
+                            onChange={handleItemsPerPageChange}
+                            value={itemsPerPage}
+                        >
+                            <option value={10}>
+                                10
+                            </option>
+                            <option value={20}>
+                                20
+                            </option>
+                            <option value={30}>
+                                30
+                            </option>
+                            <option value={40}>
+                                40
+                            </option>
+                            <option value={50}>
+                                50
+                            </option>
+                        </select>
+                    </div>
+                </div>
                 <table className="w-full text-sm text-left text-gray-500">
-                    <thead style={{ backgroundColor: 'hsl(0, 0%, 22%)'}} className="text-xs uppercase text-gray-300">
+                    <thead style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className="text-xs uppercase text-gray-300">
                         <tr className='rounded'>
                             <th scope="col" className="px-6 py-3">
                                 Email
@@ -64,7 +128,7 @@ export default function users({ users }: IUsers) {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentUsers?.map((user) => (
+                        {currentItems?.map((user) => (
                             <tr key={user.id} className="border-b bg-[#262626] border-[#383838]">
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-300 whitespace-nowrap">
                                     {user.email}
@@ -79,7 +143,7 @@ export default function users({ users }: IUsers) {
                                     {user.roleName}
                                 </td>
                                 <td className="px-6 py-4">
-                                <Link
+                                    <Link
                                         className={'bg-[#d50c2d46] text-center items-center justify-center rounded border border-[var(--primary-text-color)] w-full'}
                                         href={`/admin/dashboard/users/${user.id}`}
                                     >
@@ -92,11 +156,11 @@ export default function users({ users }: IUsers) {
                         ))}
                     </tbody>
                 </table>
-                {users.length >= usersPerPage && (
+                {filteredUsers.length >= itemsPerPage && (
                     <div className={'justify-center items-center flex space-x-3 mt-3'}>
                         <button
                             className='p-2 rounded-lg bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] disabled:bg-[#383838]'
-                            onClick={() => setCurrentPage(currentPage - 1)}
+                            onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                         >
                             Previous
@@ -104,8 +168,8 @@ export default function users({ users }: IUsers) {
                         <span> Page {currentPage} </span>
                         <button
                             className='p-2 rounded-lg bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] disabled:bg-[#383838]'
-                            onClick={() => setCurrentPage(currentPage + 1)}
-                            disabled={endIndex >= users.length}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={indexOfLastItem >= filteredUsers.length}
                         >
                             Next
                         </button>
@@ -122,13 +186,19 @@ export const getServerSideProps = (async () => {
         values: [],
     }) as IUserReturns[];
 
+    
+    const roles = await executeQueryReturnsJSON({
+        query: query.getAllRoles,
+        values: [],
+    }) as IRoleReturns[];
+
     const updateUsersPromises: Promise<IUserReturns>[] = users.map(async (user: IUserReturns) => {
         const role = await executeQueryReturnsJSON({
             query: query.getRoleByID,
             values: [user.role],
         }) as IRoleReturns[];
 
-        if(role[0]?.name) {
+        if (role[0]?.name) {
             const updatedUser = { ...user, roleName: role[0].name };
             return updatedUser;
         } else {
@@ -141,7 +211,8 @@ export const getServerSideProps = (async () => {
 
     return {
         props: {
-            users: updateUsers
+            users: updateUsers,
+            roles: roles
         }
     }
-}) satisfies GetServerSideProps<{ users: IUserReturns[] }>
+}) satisfies GetServerSideProps<{ users: IUserReturns[], roles: IRoleReturns[] }>

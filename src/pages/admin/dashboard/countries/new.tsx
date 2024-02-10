@@ -6,7 +6,7 @@ import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
 
-interface IContinentsRes {
+export interface IContinentsRes {
     id: number;
     continent_color: string;
     continent_icon: string;

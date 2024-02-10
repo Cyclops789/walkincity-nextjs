@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import { useRef, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react'
+import sha256 from 'sha256';
 
 const UserProfile = dynamic(import('@/components/Dashboard/UserProfile'));
 
@@ -15,6 +16,7 @@ export interface IUserWithoutPassword {
   id: number;
   username: string;
   email: string;
+  image: string;
   created_at: string;
 }
 
@@ -35,7 +37,9 @@ export default function Layout({
   useEffect(() => {
     if (session) {
       //@ts-ignore this is valid
-      setUserSession(session.user)
+      session.user.image = `https://gravatar.com/avatar/${sha256(session.user.email)}?s=50&d=identicon`;
+      //@ts-ignore this is valid
+      setUserSession(session.user);
     }
   }, [session]);
 
@@ -96,7 +100,7 @@ export default function Layout({
         </section>
         {/* Content */}
 
-        <section style={{ backgroundColor: 'hsl(0, 0%, 8%)' }} className={`w-[80%] h-full`}>
+        <section style={{ backgroundColor: 'hsl(0, 0%, 8%)' }} className={`w-[80%] h-full overflow-auto`}>
           <div style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='w-full h-[50px] flex justify-between'>
             <div className={'flex justify-start'}>
               <div className={'px-2 py-1'}>
@@ -113,7 +117,7 @@ export default function Layout({
                   height={40}
                   width={40}
                   alt={'User picture'}
-                  src={'/storage/users/placeholder.png'}
+                  src={userSession?.image as string}
                 />
               </div>
               <div ref={wrapperRef}>
@@ -124,7 +128,7 @@ export default function Layout({
             </div>
           </div>
           {userSession ? (
-            <div className={'p-3'}>
+            <div className={'p-3 h-auto'}>
               {children}
             </div>
           ) : (
