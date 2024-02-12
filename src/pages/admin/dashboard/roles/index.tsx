@@ -3,8 +3,8 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
+import permissions from '@/helpers/permissions';
 import query from '@/utils/db';
-
 
 export interface IRoleReturns {
     id: number;
@@ -108,11 +108,6 @@ export const getServerSideProps = (async () => {
         query: query.getAllRoles,
         values: [],
     }) as IRoleReturns[];
-
-    const permissions = await executeQueryReturnsJSON({
-        query: query.getAllPermissions,
-        values: [],
-    }) as IPermissionsReturns[];
 
     return {
         props: {

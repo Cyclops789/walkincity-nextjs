@@ -3,7 +3,7 @@ import { escape } from 'sqlstring';
 
 interface IOptions {
     name: string;
-    value: string | number;
+    value: string | number | boolean;
 }
 
 const createDB = `CREATE DATABASE IF NOT EXISTS ${secrets.MYSQL_DATABASE}`;
@@ -77,10 +77,6 @@ SELECT * FROM roles WHERE name = ?
 
 const getAllRoles = `
 SELECT * FROM roles
-`;
-
-const getAllPermissions = `
-SELECT * FROM permissions
 `;
 
 const createNewUser = `
@@ -177,7 +173,6 @@ const query = {
     getAllCountries,
     getUserByEmail,
     getAllRoles,
-    getAllPermissions,
     getUserByID,
     getRoleByID,
     getAllUsers,

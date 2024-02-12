@@ -5,6 +5,8 @@ import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
 import { ICountryRes } from '@/components/SideBar';
+import axios from 'axios'
+import { useRouter } from 'next/router';
 
 export interface IVideosRes {
     id: number;
@@ -19,14 +21,16 @@ export interface IVideosRes {
     created_on: string;
 }
 
-const Layout = dynamic(import('@/components/Layouts/Dashboard'));
+const Layout = dynamic(import('@/components/Layouts/Dashboard')),
+    ConfirmationModal = dynamic(import('@/components/Dashboard/ConfirmationModal'));
 
 export default function videos({ videos, countries }: { videos: IVideosRes[], countries: ICountryRes[] }) {
+    const router = useRouter()
+    const [modal, setModalData] = useState<any>();
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
     const [filteredVideos, setFilteredVideos] = useState<IVideosRes[]>([]);
-
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = filteredVideos.slice(indexOfFirstItem, indexOfLastItem);
@@ -56,8 +60,37 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
         setSelectedCountry(event.target.value || null);
     };
 
+    const verifyVideo = (id: number, verified: string | number) => {
+        setModalData({
+            open: true,
+            text: `Are you sure you want to ${(verified === 1 || verified === "1") ? "unverify" : (verified === 0 || verified === "0") && "verify"} this video?`,
+            type: 'create',
+            button: {
+                accept: 'Yes, Im sure',
+                decline: 'No, cancel'
+            },
+            onAccept: () => {
+                axios.post('/api/admin/videos/verify', {
+                    id: id,
+                    verify: (verified === 1 || verified === "1") ? 0 : (verified === 0 || verified === "0") && 1
+                }).then((res) => {
+                    setModalData((prevData: any) => ({ ...prevData, open: false }));
+                    router.reload()
+                });
+            },
+            onDecline: () => {
+                setModalData((prevData: any) => ({ ...prevData, open: false }));
+            }
+        });
+    }
+
     return (
         <Layout title={'Videos'}>
+            <ConfirmationModal
+                setModalData={setModalData}
+                modal={modal}
+            />
+
             <div className={'flex justify-end'}>
                 <Link href={'/admin/dashboard/videos/new'} className={'bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] p-3 rounded font-bold'}>
                     Add new video
@@ -152,7 +185,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 <td className="px-6 py-4">
                                     {video.verified === 1 ? ('Yes') : video.verified === 0 && ('No')}
                                 </td>
-                                <td className="px-6 py-4">
+                                <td className="px-6 py-4 space-x-2">
                                     <Link
                                         className={'bg-[#d50c2d46] text-center items-center justify-center rounded border border-[var(--primary-text-color)] w-full'}
                                         href={`/admin/dashboard/videos/${video.id}`}
@@ -161,6 +194,12 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                             Edit
                                         </span>
                                     </Link>
+
+                                    <span draggable onClick={(e) => { e.preventDefault(); verifyVideo(video.id, video.verified) }} className={`${video.verified ? 'bg-[#d5450c60] border-[#d5450c]' : 'bg-[#23d50c46] border-[#23d50c]'} text-center items-center justify-center rounded border  w-full cursor-pointer`}>
+                                        <span className={`font-bold ${video.verified ? 'text-[#d5450c] ' : 'text-[#23d50c]'}  p-2 w-full`}>
+                                            {video.verified ? 'Unverify' : 'Verify'}
+                                        </span>
+                                    </span>
                                 </td>
                             </tr>
                         ))}
@@ -170,7 +209,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                     <div className={'justify-center items-center flex space-x-3 mt-3'}>
                         <button
                             className='p-2 rounded-lg bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] disabled:bg-[#383838]'
-                            onClick={() => handlePageChange(currentPage - 1)} 
+                            onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                         >
                             Previous

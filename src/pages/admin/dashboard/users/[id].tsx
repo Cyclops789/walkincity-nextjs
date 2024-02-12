@@ -43,7 +43,7 @@ export default function editUser({ user, roles }: { user: IUserReturns, roles: I
             lastSavedPassword == form.password
         ) return setNotify({ open: true, type: 'warning', text: 'No data has been edited, rejecting!' });
 
-        axios.post('/api/admin/users/editUser', {
+        axios.post('/api/admin/users/edit', {
             id: userId,
             username: form.username,
             email: form.email,

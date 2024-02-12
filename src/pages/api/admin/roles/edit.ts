@@ -36,12 +36,12 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             });
         }
     
-        const video = await executeQuery({
-            query: query.getVideoById,
+        const role = await executeQuery({
+            query: query.getRoleByID,
             values: [id],
         }) as any[];
 
-        if(video.length >= 1) {
+        if(role.length >= 1) {
             let permissionsID = permissions.map((permission) => permission.id);
 
             const options = [

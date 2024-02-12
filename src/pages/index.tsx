@@ -1,16 +1,14 @@
 import type { InferGetServerSidePropsType, GetServerSideProps } from 'next'
 import { IVideosRes, ICountryRes } from '@/components/SideBar';
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import query from '@/utils/db';
-import io from 'socket.io-client';
 import { useRouter } from 'next/router';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { INotificationType } from '@/components/Notification';
-import { Socket } from 'socket.io';
-import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
+const Reactions = dynamic(import('@/components/Reactions'));
 const Layout = dynamic(import('@/components/Layouts/Main'));
 const Video = dynamic(import('@/components/Video'));
 const SideBar = dynamic(import('@/components/SideBar'));
@@ -19,7 +17,6 @@ const Notification = dynamic(import('@/components/Notification'));
 
 export default function WatchPage({ countries }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const handleFullScreen = useFullScreenHandle();
-  const [socket, setSocket] = useState<Socket<DefaultEventsMap, DefaultEventsMap>>();
   const router = useRouter();
   const { query } = router;
   const v = query.v as number | undefined;
@@ -35,27 +32,6 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
     type: 'info',
     text: 'Simple'
   });
-
-  useEffect(() => {
-    (async () => {
-      await fetch("/api/socket/io");
-    })()
-
-    const instance: any = io({ path: "/api/socket/ping" });
-    setSocket(instance);
-
-    if (!socket) return;
-
-    socket.on(`reaction`, (reaction) => {
-      console.log(reaction);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-
 
   return (
     <FullScreen handle={handleFullScreen}>
@@ -99,6 +75,8 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
             setNotify={setNotify}
             handleFullScreen={handleFullScreen}
           />
+          
+          <Reactions />
 
           <Notification
             setNotify={setNotify}
