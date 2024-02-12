@@ -72,7 +72,7 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
             return setNotify({ open: true, type: 'warning', text: 'No data has been edited, rejecting!' });
         }
 
-        axios.post('/api/admin/videos/editVideo', {
+        axios.post('/api/admin/videos/edit', {
             id: videoID,
             vid: form.vid,
             country: form.country,

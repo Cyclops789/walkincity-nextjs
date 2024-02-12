@@ -53,15 +53,15 @@ export default function newCountry({ continents }: { continents: IContinentsRes[
                 decline: 'No, cancel'
             },
             onAccept: () => {
-                axios.post('/api/admin/countries/newCountry', {
+                axios.post('/api/admin/countries/new', {
                     short_name: form.short_name,
                     long_name: form.long_name,
                     border_color: form.border_color,
                     continent: form.continent
                 }).then((res) => {
+                    setModalData((prevData: any) => ({ ...prevData, open: false }));
                     if (res.data.success) {
                         setNotify({ open: true, type: 'success', text: res.data.message });
-                        setModalData((prevData: any) => ({ ...prevData, open: false }));
 
                         if (createAnOther) {
                             setTimeout(() => {

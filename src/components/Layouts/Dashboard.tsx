@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import { useRef, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react'
 import sha256 from 'sha256';
+import { faChartLine } from '@fortawesome/free-solid-svg-icons';
 
 const UserProfile = dynamic(import('@/components/Dashboard/UserProfile'));
 
@@ -17,6 +18,11 @@ export interface IUserWithoutPassword {
   username: string;
   email: string;
   image: string;
+  role?: {
+    id?: number;
+    name?: string;
+    permissions?: string;
+  };
   created_at: string;
 }
 
@@ -33,6 +39,7 @@ export default function Layout({
 }: LayoutProps) {
   const { data: session, status: status } = useSession();
   const [userSession, setUserSession] = useState<IUserWithoutPassword>();
+  const [userPermissions, setUserPermissions] = useState('');
 
   useEffect(() => {
     if (session) {
@@ -40,6 +47,9 @@ export default function Layout({
       session.user.image = `https://gravatar.com/avatar/${sha256(session.user.email)}?s=50&d=identicon`;
       //@ts-ignore this is valid
       setUserSession(session.user);
+
+      //@ts-ignore this is also valid
+      setUserPermissions(JSON.parse(session.user.role.permissions))
     }
   }, [session]);
 
@@ -84,17 +94,30 @@ export default function Layout({
           </div>
           <hr className='text-black' style={{ borderTop: '2px dashed' }} />
           <div className='p-3 space-y-3'>
-            {DashboardRoutes.map((route) => (
-              <Link
-                href={route.path}
-                key={route.name}
-                className={`${(router.pathname.startsWith(route.path) && route.path !== '/admin/dashboard') || route.path === router.pathname ? "bg-[#1a1919]" : "bg-[#262626] hover:bg-[#1a1919]"}  py-2 px-5 flex space-x-3  items-center rounded-lg`}
-              >
-                <FontAwesomeIcon className='w-[20px]' icon={route.icon} />
-                <div>
-                  {route.name}
-                </div>
-              </Link>
+            <Link
+              href={'/admin/dashboard'}
+              key={'Dashboard'}
+              className={`${'/admin/dashboard' === router.pathname ? "bg-[#1a1919]" : "bg-[#262626] hover:bg-[#1a1919]"}  py-2 px-5 flex space-x-3  items-center rounded-lg`}
+            >
+              <FontAwesomeIcon className='w-[20px]' icon={faChartLine} />
+              <div>
+                Dashboard
+              </div>
+            </Link>
+            {userPermissions && DashboardRoutes.map((route) => (
+              /* @ts-ignore we dont need to convert number to string in order to use includes */
+              userPermissions.includes(route.permissionID) && (
+                <Link
+                  href={route.path}
+                  key={route.name}
+                  className={`${router.pathname.startsWith(route.path) || route.path === router.pathname ? "bg-[#1a1919]" : "bg-[#262626] hover:bg-[#1a1919]"}  py-2 px-5 flex space-x-3  items-center rounded-lg`}
+                >
+                  <FontAwesomeIcon className='w-[20px]' icon={route.icon} />
+                  <div>
+                    {route.name}
+                  </div>
+                </Link>
+              )
             ))}
           </div>
         </section>

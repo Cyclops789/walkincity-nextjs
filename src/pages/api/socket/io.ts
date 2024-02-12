@@ -8,7 +8,8 @@ function ioHandler(_req: NextApiRequest, res: NextApiResponse) {
         const io = new Server((res.socket as any).server);
 
         io.on('connection', socket => {
-            console.log(`${socket.id} connected`);
+            io.emit('userCount', io.engine.clientsCount);
+            console.log(`${socket.id} connected: `+io.engine.clientsCount);
 
             socket.on('reaction', (msg) => {
                 console.log('reaction: ' + msg);
@@ -16,7 +17,8 @@ function ioHandler(_req: NextApiRequest, res: NextApiResponse) {
             });
 
             socket.on('disconnect', () => {
-                console.log('user disconnected');
+                io.emit('userCount', io.engine.clientsCount);
+                console.log('user disconnected: '+io.engine.clientsCount);
             });
         });
 

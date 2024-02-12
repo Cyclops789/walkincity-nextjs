@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Router, { useRouter } from 'next/router'
 import dynamic from 'next/dynamic';
-import query from '@/utils/db';
-import { executeQueryReturnsJSON } from '@/lib/db';
+import permissions from '@/helpers/permissions';
 import { IPermissionsReturns } from '@/pages/admin/dashboard/roles';
 import { GetServerSideProps } from 'next';
 import { INotificationType } from '@/components/Dashboard/Notification';
@@ -44,13 +43,13 @@ export default function newRole({ permissions }: { permissions: IPermissionsRetu
                 decline: 'No, cancel'
             },
             onAccept: () => {
-                axios.post('/api/admin/roles/newRole', {
+                axios.post('/api/admin/roles/new', {
                     name: form.name,
                     permissions: form.permissions,
                 }).then((res) => {
+                    setModalData((prevData: any) => ({ ...prevData, open: false }));
                     if (res.data.success) {
                         setNotify({ open: true, type: 'success', text: res.data.message });
-                        setModalData((prevData: any) => ({ ...prevData, open: false }));
 
                         setTimeout(() => {
                             router.push({
@@ -150,11 +149,6 @@ export default function newRole({ permissions }: { permissions: IPermissionsRetu
 }
 
 export const getServerSideProps = (async () => {
-    const permissions = await executeQueryReturnsJSON({
-        query: query.getAllPermissions,
-        values: [],
-    }) as IPermissionsReturns[];
-
     return {
         props: {
             permissions: permissions || []

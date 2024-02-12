@@ -6,6 +6,7 @@ import { executeQueryReturnsJSON } from '@/lib/db';
 import { IPermissionsReturns } from '@/pages/admin/dashboard/roles';
 import { GetServerSideProps } from 'next';
 import { INotificationType } from '@/components/Dashboard/Notification';
+import permissions from '@/helpers/permissions';
 import axios from 'axios';
 import Select from 'react-select'
 
@@ -42,7 +43,7 @@ export default function editRole({ role, permissions }: { role: IRoleReturnsJSON
         if (!form || !form.permissions || form.permissions?.length <= 0
         ) return setNotify({ open: true, type: 'warning', text: 'At least one permission should be selected, rejecting!' });
 
-        axios.post('/api/admin/roles/editRole', {
+        axios.post('/api/admin/roles/edit', {
             id: roleId,
             name: form.name,
             permissions: form.permissions,
@@ -148,11 +149,6 @@ export const getServerSideProps = (async (context) => {
     }) as IRoleReturnsJSON[];
 
     const rolePermissions = JSON.parse(role[0].permissions)
-
-    const permissions = await executeQueryReturnsJSON({
-        query: query.getAllPermissions,
-        values: [],
-    }) as IPermissionsReturns[];
 
     for (let i = 0; i < rolePermissions.length; i++) {
         const rolePermission = rolePermissions[i];

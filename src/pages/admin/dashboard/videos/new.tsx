@@ -61,7 +61,7 @@ export default function newVideo({ countries }: IVideo) {
                 decline: 'No, cancel'
             },
             onAccept: () => {
-                axios.post('/api/admin/videos/newVideo', {
+                axios.post('/api/admin/videos/new', {
                     vid: form.vid,
                     country: form.country,
                     place: form.place,
@@ -71,10 +71,9 @@ export default function newVideo({ countries }: IVideo) {
                     seekTo: form.seekTo,
                     verified: form.verified
                 }).then((res) => {
+                    setModalData((prevData: any) => ({ ...prevData, open: false }));
                     if(res.data.success) {
-                        setNotify({ open: true, type: 'success', text: res.data.message });
-                        setModalData((prevData: any) => ({ ...prevData, open: false }));
-                        
+                        setNotify({ open: true, type: 'success', text: res.data.message });                        
                         if(createAnOther) {
                             setTimeout(() => {
                                 window.location.reload();

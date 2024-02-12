@@ -11,6 +11,7 @@ interface IUserReturns {
     username: string;
     email: string;
     password: string;
+    role: number;
     created_at: string;
 }
 
@@ -18,6 +19,7 @@ interface IUserWithoutPassword {
     id: number;
     username: string;
     email: string;
+    role: number;
     created_at: string;
 }
 
@@ -32,7 +34,6 @@ export const authOptions: NextAuthOptions = {
                 // submit to backend server and returns either a object representing a user or value
                 // that is false/null if the credentials are invalid.
                 // e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-
                 try {
                     const user = await executeQueryReturnsJSON({
                         query: query.getUserByEmail,
@@ -43,10 +44,16 @@ export const authOptions: NextAuthOptions = {
                         const verify = verifyHash(credentials?.password as string, user[0].password);
 
                         if(verify) {
+                            const role = await executeQueryReturnsJSON({
+                                query: query.getRoleByID,
+                                values: [user[0].role],
+                            }) as any[];         
+
                             return { 
                                 id: user[0].id,
                                 username: user[0].username,
                                 email: user[0].email,
+                                role: role[0],
                                 created_at: user[0].created_at
                             } as IUserWithoutPassword;
                         } else {

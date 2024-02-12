@@ -45,15 +45,15 @@ export default function newUser({ roles }: { roles: IRoleReturns[] }) {
                 decline: 'No, cancel'
             },
             onAccept: () => {
-                axios.post('/api/admin/users/newUser', {
+                axios.post('/api/admin/users/new', {
                     username: form.username,
                     email: form.email,
                     role: form.role,
                     password: form.password
                 }).then((res) => {
+                    setModalData((prevData: any) => ({ ...prevData, open: false }));
                     if(res.data.success) {
                         setNotify({ open: true, type: 'success', text: res.data.message });
-                        setModalData((prevData: any) => ({ ...prevData, open: false }));
                         
                         if(createAnOther) {
                             setTimeout(() => {

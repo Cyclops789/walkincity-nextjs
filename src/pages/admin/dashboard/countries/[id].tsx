@@ -52,7 +52,7 @@ export default function newCountry({ continents, country }: { continents: IConti
             form.continent === ''
         ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });
 
-        axios.post('/api/admin/countries/editCountry', {
+        axios.post('/api/admin/countries/edit', {
             id: countryId,
             short_name: form.short_name,
             long_name: form.long_name,
