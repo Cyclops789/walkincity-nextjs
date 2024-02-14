@@ -49,7 +49,7 @@ interface ISideBar {
 }
 
 function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, setCurrentCountry, currentCountry }: ISideBar) {
-    const [open, setOpen]                         = useState(true);
+    const [open, setOpen]                         = useState(false);
     const [weatherFilter, setWeatherFilter]       = useState('');
     const [countryFilter, setCountryFilter]       = useState('');
     const [continentFilter, setContinentFilter]   = useState('');
