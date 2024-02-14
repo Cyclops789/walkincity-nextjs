@@ -46,7 +46,7 @@ export default function countries({ countries, videos, continents }: { countries
     const handleCountinentChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedContinent(event.target.value || null);
     };
-    
+
     return (
         <Layout title={'Countries'}>
             <div className={'flex justify-end'}>
@@ -56,7 +56,7 @@ export default function countries({ countries, videos, continents }: { countries
             </div>
 
             <div className="relative overflow-x-auto mt-3 rounded-lg">
-            <div className="border-b bg-[#262626] border-[#383838] text-xs uppercase  text-gray-300">
+                <div className="border-b bg-[#262626] border-[#383838] text-xs uppercase  text-gray-300">
                     <div className='flex justify-between p-3 space-x-2'>
                         <div className='flex justify-start'>
                             <select
@@ -128,13 +128,18 @@ export default function countries({ countries, videos, continents }: { countries
                         {currentItems?.map((country) => (
                             <tr key={country.id} className="border-b bg-[#262626] border-[#383838]">
                                 <td className="px-6 py-4">
-                                    <Image
-                                        alt=''
-                                        height={1}
-                                        width={20}
-                                        src={`/flags/${country.short_name.toLowerCase()}.png`}
-                                        className='cursor-none rounded-sm'
-                                    />
+                                    <a
+                                        href={`/flags/${country.short_name.toLowerCase()}.png`}
+                                        target='_blank'
+                                    >
+                                        <Image
+                                            alt=''
+                                            height={1}
+                                            width={20}
+                                            src={`/flags/${country.short_name.toLowerCase()}.png`}
+                                            className='rounded-sm'
+                                        />
+                                    </a>
                                 </td>
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-300 whitespace-nowrap">
                                     {country.long_name}
@@ -169,7 +174,7 @@ export default function countries({ countries, videos, continents }: { countries
                     <div className={'justify-center items-center flex space-x-3 mt-3'}>
                         <button
                             className='p-2 rounded-lg bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] disabled:bg-[#383838]'
-                            onClick={() => handlePageChange(currentPage - 1)} 
+                            onClick={() => handlePageChange(currentPage - 1)}
                             disabled={currentPage === 1}
                         >
                             Previous

@@ -30,7 +30,7 @@ function Notification({ open, type, text, duration, setNotify }: INotificationTy
                 transform: show ? 'translate(0, 247px)' : 'translate(100%, 247px)',
                 zIndex: 5
             }} 
-            className={`${!show ? 'right-0' : 'right-[60px]'} rounded-md absolute text-black ${type === 'warning' ? 'bg-orange-500' : type === 'success' ? 'bg-green-500' : type === 'info' ? 'bg-blue-500' : type}`}
+            className={`${!show ? 'right-0' : 'right-[60px]'} fixed rounded-md text-black ${type === 'warning' ? 'bg-orange-500' : type === 'success' ? 'bg-green-500' : type === 'info' ? 'bg-blue-500' : type}`}
         >
             <div className="p-2 text-center">
                 {text}

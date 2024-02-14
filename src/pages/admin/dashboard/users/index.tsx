@@ -199,10 +199,10 @@ export const getServerSideProps = (async () => {
         }) as IRoleReturns[];
 
         if (role[0]?.name) {
-            const updatedUser = { ...user, roleName: role[0].name };
+            const updatedUser = { ...user, roleName: role[0].name, password: 'hidden' };
             return updatedUser;
         } else {
-            const updatedUser = { ...user, roleName: 'Unreceived Role' };
+            const updatedUser = { ...user, roleName: 'Unreceived Role', password: 'hidden' };
             return updatedUser;
         }
     });

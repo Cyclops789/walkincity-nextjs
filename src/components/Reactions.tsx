@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import dynamic from 'next/dynamic'
-import reactionsIcons from '@/helpers/reactions'
+import React, { useState, useRef, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import dynamic from 'next/dynamic';
+import reactionsIcons from '@/helpers/reactions';
 import io from 'socket.io-client';
-import { faEye } from '@fortawesome/free-solid-svg-icons'
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 const Bubble = dynamic(import('@/components/Player/Bubble'));
 
@@ -47,7 +47,7 @@ function Reactions() {
 
     return (
         <>
-            <div className='fixed bottom-4 right-3 flex space-x-2'>
+            <div className='fixed bottom-4 right-3 flex space-x-2 z-[10]'>
                 {reactionsIcons.map((reaction) => (
                     <div
                         key={reaction.name}
@@ -62,13 +62,14 @@ function Reactions() {
                         <FontAwesomeIcon className='w-[20px]' icon={reaction.icon} />
                     </div>
                 ))}
-
-                <div
-                    className={`text-white border border-white w-[60px] h-9 flex rounded-full items-center space-x-2`}
-                >
-                    <FontAwesomeIcon className='fixed right-[45px] w-[20px]' icon={faEye} />
-                    <div className='fixed right-[25px] text-sm'>
-                        {connectors} 
+            </div>
+            <div
+                className={`fixed bottom-4 w-full flex justify-center z-[1]`}
+            >
+                <div className='flex h-9 rounded-full items-center space-x-2 w-[60px] text-white border border-white justify-center'>
+                    <FontAwesomeIcon className='w-[20px]' icon={faEye} />
+                    <div className='text-sm'>
+                        {connectors}
                     </div>
                 </div>
             </div>

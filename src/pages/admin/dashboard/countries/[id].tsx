@@ -52,6 +52,15 @@ export default function newCountry({ continents, country }: { continents: IConti
             form.continent === ''
         ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });
 
+        // Check if the user did actually changed something in the data
+        if (form.short_name == getCountry.short_name &&
+            form.long_name == getCountry.long_name &&
+            form.border_color == getCountry.border_color &&
+            form.continent == getCountry.continent 
+        ) {
+            return setNotify({ open: true, type: 'warning', text: 'No data has been edited, rejecting!' });
+        }
+
         axios.post('/api/admin/countries/edit', {
             id: countryId,
             short_name: form.short_name,

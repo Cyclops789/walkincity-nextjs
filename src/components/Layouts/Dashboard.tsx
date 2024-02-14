@@ -38,7 +38,12 @@ export default function Layout({
   className = ''
 }: LayoutProps) {
   const { data: session, status: status } = useSession();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef(null);
+  const [getTitle, setTitle] = useState('Dashboard');
   const [userSession, setUserSession] = useState<IUserWithoutPassword>();
+  const [sideBarOpen, setSideBarOpen] = useState<any>('0');
   const [userPermissions, setUserPermissions] = useState('');
 
   useEffect(() => {
@@ -52,11 +57,6 @@ export default function Layout({
       setUserPermissions(JSON.parse(session.user.role.permissions))
     }
   }, [session]);
-
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const wrapperRef = useRef(null);
-  const [getTitle, setTitle] = useState('Dashboard');
 
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -77,7 +77,25 @@ export default function Layout({
     } else {
       setTitle('Dashboard')
     }
-  }, [title])
+  }, [title]);
+
+  useEffect(() => {
+    const sidebar = localStorage.getItem("sidebar");
+
+    if (sidebar == "0") {
+      setSideBarOpen("0")
+    } else if (sidebar == "1") {
+      setSideBarOpen("1")
+    } else {
+      setSideBarOpen("1")
+    }
+  }, []);
+
+  useEffect(() => {
+    if (sideBarOpen) {
+      localStorage.setItem("sidebar", `${sideBarOpen}`);
+    }
+  }, [sideBarOpen])
 
   return (
     <div>
@@ -88,21 +106,41 @@ export default function Layout({
       </Head>
       <div className={`flex h-screen w-screen text-white ${className}`}>
         {/* SideBar */}
-        <section style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='w-[20%]'>
-          <div style={{ backgroundColor: 'hsl(0, 0%, 15%)' }} className={'w-full h-[50px] text-center text-2xl items-center justify-center flex'}>
-            Dashboard
+        <section
+          style={{
+            backgroundColor: 'hsl(0, 0%, 22%)',
+            transition: 'all 0.3s ease',
+          }}
+          className={`${sideBarOpen === "1" ? "w-[20%]" : "w-[70px]"}`}
+        >
+          <div style={{ backgroundColor: 'hsl(0, 0%, 15%)' }} className={'w-full h-[50px] text-center text-2xl items-center flex justify-center'}>
+            <Image
+              src={'/favicon.ico'}
+              width={35}
+              height={35}
+              alt='Logo'
+              className='mr-2'
+            />
+            {sideBarOpen === "1" && (
+              <span className='font-semibold'>
+                Walkin<strong className='text-[var(--primary-text-color)]'>.</strong>City
+              </span>
+            )}
+
           </div>
-          <hr className='text-black' style={{ borderTop: '2px dashed' }} />
+          <hr className='text-[var(--primary-text-color)]' style={{ borderTop: '2px dashed' }} />
           <div className='p-3 space-y-3'>
             <Link
               href={'/admin/dashboard'}
               key={'Dashboard'}
-              className={`${'/admin/dashboard' === router.pathname ? "bg-[#1a1919]" : "bg-[#262626] hover:bg-[#1a1919]"}  py-2 px-5 flex space-x-3  items-center rounded-lg`}
+              className={`${'/admin/dashboard' === router.pathname ? "bg-[#1a1919]" : "bg-[#262626] hover:bg-[#1a1919]"} h-10 py-2 px-5 flex space-x-3  items-center rounded-lg ${sideBarOpen === "0" && "justify-center"}`}
             >
               <FontAwesomeIcon className='w-[20px]' icon={faChartLine} />
-              <div>
-                Dashboard
-              </div>
+              {sideBarOpen === "1" && (
+                <div>
+                  Dashboard
+                </div>
+              )}
             </Link>
             {userPermissions && DashboardRoutes.map((route) => (
               /* @ts-ignore we dont need to convert number to string in order to use includes */
@@ -110,12 +148,14 @@ export default function Layout({
                 <Link
                   href={route.path}
                   key={route.name}
-                  className={`${router.pathname.startsWith(route.path) || route.path === router.pathname ? "bg-[#1a1919]" : "bg-[#262626] hover:bg-[#1a1919]"}  py-2 px-5 flex space-x-3  items-center rounded-lg`}
+                  className={`${router.pathname.startsWith(route.path) || route.path === router.pathname ? "bg-[#1a1919]" : "bg-[#262626] hover:bg-[#1a1919]"} h-10 py-2 px-5 flex space-x-3  items-center rounded-lg ${sideBarOpen === "0" && "justify-center"}`}
                 >
                   <FontAwesomeIcon className='w-[20px]' icon={route.icon} />
-                  <div>
-                    {route.name}
-                  </div>
+                  {sideBarOpen === "1" && (
+                    <div>
+                      {route.name}
+                    </div>
+                  )}
                 </Link>
               )
             ))}
@@ -123,12 +163,26 @@ export default function Layout({
         </section>
         {/* Content */}
 
-        <section style={{ backgroundColor: 'hsl(0, 0%, 8%)' }} className={`w-[80%] h-full overflow-auto`}>
+        <section style={{ backgroundColor: 'hsl(0, 0%, 8%)' }} className={`w-[100%] h-full overflow-auto`}>
           <div style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='w-full h-[50px] flex justify-between'>
             <div className={'flex justify-start'}>
               <div className={'px-2 py-1'}>
-                <div className='cursor-pointer w-[40px] h-[40px] bg-slate-300 px-2 py-1 rounded flex items-center justify-center border border-slate-900'>
-                  <FontAwesomeIcon className={'text-slate-900'} icon={faAnglesLeft} />
+                <div
+                  onClick={() => {
+                    if (sideBarOpen === "1") {
+                      setSideBarOpen("0")
+                    } else if (sideBarOpen === "0") {
+                      setSideBarOpen("1")
+                    }
+                  }}
+                  className='cursor-pointer w-[40px] h-[40px] px-2 py-1 rounded flex items-center justify-center bg-[#d50c2d46] border border-[var(--primary-text-color)]'>
+                    <FontAwesomeIcon 
+                      style={{
+                        transition: 'all 0.5s ease',
+                      }}
+                      className={`text-[var(--primary-text-color)] ${sideBarOpen === "1" ? "" : "rotate-180"}`} 
+                      icon={faAnglesLeft} 
+                    />
                 </div>
               </div>
             </div>
