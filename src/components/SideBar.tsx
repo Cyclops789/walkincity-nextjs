@@ -49,7 +49,7 @@ interface ISideBar {
 }
 
 function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, setCurrentCountry, currentCountry }: ISideBar) {
-    const [open, setOpen]                         = useState(false);
+    const [open, setOpen]                         = useState(true);
     const [weatherFilter, setWeatherFilter]       = useState('');
     const [countryFilter, setCountryFilter]       = useState('');
     const [continentFilter, setContinentFilter]   = useState('');
@@ -170,17 +170,13 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
     return (
         <div
             ref={wrapperRef}
-            className={`fixed ${open ? 'bg-[rgba(0,0,0,.7)] overflow-auto' : ''} h-screen max-w-[320px] w-[320px]`}
+            className={`fixed ${open ? 'bg-[rgba(0,0,0,.7)] overflow-auto' : ''} h-screen max-w-[320px] w-[320px] flex`}
             style={{
                 transition: 'all 0.7s ease',
+                zIndex: 10,
                 transform: open ? 'translate(0)' : 'translate(-83%)',
             }}
         >
-            <div className='flex justify-end'>
-                <div className={`cursor-pointer mt-3 text-white mr-3`}>
-                    <FontAwesomeIcon size={"2x"} icon={faBars} onClick={() => setOpen(!open)} />
-                </div>
-            </div>
             <div className='max-w-[260px]'>
                 <div className="flex flex-wrap space-x-2 space-y-2  justify-between">
                     <div 
@@ -373,6 +369,11 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                             </div>
                         </div>
                     ))}
+                </div>
+            </div>
+            <div className='flex justify-center w-[60px]'>
+                <div className={`cursor-pointer text-white mt-3`}>
+                    <FontAwesomeIcon size={"2x"} icon={faBars} onClick={() => setOpen(!open)} />
                 </div>
             </div>
         </div>

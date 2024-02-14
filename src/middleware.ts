@@ -55,6 +55,7 @@ export default withAuth(
             if (!hasAnyPerm) {
                 const dashboardURL = new URL('/admin/dashboard', req.url);
                 dashboardURL.searchParams.append('error', 'permission');
+                
                 return NextResponse.redirect(dashboardURL);
             }
         }

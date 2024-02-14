@@ -180,6 +180,8 @@ export const getServerSideProps = (async (context) => {
         values: [id],
     }) as IUserReturns[];
 
+    const userWithoutPassword = { ...user[0], password: 'hidden'}
+
     const roles = await executeQueryReturnsJSON({
         query: query.getAllRoles,
         values: [],
@@ -196,7 +198,7 @@ export const getServerSideProps = (async (context) => {
 
     return {
         props: {
-            user: user[0] || [],
+            user: userWithoutPassword || [],
             roles: roles || []
         }
     }

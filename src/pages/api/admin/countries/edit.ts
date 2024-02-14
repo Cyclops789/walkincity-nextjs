@@ -41,7 +41,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
         if(country.length >= 1) {
             const options = [
                 {
-                    name: 'name',
+                    name: 'short_name',
                     value: short_name
                 },
                 {

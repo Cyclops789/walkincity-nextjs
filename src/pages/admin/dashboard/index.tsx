@@ -15,7 +15,7 @@ import { useRouter } from 'next/router';
 const Notification = dynamic(import('@/components/Dashboard/Notification')),
   Layout = dynamic(import('@/components/Layouts/Dashboard'));
 
-function dashboard({ videos, users }: { videos: IVideosRes[], users: IUserReturns[] }) {
+function dashboard({ videos, unverified: unverifiedVideos, unverified: verifiedVideos, users, allUsers, admins }: { videos: number, unverified: number, verified: number, users: number, allUsers: number, admins: number }) {
   const router = useRouter();
   const { error } = router.query;
   const [notify, setNotify] = useState<any>();
@@ -51,21 +51,21 @@ function dashboard({ videos, users }: { videos: IVideosRes[], users: IUserReturn
       <div className={'flex space-x-2'}>
         <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
           <div className="p-5 text-2xl">
-            <div className='flex justify-between'>{videos.length} <FontAwesomeIcon icon={faSignal} /></div>
+            <div className='flex justify-between'>{videos} <FontAwesomeIcon icon={faSignal} /></div>
             <div className='text-start font-bold mt-5'>Total</div>
           </div>
         </div>
 
         <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
           <div className="p-5 text-2xl">
-            <div className='flex justify-between'>{videos.filter((video) => video.verified === 0).length} <FontAwesomeIcon icon={faSignal} /></div>
+            <div className='flex justify-between'>{unverifiedVideos} <FontAwesomeIcon icon={faSignal} /></div>
             <div className='text-start font-bold mt-5'>Total unverified</div>
           </div>
         </div>
 
         <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
           <div className="p-5 text-2xl">
-            <div className='flex justify-between'>{videos.filter((video) => video.verified === 1).length} <FontAwesomeIcon icon={faSignal} /></div>
+            <div className='flex justify-between'>{verifiedVideos} <FontAwesomeIcon icon={faSignal} /></div>
             <div className='text-start font-bold mt-5'>Total verified</div>
           </div>
         </div>
@@ -76,21 +76,21 @@ function dashboard({ videos, users }: { videos: IVideosRes[], users: IUserReturn
           <div className={'flex space-x-2'}>
             <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
               <div className="p-5 text-2xl">
-                <div className='flex justify-between'>{users.length} <FontAwesomeIcon icon={faSignal} /></div>
+                <div className='flex justify-between'>{allUsers} <FontAwesomeIcon icon={faSignal} /></div>
                 <div className='text-start font-bold mt-5'>Total</div>
               </div>
             </div>
 
             <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
               <div className="p-5 text-2xl">
-                <div className='flex justify-between'>{users.filter((user) => parseInt(user.role as string) > 2).length}  <FontAwesomeIcon icon={faSignal} /></div>
+                <div className='flex justify-between'>{users}  <FontAwesomeIcon icon={faSignal} /></div>
                 <div className='text-start font-bold mt-5'>Total users</div>
               </div>
             </div>
 
             <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
               <div className="p-5 text-2xl">
-                <div className='flex justify-between'>{users.filter((user) => parseInt(user.role as string) <= 2).length} <FontAwesomeIcon icon={faSignal} /></div>
+                <div className='flex justify-between'>{admins} <FontAwesomeIcon icon={faSignal} /></div>
                 <div className='text-start font-bold mt-5'>Total admins</div>
               </div>
             </div>
@@ -115,10 +115,15 @@ export const getServerSideProps = (async () => {
 
   return {
     props: {
-      videos: allVideos,
-      users: allUsers
+      unverified: allVideos.filter((video) => video.verified === 0).length,
+      verified: allVideos.filter((video) => video.verified === 1).length,
+      videos: allVideos.length,
+
+      allUsers: allUsers.length,
+      admins: allUsers.filter((user) => parseInt(user.role as string) <= 2).length,
+      users:  allUsers.filter((user) => parseInt(user.role as string) > 2).length
     }
   }
-}) satisfies GetServerSideProps<{ videos: IVideosRes[], users: IUserReturns[] }>
+}) satisfies GetServerSideProps<{ videos: number, unverified: number, verified: number,  allUsers: number, admins: number, users: number }>
 
 export default dashboard;

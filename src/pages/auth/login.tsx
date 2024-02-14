@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '@/components/Layouts/Main'
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 function login() {
+    const router = useRouter();
+    const { error } : { error?: string } = router.query;
     const [form, setForm]   = useState({ email: '', password: '' });
-    const [error, setError] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmitForm = (e: React.MouseEvent<HTMLFormElement, MouseEvent>) => {
         e.preventDefault();
@@ -17,12 +20,18 @@ function login() {
             password: form.password
         }).then((res) => {
             if(res?.error) {
-                setError(res?.error)
+                setErrorMessage(res?.error)
             }
         }).catch((e) => {
-            setError(String(e))
+            setErrorMessage(String(e))
         })
-    }
+    };
+
+    useEffect(() => {
+        if(error && error == "CredentialsSignin") {
+            setErrorMessage("Invalid email or password!")
+        }
+    }, [error])
 
     return (
         <Layout title='Admin Login'>
@@ -31,9 +40,9 @@ function login() {
                     <div className='text-2xl uppercase text-center'>
                         login
                     </div>
-                    {error && (
-                        <div className='text-red-700 p-3 text-center'>
-                            {error}
+                    {errorMessage && (
+                        <div className='text-red-500 p-3 text-center'>
+                            {errorMessage}
                         </div>
                     )}
                     <div className='space-y-2'>

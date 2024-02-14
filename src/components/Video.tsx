@@ -39,7 +39,7 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
             case  0: // ended
                 setPlaying(false);
                 break;
-            case  1: // playing
+            case  1: // playing - enable in production
                 setPlaying(false);
                 break;
             case  2: // paused
@@ -99,13 +99,13 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                             'encrypted-media': 1, 
                             gyroscope: 1,
                             'picture-in-picture': 1, 
-                            'web-share': 1
+                            'web-share': 1,
+                            controls: 0
                         },
                     }}
                     videoId={currentVideo?.vid}
                     onStateChange={onStateChange}
                     onReady={onReady}
-                    // Enable in production
                     style={{ pointerEvents: 'none' }}
                 />
             </div>
