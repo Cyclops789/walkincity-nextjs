@@ -28,9 +28,9 @@ function Notification({ open, type, text, duration, setNotify }: INotificationTy
         <div 
             style={{
                 transition: 'all 0.4s ease',
-                transform: show ? 'translate(0, 500px)' : 'translate(100%, 500px)',
+                transform: show ? 'translateX(0)' : 'translateX(100%)',
             }} 
-            className={`${!show ? 'right-0' : 'right-[10px]'} rounded-md fixed bg-[#383838] flex border-l-4 ${type === 'warning' ? 'border-orange-500' : type === 'success' ? 'border-green-500' : type === 'info' ? 'border-blue-500' : type} text-gray-200`}
+            className={`${!show ? 'right-0' : 'right-[10px]'} rounded-md fixed bottom-2 bg-[#383838] flex border-l-4 ${type === 'warning' ? 'border-orange-500' : type === 'success' ? 'border-green-500' : type === 'info' ? 'border-blue-500' : type} text-gray-200`}
         >
             <div className={`mt-1.5 ml-2 ${type === 'warning' ? 'text-orange-500' : type === 'success' ? 'text-green-500' : type === 'info' ? 'text-blue-500' : type}`}>
                 {type === 'warning' ? (

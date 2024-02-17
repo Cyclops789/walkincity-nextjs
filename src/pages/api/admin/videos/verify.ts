@@ -2,7 +2,6 @@ import executeQuery from '@/lib/db';
 import query from '@/utils/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-
 interface IEditVideoReq_ {
     id: string | number | undefined;
     verify: string | number | undefined;

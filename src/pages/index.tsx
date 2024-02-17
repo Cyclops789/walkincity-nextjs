@@ -24,7 +24,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
   const [currentVideo, setCurrentVideo] = useState<IVideosRes>();
   const [currentCountry, setCurrentCountry] = useState<ICountryRes>();
   const [playing, setPlaying] = useState(false);
-  const [title, setTitle] = useState('SomeWhere');
+  const [title, setTitle] = useState('Some, Where');
   const [ended, setEnded] = useState(false);
   const [volume, setVolume] = useState('0');
   const [notify, setNotify] = useState<INotificationType>({
@@ -76,7 +76,9 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
             handleFullScreen={handleFullScreen}
           />
           
-          <Reactions />
+          <Reactions 
+            video={currentVideo}
+          />
 
           <Notification
             setNotify={setNotify}

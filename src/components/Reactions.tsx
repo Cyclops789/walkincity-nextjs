@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IVideosRes } from './SideBar';
 import dynamic from 'next/dynamic';
 import reactionsIcons from '@/helpers/reactions';
 import io from 'socket.io-client';
@@ -12,33 +13,43 @@ interface ILikes {
     name: string;
 }
 
-function Reactions() {
+function Reactions({ video }: { video: IVideosRes | undefined}) {
     const [connectors, setConnectors] = useState('0');
     const [likes, setLikes] = useState<ILikes[]>([]);
     const socketRef = useRef<any>();
     const cleanLike = useRef((id: any) => { setLikes((currentLikes) => currentLikes.filter((like) => like.id !== id)) });
 
     useEffect(() => {
-        fetch("/api/socket/io").finally(() => {
-            socketRef.current = io();
-
-            socketRef.current.on(`reaction`, (reaction: string) => {
-                setLikes((prevLikes) => [...prevLikes, { id: new Date().getTime(), name: reaction }])
-            });
-
-            socketRef.current.on(`userCount`, (userCount: string) => {
-                setConnectors(userCount)
-            });
-
-            return () => {
+        if(video) {
+            if(socketRef.current) {
                 socketRef.current.disconnect();
-            };
-        })
-    }, []);
+            }
+            
+            fetch("/api/socket/io").finally(() => {
+                socketRef.current = io({
+                    query: {
+                        videoID: video.vid
+                    }
+                });
+    
+                socketRef.current.on(`reaction-${video.vid}`, (reaction: string) => {
+                    setLikes((prevLikes) => [...prevLikes, { id: new Date().getTime(), name: reaction }])
+                });
+    
+                socketRef.current.on(`userCount-${video.vid}`, (userCount: string) => {
+                    setConnectors(userCount)
+                });
+    
+                return () => {
+                    socketRef.current.disconnect();
+                };
+            })
+        }
+    }, [video]);
 
     const sendReaction = (reactionName: string) => {
-        if (socketRef.current) {
-            socketRef.current.emit("reaction", reactionName);
+        if (socketRef.current && video) {
+            socketRef.current.emit(`reaction-${video.vid}`, reactionName);
         } else {
             console.log("Socket is not ready yet, giving a dummy reacting for now!")
             setLikes((prevLikes) => [...prevLikes, { id: new Date().getTime(), name: reactionName }])
@@ -64,7 +75,7 @@ function Reactions() {
                 ))}
             </div>
             <div
-                className={`fixed bottom-4 w-full flex justify-center z-[1]`}
+                className={`fixed bottom-4 w-full flex justify-start ml-3 sm:justify-center sm:ml-0 z-[1]`}
             >
                 <div className='flex h-9 rounded-full items-center space-x-2 w-[60px] text-white border border-white justify-center'>
                     <FontAwesomeIcon className='w-[20px]' icon={faEye} />
