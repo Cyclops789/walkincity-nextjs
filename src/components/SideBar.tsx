@@ -1,8 +1,8 @@
-
 import React, { useState, useRef, useEffect } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import { Dispatch, SetStateAction } from 'react';
+import io from 'socket.io-client';
 import {
     faBars,
     faMagnifyingGlass,
@@ -48,18 +48,25 @@ interface ISideBar {
     setEnded: Dispatch<SetStateAction<boolean>>;
 }
 
+interface IUserCountSideBar {
+    vid: string;
+    connectors: string;
+}
+
 function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, setCurrentCountry, currentCountry }: ISideBar) {
-    const [open, setOpen]                         = useState(false);
-    const [weatherFilter, setWeatherFilter]       = useState('');
-    const [countryFilter, setCountryFilter]       = useState('');
-    const [continentFilter, setContinentFilter]   = useState('');
-    const [countryOpen, setCountryOpen]           = useState({ id: 0, state: false });
-    const [getCountries, setCountries]            = useState<ICountryRes[]>(countries);
-    const [search, setSearch]                     = useState(false);
-    const wrapperRef                              = useRef(null);
+    const socketRef = useRef<any>();
+    const [connectors, setConnectors] = useState<IUserCountSideBar[]>();
+    const [open, setOpen] = useState(false);
+    const [weatherFilter, setWeatherFilter] = useState('');
+    const [countryFilter, setCountryFilter] = useState('');
+    const [continentFilter, setContinentFilter] = useState('');
+    const [countryOpen, setCountryOpen] = useState({ id: 0, state: false });
+    const [getCountries, setCountries] = useState<ICountryRes[]>(countries);
+    const [search, setSearch] = useState(false);
+    const wrapperRef = useRef(null);
 
     const changeWeatherFilter = (weather: string) => {
-        if(weatherFilter == weather) {
+        if (weatherFilter == weather) {
             setWeatherFilter('');
         } else {
             setWeatherFilter('');
@@ -84,9 +91,8 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
         }
     }, []);
 
-
     useEffect(() => {
-        if(ended) {
+        if (ended) {
             // pick random video
             const randomCountryIndex = Math.floor(Math.random() * countries.length);
             const randomVideoIndex = Math.floor(Math.random() * countries[randomCountryIndex].videos.length);
@@ -129,7 +135,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
     }, [continentFilter]);
 
     useEffect(() => {
-        if(continentFilter != '') {
+        if (continentFilter != '') {
             setCountries(countries.filter(item => item.continent.toLowerCase().includes(continentFilter.toLowerCase())))
         }
     }, [continentFilter]);
@@ -146,7 +152,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
         if (weatherFilter !== '') {
             setCountries((prevCountries) => {
                 let filteredCountries: ICountryRes[] = [];
-    
+
                 prevCountries.forEach((country) => {
                     country.videos?.forEach((video) => {
                         if (video.weather.includes(weatherFilter.toLowerCase())) {
@@ -160,12 +166,25 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                         }
                     });
                 });
-    
+
                 return filteredCountries;
             });
         }
     }, [weatherFilter]);
 
+    useEffect(() => {
+        fetch("/api/socket/io").finally(() => {
+            socketRef.current = io();
+
+            socketRef.current.on(`usersCount`, (usersCount: IUserCountSideBar[]) => {
+                setConnectors(usersCount)
+            });
+
+            return () => {
+                socketRef.current.disconnect();
+            };
+        })
+    }, []);
 
     return (
         <div
@@ -179,137 +198,137 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
         >
             <div className='max-w-[260px]'>
                 <div className="flex flex-wrap space-x-2 space-y-2  justify-between">
-                    <div 
+                    <div
                         onClick={() => {
-                            if(continentFilter == 'Africa') {
+                            if (continentFilter == 'Africa') {
                                 setContinentFilter('');
                             } else {
                                 setContinentFilter('Africa');
                             }
-                        }} 
-                        title="Africa" 
+                        }}
+                        title="Africa"
                         className={`rounded ml-2 mt-2 px-3 py-2 cursor-pointer ${continentFilter == 'Africa' ? 'bg-gray-800 text-white' : 'bg-white'}`}
                     >
-                        <FontAwesomeIcon 
-                            size='lg' 
-                            icon={faEarthAfrica} 
+                        <FontAwesomeIcon
+                            size='lg'
+                            icon={faEarthAfrica}
                         />
                     </div>
-                    <div 
+                    <div
                         onClick={() => {
-                            if(continentFilter == 'Asia') {
+                            if (continentFilter == 'Asia') {
                                 setContinentFilter('');
                             } else {
                                 setContinentFilter('Asia');
                             }
-                        }} 
-                        title="Asia" 
+                        }}
+                        title="Asia"
                         className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Asia' ? 'bg-gray-800 text-white' : 'bg-white'}`}
                     >
-                        <FontAwesomeIcon 
-                            size='lg' 
-                            icon={faEarthAsia} 
+                        <FontAwesomeIcon
+                            size='lg'
+                            icon={faEarthAsia}
                         />
                     </div>
                     <div
                         onClick={() => {
-                            if(continentFilter == 'Europe') {
+                            if (continentFilter == 'Europe') {
                                 setContinentFilter('');
                             } else {
                                 setContinentFilter('Europe');
                             }
-                        }} 
-                        title="Europe" 
+                        }}
+                        title="Europe"
                         className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Europe' ? 'bg-gray-800 text-white' : 'bg-white'}`}
                     >
-                        <FontAwesomeIcon 
-                            size='lg' 
-                            icon={faEarthEurope} 
+                        <FontAwesomeIcon
+                            size='lg'
+                            icon={faEarthEurope}
                         />
                     </div>
                     <div
                         onClick={() => {
-                            if(continentFilter == 'Americas') {
+                            if (continentFilter == 'Americas') {
                                 setContinentFilter('');
                             } else {
                                 setContinentFilter('Americas');
                             }
-                        }} 
-                        title="Americas" 
+                        }}
+                        title="Americas"
                         className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Americas' ? 'bg-gray-800 text-white' : 'bg-white'}`}
                     >
                         <FontAwesomeIcon
-                            size='lg' 
-                            icon={faEarthAmericas} 
+                            size='lg'
+                            icon={faEarthAmericas}
                         />
                     </div>
                     <div
                         onClick={() => {
-                            if(continentFilter == 'Oceania') {
+                            if (continentFilter == 'Oceania') {
                                 setContinentFilter('');
                             } else {
                                 setContinentFilter('Oceania');
                             }
-                        }} 
-                        title="Oceania" 
+                        }}
+                        title="Oceania"
                         className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Oceania' ? 'bg-gray-800 text-white' : 'bg-white'}`}
                     >
-                        <FontAwesomeIcon 
-                            size='lg' 
-                            icon={faEarthOceania} 
+                        <FontAwesomeIcon
+                            size='lg'
+                            icon={faEarthOceania}
                         />
                     </div>
                 </div>
 
                 <div className="flex flex-wrap space-x-2 space-y-2 pb-2 justify-between">
-                    <div 
-                        title="Day" 
+                    <div
+                        title="Day"
                         className={`rounded ml-2 mt-2 px-3 py-2 cursor-pointer ${weatherFilter == 'weather-normal-morning' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => {changeWeatherFilter('weather-normal-morning')}} 
+                        onClick={() => { changeWeatherFilter('weather-normal-morning') }}
                     >
-                        <FontAwesomeIcon 
-                            size='lg' 
-                            icon={faSun} 
+                        <FontAwesomeIcon
+                            size='lg'
+                            icon={faSun}
                         />
                     </div>
-                    <div 
-                        title="Night" 
+                    <div
+                        title="Night"
                         className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-normal-night' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => {changeWeatherFilter('weather-normal-night')}} 
+                        onClick={() => { changeWeatherFilter('weather-normal-night') }}
                     >
-                        <FontAwesomeIcon 
-                            size='lg' 
-                            icon={faMoon} 
+                        <FontAwesomeIcon
+                            size='lg'
+                            icon={faMoon}
                         />
                     </div>
-                    <div 
-                        title="Raining" 
+                    <div
+                        title="Raining"
                         className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-rain-' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => {changeWeatherFilter('weather-rain-')}} 
+                        onClick={() => { changeWeatherFilter('weather-rain-') }}
                     >
-                        <FontAwesomeIcon 
-                            size='lg' 
-                            icon={faCloudRain} 
+                        <FontAwesomeIcon
+                            size='lg'
+                            icon={faCloudRain}
                         />
                     </div>
-                    <div 
-                        title="Cloudy" 
+                    <div
+                        title="Cloudy"
                         className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-cloud-morning' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => {changeWeatherFilter('weather-cloud-morning')}} 
+                        onClick={() => { changeWeatherFilter('weather-cloud-morning') }}
                     >
-                        <FontAwesomeIcon 
-                            size='lg' 
-                            icon={faCloud} 
+                        <FontAwesomeIcon
+                            size='lg'
+                            icon={faCloud}
                         />
                     </div>
-                    <div  
-                        title="Snowing" 
+                    <div
+                        title="Snowing"
                         className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-snow-' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => {changeWeatherFilter('weather-snow-')}} 
+                        onClick={() => { changeWeatherFilter('weather-snow-') }}
                     >
-                        <FontAwesomeIcon 
-                            size='lg' 
-                            icon={faSnowflake} 
+                        <FontAwesomeIcon
+                            size='lg'
+                            icon={faSnowflake}
                         />
                     </div>
                 </div>
@@ -353,14 +372,24 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                                 className="border border-black absolute top-[0.9rem] left-[-27px] h-auto transform -translate-y-1/2 rotate-[-49deg]"
                             />
 
-                            {country.long_name}
+                            <div className='my-[-4px] pl-[70px] text-start'>
+                                <div className='text-sm font-semibold'>{country.long_name}</div>
+                                <div className='text-sm'>{connectors?.reduce((accumulator, connector) => { const filteredVideos = country.videos.filter((video) => video.vid === connector.vid); return accumulator + filteredVideos.length }, 0) || 0} watching</div>
+                            </div>
 
-                            <FontAwesomeIcon
-                                className={`absolute top-3.5 right-5 transition-transform duration-200 ease-in-out ${(countryOpen.id === country.id && countryOpen.state === true) ? 'rotate-[90deg]' : ''}`}
-                                size='lg'
-                                icon={faChevronRight}
-                            />
-                            <div className={`ml-3 mt-[50px] grid justify-start items-start ${(countryOpen.id === country.id && countryOpen.state === true) ? '' : 'hidden'}`}>
+                            <div className="flex items-center justify-center h-full">
+                                <FontAwesomeIcon
+                                    style={{
+                                        animation: `${(currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) && 'currentLableCountry'} 1s ease 0s infinite normal none`,
+                                        color: `${(currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) ? 'var(--primary-text-color)' : 'black'}`,
+                                    }}
+                                    className={`absolute top-3.5 right-5 ${currentCountry !== country && 'transition-transform duration-200 ease-in-out'} ${(countryOpen.id === country.id && countryOpen.state === true) ? 'rotate-[90deg]' : ''}`}
+                                    size='lg'
+                                    icon={faChevronRight}
+                                />
+                            </div>
+
+                            <div className={`ml-3 mt-[35px] grid justify-start items-start ${(countryOpen.id === country.id && countryOpen.state === true) ? '' : 'hidden'}`}>
                                 {country.videos.map((video: IVideosRes) => (
                                     <div key={video.vid} onClick={() => { setCurrentCountry(country); setCurrentVideo(video) }} className={`cursor-pointer ${currentVideo === video ? 'text-blue-400' : 'hover:text-blue-400'}`}>
                                         {video.country}, {video.place}
@@ -372,8 +401,8 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                 </div>
             </div>
             <div className='flex justify-center w-[60px]'>
-                <div className={`cursor-pointer text-white mt-3`}>
-                    <FontAwesomeIcon size={"2x"} icon={faBars} onClick={() => setOpen(!open)} />
+                <div className={`text-white mt-3`}>
+                    <FontAwesomeIcon className='cursor-pointer' size={"2x"} icon={faBars} onClick={() => setOpen(!open)} />
                 </div>
             </div>
         </div>

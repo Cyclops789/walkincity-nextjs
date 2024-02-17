@@ -22,6 +22,7 @@ export interface IVideoComponent {
 
 function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo, setCurrentCountry, currentCountry, countries, c, volume }: IVideoComponent) {
     const [player, setPlayer] = useState<YouTubePlayer>();
+    const [originURL, setOriginURL] = useState('');
 
     const onReady: YouTubeProps['onReady'] = (e) => {
         e.target.mute();
@@ -81,6 +82,7 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
 
     useEffect(() => {
         setTitle(`${currentVideo?.country}, ${currentVideo?.place}`);
+        setOriginURL(window.location.origin)
     }, [currentVideo]);
 
     return (
@@ -100,7 +102,8 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                             gyroscope: 1,
                             'picture-in-picture': 1, 
                             'web-share': 1,
-                            controls: 0
+                            controls: 0,
+                            origin: originURL
                         },
                     }}
                     videoId={currentVideo?.vid}
