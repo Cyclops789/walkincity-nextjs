@@ -391,7 +391,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
 
                             <div className={`ml-3 mt-[35px] grid justify-start items-start ${(countryOpen.id === country.id && countryOpen.state === true) ? '' : 'hidden'}`}>
                                 {country.videos.map((video: IVideosRes) => (
-                                    <div key={video.vid} onClick={() => { setCurrentCountry(country); setCurrentVideo(video) }} className={`cursor-pointer ${currentVideo === video ? 'text-blue-400' : 'hover:text-blue-400'}`}>
+                                    <div key={video.vid} onClick={() => { setCurrentCountry(country); setCurrentVideo(video) }} className={`text-start cursor-pointer ${currentVideo === video ? 'text-blue-400' : 'hover:text-blue-400'}`}>
                                         {video.country}, {video.place}
                                     </div>
                                 ))}
