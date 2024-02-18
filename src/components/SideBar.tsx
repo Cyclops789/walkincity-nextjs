@@ -380,7 +380,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                             <div className="flex items-center justify-center h-full">
                                 <FontAwesomeIcon
                                     style={{
-                                        animation: `${(currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) && 'currentLableCountry'} 1s ease 0s infinite normal none`,
+                                        animation: `${((currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) && (countryOpen.id !== country.id && countryOpen.state !== true)) && 'currentLableCountry'} 1s ease 0s infinite normal none`,
                                         color: `${(currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) ? 'var(--primary-text-color)' : 'black'}`,
                                     }}
                                     className={`absolute top-3.5 right-5 ${currentCountry !== country && 'transition-transform duration-200 ease-in-out'} ${(countryOpen.id === country.id && countryOpen.state === true) ? 'rotate-[90deg]' : ''}`}
