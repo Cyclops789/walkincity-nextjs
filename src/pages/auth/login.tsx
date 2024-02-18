@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 function login() {
     const router = useRouter();
     const { error } : { error?: string } = router.query;
-    const [form, setForm]   = useState({ email: '', password: '' });
+    const [form, setForm] = useState({ email: '', password: '' });
     const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmitForm = (e: React.MouseEvent<HTMLFormElement, MouseEvent>) => {
