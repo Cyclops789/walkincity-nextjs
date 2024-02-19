@@ -13,11 +13,12 @@ interface INewVideoRequest_ {
     weather: string | undefined;
     continent: string | undefined;
     seekTo: string | undefined;
+    by_email: string | undefined;
 }
 
 export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { vid, country, place, token, type, weather, continent, seekTo }: INewVideoRequest_ = _req.body
+        const { vid, country, place, token, type, weather, continent, seekTo, by_email }: INewVideoRequest_ = _req.body
 
         if (!token) {
             return res.json({
@@ -28,7 +29,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             });
         }
 
-        if (!vid || !country || !place || !type || !weather || !continent || !seekTo) {
+        if (!vid || !country || !place || !type || !weather || !continent || !seekTo || !by_email) {
             return res.json({
                 success: false,
                 error: {
@@ -64,18 +65,24 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             }
         }).then(async (r) => {
             if (r.data.success) {
-                console.log("Token valid")
                 const video = await executeQuery({
                     query: query.getVideoByVid,
                     values: [youtube_id],
                 }) as any[];
 
-                if (video.length <= 1) {
+                const videoRequest = await executeQuery({
+                    query: query.getVideoRequestByVid,
+                    values: [youtube_id],
+                }) as any[];
+
+                if (!video[0]?.vid && !videoRequest[0]?.vid) {
                     try {
-                        await executeQuery({
-                            query: query.createNewVideo,
-                            values: [youtube_id, country, place, weather, type, continent, seekTo, 0],
+                        const newRequestVideo = await executeQuery({
+                            query: query.createNewVideosRequests,
+                            values: [youtube_id, country, place, weather, type, seekTo, continent, by_email],
                         }) as any[];
+
+                        console.log(newRequestVideo)
 
                         return res.json({ success: true, message: 'Request has been sent successfully! redirecting in 5s' });
 
@@ -94,13 +101,12 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                     return res.json({
                         success: false,
                         error: {
-                            message: 'Video already exist.'
+                            message: `Video${video[0]?.vid ? " " : videoRequest[0]?.vid && " request " }already exist.`
                         }
                     });
                 }
 
             } else if (!r.data.success) {
-                console.log("Token is not valid")
                 return res.json({
                     success: false,
                     error: {

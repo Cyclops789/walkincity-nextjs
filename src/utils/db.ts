@@ -8,49 +8,6 @@ interface IOptions {
 
 const createDB = `CREATE DATABASE IF NOT EXISTS ${secrets.MYSQL_DATABASE}`;
 
-const createTableVideos = `
-CREATE TABLE IF NOT EXISTS videos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    vid VARCHAR(255) NOT NULL UNIQUE,
-    country VARCHAR(255) NOT NULL,
-    place VARCHAR(255) NOT NULL,
-    continent VARCHAR(255) NOT NULL,
-    weather VARCHAR(255) NOT NULL,
-    type VARCHAR(255) NOT NULL,
-    created_on TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
-)
-`;
-
-const createTableRadios = `
-CREATE TABLE IF NOT EXISTS radios (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL UNIQUE,
-    url VARCHAR(255) NOT NULL UNIQUE,
-    created_on TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
-)
-`;
-
-const createTableIcons = `
-CREATE TABLE IF NOT EXISTS icons (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    time VARCHAR(255) NOT NULL,
-    old VARCHAR(255) NOT NULL,
-    new VARCHAR(255) NOT NULL,
-    created_on TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6)
-)
-`;
-
-const createTableUsers = `
-CREATE TABLE users (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-`;
-
 const getUserByEmail = `
 SELECT * FROM users WHERE email = ?
 `;
@@ -73,6 +30,27 @@ SELECT * FROM roles WHERE id = ?
 
 const getRoleByName = `
 SELECT * FROM roles WHERE name = ?
+`;
+
+const getAllVideosRequests = `
+SELECT * FROM videos_requests
+`;
+
+const getVideoRequestByID = `
+SELECT * FROM videos_requests WHERE id = ?
+`;
+
+const getVideoRequestByVid = `
+SELECT * FROM videos_requests WHERE vid = ?
+`;
+
+const getVideoRequestByEmail = `
+SELECT * FROM videos_requests WHERE by_email = ?
+`;
+
+const createNewVideosRequests = `
+INSERT INTO videos_requests (vid, country, place, weather, type, seekTo, continent, by_email)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 `;
 
 const getAllRoles = `
@@ -158,11 +136,7 @@ const updateField = (table: string, id: number | string, options: IOptions[] = [
 
 const query = {
     createDB,
-    createTableVideos,
-    createTableRadios,
-    createTableIcons,
     getAllContinents,
-    createTableUsers,
     getVideosByContinent,
     getVideosByWeather,
     getVideosByWeatherAndContinent,
@@ -175,6 +149,11 @@ const query = {
     getAllRoles,
     getUserByID,
     getRoleByID,
+    getAllVideosRequests,
+    getVideoRequestByVid,
+    getVideoRequestByID, 
+    getVideoRequestByEmail,
+    createNewVideosRequests,
     getAllUsers,
     getCountryByID,
     getUsersByRole,
