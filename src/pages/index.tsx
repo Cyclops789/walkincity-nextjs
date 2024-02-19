@@ -46,22 +46,28 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
             setCurrentVideo={setCurrentVideo}
             countries={countries}
           />
-
-          <Video
-            v={v}
-            c={c}
-            volume={volume}
-            countries={countries}
-            ended={ended}
-            setEnded={setEnded}
-            setCurrentCountry={setCurrentCountry}
-            currentCountry={currentCountry}
-            setCurrentVideo={setCurrentVideo}
-            currentVideo={currentVideo}
-            setTitle={setTitle}
-            setPlaying={setPlaying}
-            playing={playing}
-          />
+          <div className={`w-full h-full`}>
+            <div className='w-screen h-screen bg-black justify-center items-center flex'>
+              {!playing && (
+                <div className="custom-loader"></div>
+              )}
+              <Video
+                v={v}
+                c={c}
+                volume={volume}
+                countries={countries}
+                ended={ended}
+                setEnded={setEnded}
+                setCurrentCountry={setCurrentCountry}
+                currentCountry={currentCountry}
+                setCurrentVideo={setCurrentVideo}
+                currentVideo={currentVideo}
+                setTitle={setTitle}
+                setPlaying={setPlaying}
+                playing={playing}
+              />
+            </div>
+          </div>
 
           <PlayerButtons
             ended={ended}
@@ -75,8 +81,8 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
             setNotify={setNotify}
             handleFullScreen={handleFullScreen}
           />
-          
-          <Reactions 
+
+          <Reactions
             video={currentVideo}
           />
 
