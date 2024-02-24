@@ -1,4 +1,4 @@
-const { executeQuery, colors } = require("./db");
+const { executeQuery, colors } = require("../db");
 colors.enable();
 
 (async () => {
