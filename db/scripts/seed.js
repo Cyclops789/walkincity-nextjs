@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const directoryPath = __dirname + '/seeds';
-const { executeQuery } = require("./db");
+const directoryPath = __dirname + '/../seeds';
+const { executeQuery } = require("../db");
 
 (async () => {
     try {

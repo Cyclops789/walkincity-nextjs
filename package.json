@@ -7,9 +7,11 @@
     "start": "next start -p 4000",
     "stage": "yarn build; yarn start",
     "type-check": "tsc",
-    "db:migrate": "node db/migrate.js",
-    "db:seed": "node db/seed.js",
-    "db:init": "node db/initial.js"
+    "db:migrate": "node db/scripts/migrate.js",
+    "db:seed": "node db/scripts/seed.js",
+    "db:init": "node db/scripts/initial.js",
+    "db:backup": "node db/scripts/backup.js",
+    "db:setup": "yarn db:init && yarn db:migrate && yarn db:seed && yarn db:backup"
   },
   "dependencies": {
     "@babel/core": "^7.23.7",
@@ -36,6 +38,7 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "mysql": "^2.18.1",
+    "mysqldump": "^3.2.0",
     "nanoid": "^5.0.4",
     "next": "^14.1.0",
     "next-auth": "^4.24.5",
