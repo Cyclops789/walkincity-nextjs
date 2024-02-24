@@ -11,6 +11,7 @@ import query from '@/utils/db';
 import { useRouter } from 'next/router';
 import YouTubeVideoId from '@/helpers/youtube';
 import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
+import Link from 'next/link';
 
 interface INewVideoForm {
     vid?: string;
@@ -328,8 +329,11 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
                             <input id='email' onChange={(e) => updateFormData({ name: 'email', value: e.target.value })} className='rounded p-2 text-black w-full' type="email" required />
                         </div>
 
-                        <div className='flex justify-center pt-5'>
+                        <div className='flex justify-center pt-2'>
                             <button disabled={sending || !tested || !form || form.vid === '' || form.country === '' || form.place === '' || form.type === '' || form.weather === '' || form.email === '' || form.seekTo === undefined || form.seekTo === null} type="submit" className='bg-[var(--primary-text-color)] disabled:bg-slate-700 hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'>Submit</button>
+                        </div>
+                        <div className='flex justify-center pt-1 text-center'>
+                        <Link href="/" className='bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'>Back</Link>
                         </div>
                     </form>
                 </div>
