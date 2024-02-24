@@ -7,26 +7,26 @@ const { executeQuery } = require("../db");
     try {
         const files = await fs.promises.readdir(directoryPath);
 
-        let migrations;
-        const migrationsQueryPromise = executeQuery(`SELECT * FROM seeds;`);
+        let seeds;
+        const seedsQueryPromise = executeQuery(`SELECT * FROM seeds;`);
 
-        const result = await migrationsQueryPromise;
-        migrations = JSON.stringify(result);
+        const result = await seedsQueryPromise;
+        seeds = JSON.stringify(result);
         
-        const migrationsAsJSON = JSON.parse(migrations);
+        const seedsAsJSON = JSON.parse(seeds);
 
         for (const file of files) {
             if (file.endsWith('.js')) {
-                let alreadyMigrated = false;
+                let alreadySeeded = false;
 
-                for (const migration of migrationsAsJSON) {
-                    if (migration.migration === file.replace('.js', '')) {
-                        alreadyMigrated = true;
+                for (const seed of seedsAsJSON) {
+                    if (seed.seed === file.replace('.js', '')) {
+                        alreadySeeded = true;
                         break;
                     }
                 }
 
-                if (!alreadyMigrated) {
+                if (!alreadySeeded) {
                     await executeQuery(
                         `INSERT INTO seeds (seed) VALUES (?);`,
                         [file.replace('.js', '')]
