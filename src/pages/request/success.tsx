@@ -1,15 +1,12 @@
 import React from 'react'
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 const Layout = dynamic(import('@/components/Layouts/Main'));
 
 export default function success() {
-    const router = useRouter();
-
-
     return (
         <Layout title={'Request a new walk'}>
             <div style={{ backgroundColor: 'hsl(0, 0%, 8%)' }} className='flex w-screen h-screen justify-center items-center'>
@@ -24,11 +21,12 @@ export default function success() {
                         <div className='flex text-center text-xl justify-center items-center'>
                             <div>You will be notified once the video is verified by one of our team.</div>
                         </div>
+                        <div className='flex justify-center pt-1 text-center'>
+                            <Link href="/" className='bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'>Go back</Link>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
         </Layout>
     )
 }

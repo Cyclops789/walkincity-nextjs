@@ -119,7 +119,7 @@ export default function editRole({ role, permissions }: { role: IRoleReturnsJSON
                                                 defaultValue={form.permissions}
                                                 options={permissions}
                                                 className='capitalize'
-                                                getOptionLabel={(option) => `${option.name.replace('_', ' ')}`}
+                                                getOptionLabel={(option) => `${option.name.replaceAll('_', ' ')}`}
                                                 getOptionValue={(option) => `${option.id}`}
                                                 onChange={(selection) => updateFormData({ name: 'permissions', value: selection })}
                                             />

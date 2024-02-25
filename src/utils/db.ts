@@ -13,11 +13,11 @@ SELECT * FROM users WHERE email = ?
 `;
 
 const getUserByID = `
-SELECT * FROM users WHERE id = ?
+SELECT *, 'hidden' AS password FROM users WHERE id = ?
 `;
 
 const getAllUsers = `
-SELECT * FROM users
+SELECT *, 'hidden' AS password FROM users
 `;
 
 const getUsersByRole = `
@@ -33,7 +33,11 @@ SELECT * FROM roles WHERE name = ?
 `;
 
 const getAllVideosRequests = `
-SELECT * FROM videos_requests
+SELECT *, 'hidden' AS by_email FROM videos_requests
+`;
+
+const getAllAvailableVideosRequests = `
+SELECT *, 'hidden' AS by_email FROM videos_requests WHERE action IS NULL;
 `;
 
 const getVideoRequestByID = `
@@ -163,6 +167,7 @@ const query = {
     getAllIcons,
     createNewUser,
     createNewVideo,
+    getAllAvailableVideosRequests,
     getCountryByShortName,
     getVideosByVerified,
     updateField

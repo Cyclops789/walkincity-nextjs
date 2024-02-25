@@ -30,6 +30,12 @@ const permissions = [
         dashboardPath: '',
         apiPath: '/api/admin/videos/verify'
     },
+    {
+        id: 18,
+        name: 'accept_reject_videos',
+        dashboardPath: '/admin/dashboard/requests',
+        apiPath: '/api/admin/requests/action'
+    },
 
     // Users
     {
@@ -83,7 +89,7 @@ const permissions = [
         apiPath: '/api/admin/countries/new'
     },    
     
-    // Countries
+    // Roles
     {
         id: 14,
         name: 'read_roles',

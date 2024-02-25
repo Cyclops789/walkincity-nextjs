@@ -96,7 +96,6 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
     }
 
     const updateFormData = ({ name, value }: { name: string, value: string | number }) => {
-
         setFormData((prevData) => ({ ...prevData, [name]: value }))
     }
 
