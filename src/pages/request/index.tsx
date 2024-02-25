@@ -179,9 +179,6 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
             case 3: // buffering
                 setVideoState('Video is buffering, play to verify.')
                 break;
-            case 5: // video cued
-                setVideoState('Video cued, play to verify.')
-                break;
         }
     }
 
