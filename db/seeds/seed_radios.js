@@ -36,11 +36,14 @@ INSERT INTO ${table} (id, name, url, created_on) VALUES
 (30, '28_RADIO_NO_NAME', 'https://radio.lacapanna.eu:8000/radio.mp3', '2023-07-10 15:20:33.760676');
 `;
 
-(async () => {
+async function execute()  {
     await executeQuery(query, values = []).catch((e) => {
         console.log(`[${table}] Error seeding the table: `.red, e);
-        process.exit(0);
     });
 
     console.log(`[${table}] seeded with success!`.green);
-})();
+};
+
+module.exports = {
+    execute
+}

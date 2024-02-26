@@ -15,11 +15,14 @@ INSERT INTO ${table} (id, name, time, old, new, created_on) VALUES
 (8, 'normal', 'night', 'weather-normal-night', 'fa-solid fa-moon', '2023-07-10 15:25:16.433944');
 `;
 
-(async () => {
+async function execute()  {
     await executeQuery(query, values = []).catch((e) => {
         console.log(`[${table}] Error seeding the table: `.red, e);
-        process.exit(0);
     });
 
     console.log(`[${table}] seeded with success!`.green);
-})();
+};
+
+module.exports = {
+    execute
+}

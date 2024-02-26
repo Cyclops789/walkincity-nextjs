@@ -26,7 +26,7 @@ interface INewVideoForm {
 const Layout = dynamic(import('@/components/Layouts/Main')),
     Notification = dynamic(import('@/components/Dashboard/Notification'));
 
-export default function request({ videos, countries }: { videos: IVideosRes[], countries: ICountryRes[] }) {
+export default function request({ countries }: { countries: ICountryRes[] }) {
     const router = useRouter();
     const ref = useRef<any>(null);
     const [form, setForm] = useState<INewVideoForm>();
@@ -65,10 +65,10 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
             return setNotify({ open: true, type: 'warning', text: 'Please test the video before sending.' });
         }
 
-        if (!playing ) {
+        if (!playing) {
             return setNotify({ open: true, type: 'warning', text: 'Please verify the video before sending.' });
         }
-        
+
         setSending(true);
         axios.post('/api/request/new', {
             token,
@@ -83,10 +83,6 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
         }).then((res) => {
             if (res.data.success) {
                 setNotify({ open: true, type: 'success', text: res.data.message });
-
-                setTimeout(() => {
-                    router.push('/request/success');
-                }, 5000);
             } else if (!res.data.success && res.data.error.message) {
                 setNotify({ open: true, type: 'warning', text: res.data.error.message })
             }
@@ -105,9 +101,9 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
         if (!form?.vid) {
             return setNotify({ open: true, type: 'warning', text: 'Please fill out the video input.' });
         }
-        if(tested !== '' && tested) {
+        if (tested !== '' && tested) {
             setTested('');
-            updateFormData({ name:'vid', value: '' })
+            updateFormData({ name: 'vid', value: '' })
         } else {
             setTested(form.vid);
         }
@@ -170,8 +166,13 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
                 setVideoState('Video ended, play to verify.')
                 break;
             case 1: // playing
-                setPlaying(true)
-                setVideoState('Video is playing.')
+                if(e.target.getDuration() < 900 ) {
+                    setVideoError('Video should be at least 15min.')
+                    setPlaying(false)
+                } else if (e.target.getDuration() >= 900) {
+                    setPlaying(true)
+                    setVideoState('Video is playing.')
+                }
                 break;
             case 2: // paused
                 setVideoState('Video is paused.')
@@ -183,14 +184,14 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
     }
 
     useEffect(() => {
-        if(form?.vid === '' || !form?.vid) {
+        if (form?.vid === '' || !form?.vid) {
             setTested('');
             setPlaying(false)
         }
     }, [form]);
 
     useEffect(() => {
-        if(playing) {
+        if (playing) {
             setVideoError('')
         }
     }, [playing])
@@ -237,7 +238,7 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
                         </ul>
 
                         <div className="font-semibold text-[#ff284b]">
-                            - Please test the video before sending, otherwise your request will be declined
+                            - The video must be 15min or more otherwise if will be rejected.
                         </div>
                         <div className="font-semibold text-[#fc002a] text-center uppercase text-2xl underline">
                             Video
@@ -270,7 +271,7 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
                         </div>
 
                         <div className='space-y-2'>
-                            <label htmlFor='vid'>Video <span className='text-red-600'>*</span></label>
+                            <label htmlFor='vid'>Video <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>You can test the video before sending.</span></label>
                             <div className="flex space-x-2">
                                 <input disabled={tested !== ''} id='vid' value={form?.vid} onChange={(e) => updateFormData({ name: 'vid', value: e.target.value })} className='rounded p-2 text-black w-full' type="text" required />
                                 <button onClick={testVideo} type='button' className={'bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-auto uppercase'}>
@@ -295,12 +296,12 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
                         </div>
 
                         <div className='space-y-2'>
-                            <label htmlFor='place'>Place <span className='text-red-600'>*</span></label>
+                            <label htmlFor='place'>Place <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>It can be the city / village or both.</span></label>
                             <input id='place' onChange={(e) => updateFormData({ name: 'place', value: e.target.value })} className='rounded p-2 text-black w-full' type="text" required />
                         </div>
 
                         <div className='space-y-2'>
-                            <label htmlFor='weather'>Weather <span className='text-red-600'>*</span></label>
+                            <label htmlFor='weather'>Weather <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>Choose the closest one.</span></label>
                             <select
                                 id="weather"
                                 onChange={(e) => updateFormData({ name: 'weather', value: e.target.value })}
@@ -317,12 +318,12 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
                         </div>
 
                         <div className='space-y-2'>
-                            <label htmlFor='seekTo'>Seek the video to (in seconds) <span className='text-red-600'>*</span></label>
+                            <label htmlFor='seekTo'>Seek the video to (in seconds) <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>When the walk starts.</span></label>
                             <input id='seekTo' onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.valueAsNumber })} className='rounded p-2 text-black w-full' type="number" required />
                         </div>
 
                         <div className='space-y-2'>
-                            <label htmlFor='email'>Your email <span className='text-red-600'>*</span></label>
+                            <label htmlFor='email'>Your email <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>We will use this email to verify the request.</span></label>
                             <input id='email' onChange={(e) => updateFormData({ name: 'email', value: e.target.value })} className='rounded p-2 text-black w-full' type="email" required />
                         </div>
 
@@ -330,7 +331,7 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
                             <button disabled={sending || !tested || !form || form.vid === '' || form.country === '' || form.place === '' || form.type === '' || form.weather === '' || form.email === '' || form.seekTo === undefined || form.seekTo === null} type="submit" className='bg-[var(--primary-text-color)] disabled:bg-slate-700 hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'>Submit</button>
                         </div>
                         <div className='flex justify-center pt-1 text-center'>
-                        <Link href="/" className='bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'>Back</Link>
+                            <Link href="/" className='bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'>Back</Link>
                         </div>
                     </form>
                 </div>
@@ -350,10 +351,6 @@ export default function request({ videos, countries }: { videos: IVideosRes[], c
 }
 
 export const getServerSideProps = (async () => {
-    const videos = await executeQueryReturnsJSON({
-        query: query.getAllVideos,
-        values: [],
-    }) as IVideosRes[];
 
     const countries = await executeQueryReturnsJSON({
         query: query.getAllCountries,
@@ -362,8 +359,7 @@ export const getServerSideProps = (async () => {
 
     return {
         props: {
-            videos: videos,
             countries: countries
         }
     }
-}) satisfies GetServerSideProps<{ videos: IVideosRes[], countries: ICountryRes[] }>
+}) satisfies GetServerSideProps<{ countries: ICountryRes[] }>

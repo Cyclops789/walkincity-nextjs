@@ -13,11 +13,14 @@ INSERT INTO ${table} (id, continent_name, continent_icon, continent_color) VALUE
     (7, 'Antarctica', 'antarctica', 'grey');
 `;
 
-(async () => {
+async function execute()  {
     await executeQuery(query, values = []).catch((e) => {
         console.log(`[${table}] Error seeding the table: `.red, e);
-        process.exit(0);
     });
 
     console.log(`[${table}] seeded with success!`.green);
-})();
+};
+
+module.exports = {
+    execute
+}

@@ -31,7 +31,6 @@ const Layout = dynamic(import('@/components/Layouts/Dashboard')),
     SheetModal = dynamic(import('@/components/Dashboard/SheetModal'));
 
 export default function videos({ videos, countries }: { videos: IVideosRes[], countries: ICountryRes[] }) {
-    const router = useRouter()
     const [modal, setModalData] = useState<any>();
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);

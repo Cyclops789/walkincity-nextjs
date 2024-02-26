@@ -26,10 +26,9 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
 
     const onReady: YouTubeProps['onReady'] = (e) => {
         e.target.mute();
-        e.target.seekTo(60);
         e.target.playVideo();
 
-        setPlayer(e.target)
+        setPlayer(e.target);
     }
 
     const onError: YouTubeProps['onError'] = (e) => {
@@ -143,6 +142,7 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                     'picture-in-picture': 1,
                     'web-share': 1,
                     controls: 0,
+                    start: currentVideo?.seekTo,
                     origin: originURL
                 },
             }}

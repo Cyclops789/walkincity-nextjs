@@ -36,11 +36,14 @@ INSERT INTO ${table} (id, short_name, long_name, border_color, continent) VALUES
 (29, 'MA', 'Morocco', 'red', 'Africa');
 `;
 
-(async () => {
+async function execute()  {
     await executeQuery(query, values = []).catch((e) => {
         console.log(`[${table}] Error seeding the table: `.red, e);
-        process.exit(0);
     });
 
     console.log(`[${table}] seeded with success!`.green);
-})();
+};
+
+module.exports = {
+    execute
+}
