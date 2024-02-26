@@ -69,6 +69,20 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             }
         }).then(async (r) => {
             if (r.data.success) {
+                const targetedCountry = await executeQuery({
+                    query: query.getCountryByLongName,
+                    values: [country],
+                }) as any[];
+    
+                if(targetedCountry.length <= 0) {
+                    return res.json({
+                        success: false,
+                        error: {
+                            message: 'Targeted country was not found.'
+                        }
+                    });
+                }
+
                 const video = await executeQuery({
                     query: query.getVideoByVid,
                     values: [youtube_id],
@@ -95,7 +109,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                             template: verifyRequest(country, place, vid, secrets.APP_URL as string, token)
                         })
 
-                        return res.json({ success: true, message: 'A verification email has been sent to your email!' });
+                        return res.json({ success: true, message: 'A verification email has been sent, please check your inbox!' });
 
                     } catch (error) {
                         console.error(error);

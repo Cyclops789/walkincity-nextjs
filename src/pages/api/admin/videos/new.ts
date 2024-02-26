@@ -43,6 +43,20 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
 
         if (!video[0]?.vid) {
             try {
+                const targetedCountry = await executeQuery({
+                    query: query.getCountryByLongName,
+                    values: [country],
+                }) as any[];
+    
+                if(targetedCountry.length <= 0) {
+                    return res.json({
+                        success: false,
+                        error: {
+                            message: 'Targeted country was not found.'
+                        }
+                    });
+                }
+
                 const newVideo = await executeQuery({
                     query: query.createNewVideo,
                     values: [vid, country, place, weather, type, continent, seekTo, verified],

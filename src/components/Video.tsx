@@ -142,7 +142,7 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                     'picture-in-picture': 1,
                     'web-share': 1,
                     controls: 0,
-                    start: currentVideo?.seekTo,
+                    start: currentVideo?.seekTo || 1,
                     origin: originURL
                 },
             }}

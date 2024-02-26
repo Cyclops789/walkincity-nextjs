@@ -1,5 +1,8 @@
+import { requestAccepted, requestDeclined } from '@/helpers/mail';
 import executeQuery from '@/lib/db';
+import { sendMailAsVerfiy } from '@/lib/mail';
 import query from '@/utils/db';
+import secrets from '@/utils/secrets';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface IRequestVideo {
@@ -17,7 +20,7 @@ interface IRequestVideo {
 
 export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { id, action, country, place, weather, seekTo }: IRequestVideo = _req.body
+        const { id, action, country, place, weather, seekTo, reason }: IRequestVideo = _req.body
 
         if (!id || !action) {
             return res.json({
@@ -34,6 +37,15 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                 error: {
                     message: 'Invalid ID.'
                 }
+            });
+        }
+
+        if(action === 'reject' && (reason === '' || reason === undefined)) {
+            return res.json({ 
+                success: false, 
+                error: {
+                    message: 'You must specify an action with rejection!'
+                } 
             });
         }
 
@@ -61,10 +73,16 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                 }) as any[];
 
                 if(action === 'reject') {
+                    await sendMailAsVerfiy({
+                        subject: "Your request has been declined.",
+                        to: requestedVideo[0].by_email,
+                        template: requestDeclined(secrets.APP_URL as string, reason as string)
+                    });
+
                     return res.json({ success: true, message: 'Request has been rejected successfully!' });
                 }
 
-                await executeQuery({
+                const forwadedVideo = await executeQuery({
                     query: query.createNewVideo,
                     values: [
                         requestedVideo[0].vid,
@@ -74,9 +92,29 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                         requestedVideo[0].type,
                         requestedVideo[0].continent,
                         seekTo ? seekTo : requestedVideo[0].seekTo,
-                        0
+                        1
                     ],
+                }) as any[] | any;
+
+                const targetedCountry = await executeQuery({
+                    query: query.getCountryByLongName,
+                    values: [requestedVideo[0].country],
                 }) as any[];
+
+                if(targetedCountry.length <= 0) {
+                    return res.json({
+                        success: false,
+                        error: {
+                            message: 'Targeted country was not found.'
+                        }
+                    });
+                }
+
+                await sendMailAsVerfiy({
+                    subject: "Your request has been accepted!",
+                    to: requestedVideo[0].by_email,
+                    template: requestAccepted(secrets.APP_URL as string, targetedCountry[0].id, forwadedVideo.insertId)
+                });
 
                 return res.json({ success: true, message: 'Request has been accepted successfully!' });
 
