@@ -23,24 +23,6 @@ async function executeQuery(query, values = []) {
     }
 }
 
-(async () => {
-    await executeQuery(`
-        CREATE TABLE IF NOT EXISTS migrations (
-            id INT(11) NOT NULL AUTO_INCREMENT,
-            migration VARCHAR(255),
-            PRIMARY KEY (id)
-        );
-    `);
-
-    await executeQuery(`
-        CREATE TABLE IF NOT EXISTS seeds (
-            id INT(11) NOT NULL AUTO_INCREMENT,
-            seed VARCHAR(255),
-            PRIMARY KEY (id)
-        );
-    `);
-})();
-
 module.exports = {
     executeQuery,
     colors
