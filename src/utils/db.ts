@@ -122,6 +122,10 @@ const getCountryByShortName = `
 SELECT * FROM countries WHERE short_name = ?
 `;
 
+const getCountryByLongName = `
+SELECT * FROM countries WHERE long_name = ?
+`;
+
 const getAllContinents = `
 SELECT * FROM continents
 `;
@@ -186,6 +190,7 @@ const query = {
     getAllAvailableVideosRequests,
     getCountryByShortName,
     getVideosByVerified,
+    getCountryByLongName,
     updateField
 };
 

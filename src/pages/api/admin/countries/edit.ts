@@ -10,7 +10,6 @@ interface ICountry {
     continent: string;
 }
 
-
 export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
     try {
         const { id, short_name, long_name, border_color, continent }: ICountry = _req.body
@@ -82,7 +81,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             return res.json({
                 success: false, 
                 error: { 
-                    message: 'Country Not Found.' 
+                    message: 'Country was not found.' 
                 } 
             });
         }

@@ -143,6 +143,7 @@ export const requestAccepted = (
             <div class="content">
                 <p>Congratulation! your requested video has been accepted.</p>
                 <a href="${base_url}/?v=${videoID}&c=${countryID}" style="color:white;" class="btn">Take me in!</a>
+                <p></p>
                 <a href="${base_url}" style="font-weight: bold; color: black; text-decoration: none;">Walkin<span style="font-size: 30px; color:red; border-radius: 25px">.</span>City</a>
             </div>
         </div>
@@ -215,7 +216,8 @@ export const requestDeclined = (
             </div>
             <div class="content">
                 <p>Sadly your requested video has been declined, see below for the reason.</p>
-                <p>${reason}</p>
+                <p>Reason: ${reason}</p>
+                <p></p>
                 <a href="${base_url}" style="font-weight: bold; color: black; text-decoration: none;">Walkin<span style="font-size: 30px; color:red; border-radius: 25px">.</span>City</a>
             </div>
         </div>

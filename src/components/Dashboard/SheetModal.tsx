@@ -40,10 +40,16 @@ export default function SheetModal({
             country: form.country,
             place: form.place,
             seekTo: form.seekTo,
-            weather: form.weather
+            weather: form.weather,
+            reason: form.reason || ''
         }).then((res) => {
             if (res.data.success) {
                 setNotify({ open: true, text: res.data.message, type: 'success' });
+                
+                setCurrentEditVideo({
+                    video: undefined,
+                    open: false
+                });
 
                 setTimeout(() => {
                     if(window) window.location.reload();
