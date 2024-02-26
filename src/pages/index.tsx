@@ -101,7 +101,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
 
 export const getServerSideProps = (async () => {
   const videos = await executeQueryReturnsJSON({
-    query: query.getAllVideos,
+    query: query.getAllVerifiedVideos,
     values: [],
   });
 

@@ -35,6 +35,7 @@ export interface IVideosRes {
     place: string;
     continent: string;
     weather: string;
+    seekTo: number;
     type: 'walk' | 'drive';
 }
 

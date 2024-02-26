@@ -37,7 +37,7 @@ SELECT *, 'hidden' AS by_email FROM videos_requests
 `;
 
 const getAllAvailableVideosRequests = `
-SELECT *, 'hidden' AS by_email FROM videos_requests WHERE action IS NULL;
+SELECT *, 'hidden' AS by_email FROM videos_requests WHERE action IS NULL AND verified = 1;
 `;
 
 const getVideoRequestByID = `
@@ -81,8 +81,21 @@ INSERT INTO videos (short_name, long_name, border_color, continent)
 VALUES (?, ?, ?, ?);
 `;
 
+const createNewToken  = `
+INSERT INTO tokens (token, videoId)
+VALUES (?, ?);
+`;
+
+const getTokenByToken = `
+SELECT * FROM tokens WHERE token = ?
+`;
+
 const getAllVideos = `
 SELECT * FROM videos
+`;
+
+const getAllVerifiedVideos = `
+SELECT * FROM videos WHERE verified = 1
 `;
 
 const getVideoById = `
@@ -155,15 +168,18 @@ const query = {
     getRoleByID,
     getAllVideosRequests,
     getVideoRequestByVid,
+    getTokenByToken,
     getVideoRequestByID, 
     getVideoRequestByEmail,
     createNewVideosRequests,
     getAllUsers,
     getCountryByID,
     getUsersByRole,
+    createNewToken,
     getRoleByName,
     createNewCountry,
     getAllVideos,
+    getAllVerifiedVideos,
     getAllIcons,
     createNewUser,
     createNewVideo,

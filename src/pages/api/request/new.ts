@@ -3,6 +3,10 @@ import query from '@/utils/db';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import YouTubeVideoId from '@/helpers/youtube';
+import { generateToken } from '@/lib/token';
+import { sendMailAsVerfiy } from '@/lib/mail';
+import { verifyRequest } from '@/helpers/mail';
+import secrets from '@/utils/secrets';
 
 interface INewVideoRequest_ {
     vid: string | undefined;
@@ -80,11 +84,18 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                         const newRequestVideo = await executeQuery({
                             query: query.createNewVideosRequests,
                             values: [youtube_id, country, place, weather, type, seekTo, continent, by_email],
-                        }) as any[];
+                        }) as any[] | any;
 
                         console.log(newRequestVideo)
 
-                        return res.json({ success: true, message: 'Request has been sent successfully! redirecting in 5s' });
+                        const token = await generateToken({ videoID: newRequestVideo.insertId });
+
+                        await sendMailAsVerfiy({
+                            to: by_email,
+                            template: verifyRequest(country, place, vid, secrets.APP_URL as string, token)
+                        })
+
+                        return res.json({ success: true, message: 'A verification email has been sent to your email!' });
 
                     } catch (error) {
                         console.error(error);

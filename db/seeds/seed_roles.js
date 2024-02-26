@@ -10,11 +10,14 @@ INSERT INTO ${table} (name, permissions, id) VALUES
 ('Videos verifier', '[1,5]', 3);
 `;
 
-(async () => {
+async function execute()  {
     await executeQuery(query, values = []).catch((e) => {
         console.log(`[${table}] Error seeding the table: `.red, e);
-        process.exit(0);
     });
 
     console.log(`[${table}] seeded with success!`.green);
-})();
+};
+
+module.exports = {
+    execute
+}

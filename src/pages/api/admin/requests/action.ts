@@ -3,13 +3,15 @@ import query from '@/utils/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface IRequestVideo {
-    id: string | number | undefined;
-    action: string | undefined;
+    id?: string | number;
+    action?: string;
 
-    country: string | undefined;
-    place: string | undefined;
-    weather: string | undefined;
-    seekTo: string | number;
+    country?: string;
+    place?: string;
+    weather?: string;
+    seekTo?: string | number;
+
+    reason?: string;
 }
 
 

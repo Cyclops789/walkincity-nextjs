@@ -21,7 +21,7 @@ export default function SheetModal({
     const wrapperRef = useRef(null);
     const [notify, setNotify] = useState<INotificationType>({ open: false, type: 'info', text: 'Simple' });
     const [validVideo, setValidVideo] = useState(false);
-    const [form, setFormData] = useState({ id: 0, country: '', place: '', weather: '', seekTo: '', });
+    const [form, setFormData] = useState({ id: 0, country: '', place: '', weather: '', seekTo: '', reason: '' });
 
     const sendAction = (action: 'accept' | 'reject') => {
         if (!form ||
@@ -101,6 +101,7 @@ export default function SheetModal({
             place: currentEditVideo?.video?.place || '',
             weather: currentEditVideo?.video?.weather || '',
             seekTo: currentEditVideo?.video?.seekTo || '',
+            reason: '',
         })
     }, [currentEditVideo?.video]);
 
@@ -156,7 +157,7 @@ export default function SheetModal({
                             <select
                                 onChange={(e) => updateFormData({ name: 'country', value: e.target.value })}
                                 value={form.country}
-                                className={`bg-[#262626] text-[#656b78] w-[150px] h-[50px] rounded flex text-center justify-center items-center`}
+                                className={`bg-[#262626] w-[150px] h-[50px] rounded flex text-center justify-center items-center`}
                                 required
                             >
                                 {countries?.map((country) => (
@@ -173,7 +174,7 @@ export default function SheetModal({
                                 id={"place"}
                                 onChange={(e) => updateFormData({ name: 'place', value: e.target.value })}
                                 value={form.place}
-                                className={`bg-[#262626] text-[#656b78] w-[150px] h-[50px] rounded flex ${currentEditVideo?.video?.place !== form.place ? 'pl-2' : 'text-center'} justify-center items-center`}
+                                className={`bg-[#262626] w-[150px] h-[50px] rounded flex ${currentEditVideo?.video?.place !== form.place ? 'pl-2' : 'text-center'} justify-center items-center`}
                             />
                         </div>
                     </div>
@@ -186,7 +187,7 @@ export default function SheetModal({
                             <select
                                 onChange={(e) => updateFormData({ name: 'weather', value: e.target.value })}
                                 value={form.weather}
-                                className={`bg-[#262626] text-[#656b78] w-[150px] h-[50px] rounded flex pl-2 justify-center items-center`}
+                                className={`bg-[#262626] w-[150px] h-[50px] rounded flex pl-2 justify-center items-center`}
                                 required
                             >
                                 <option value={'weather-normal-morning'}>Normal Morning</option>
@@ -204,7 +205,7 @@ export default function SheetModal({
                             <div className='flex'>
                                 <div
                                     style={{ borderColor: 'rgb(72, 72, 72)' }}
-                                    className={`bg-[#262626] text-[#656b78] w-[75px] h-[50px] rounded-l flex text-center justify-center items-center border-r`}
+                                    className={`bg-[#262626] w-[75px] h-[50px] rounded-l flex text-center justify-center items-center border-r`}
                                 >
                                     Second
                                 </div>
@@ -214,13 +215,29 @@ export default function SheetModal({
                                     type='number'
                                     onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.value })}
                                     value={form.seekTo}
-                                    className={`bg-[#262626] text-[#656b78] w-[75px] h-[50px] rounded-r flex text-center justify-center items-center`}
+                                    className={`bg-[#262626] w-[75px] h-[50px] rounded-r flex text-center justify-center items-center`}
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <div className='flex justify-between m-auto font-semibold mt-[50px]'>
+                    <div className='flex justify-center mt-4'>
+                        <select 
+                            onChange={(e) => updateFormData({ name: 'reason', value: e.target.value })}
+                            className={`bg-[#262626] ${form.reason == '' && 'text-[#656b78]'} text-center w-full h-[50px] pl-3 rounded flex justify-center items-center`}
+                        >
+                            <option value={''}>Specify a reason if you are going to reject</option>
+                            <option value={"Invalid Video"}>Invalid Video</option>
+                            <option value={"Country in the video is not available"}>Country in the video is not available</option>
+                            <option value={"It's not a valid walking video"}>It's not a valid walking video</option>
+                            <option value={"Invalid place or place doesnt exist"}>Invalid place or place doesnt exist</option>
+                            <option value={"Duplicated video"}>Duplicated video</option>
+                            <option value={"Video is a spam"}>Video is a spam</option>
+                            <option value={"Video must be at least 15min"}>Video must be at least 15min</option>
+                        </select>
+                    </div>
+
+                    <div className='flex justify-between m-auto font-semibold mt-[20px]'>
                         <button onClick={() => sendAction('accept')} className='px-16 py-6 text-center bg-green-500 hover:bg-green-600 rounded'>
                             ACCEPT
                         </button>

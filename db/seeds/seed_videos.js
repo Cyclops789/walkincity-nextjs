@@ -120,11 +120,14 @@ INSERT INTO ${table} (id, vid, country, place, weather, type, created_on, contin
 (115, 'FUYeQ4Ypsdc', 'Morocco', 'Casablanca', 'weather-rain-morning', 'walk', '2023-07-10 15:11:25.684932', 'Africa', 1, 1);
 `;
 
-(async () => {
+async function execute()  {
     await executeQuery(query, values = []).catch((e) => {
         console.log(`[${table}] Error seeding the table: `.red, e);
-        process.exit(0);
     });
 
     console.log(`[${table}] seeded with success!`.green);
-})();
+};
+
+module.exports = {
+    execute
+}

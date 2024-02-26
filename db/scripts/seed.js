@@ -27,13 +27,13 @@ const { executeQuery } = require("../db");
                 }
 
                 if (!alreadySeeded) {
+                    const filePath = path.join(directoryPath, file);
+                    require(filePath).execute();
+
                     await executeQuery(
                         `INSERT INTO seeds (seed) VALUES (?);`,
                         [file.replace('.js', '')]
                     );
-
-                    const filePath = path.join(directoryPath, file);
-                    require(filePath);
                 }
             }
         }
