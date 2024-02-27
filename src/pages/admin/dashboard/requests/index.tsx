@@ -127,7 +127,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                     <thead style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className="text-xs uppercase  text-gray-300">
                         <tr className='rounded'>
                             <th scope="col" className="px-6 py-3">
-                                Video ID
+                                Video
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Continent

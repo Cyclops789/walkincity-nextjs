@@ -56,7 +56,7 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
             form.weather === '' ||
             form.type === '' ||
             form.seekTo === 0 ||
-            form.verified === undefined || 
+            form.verified === undefined ||
             form.verified === ''
         ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });;
 
@@ -100,7 +100,7 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
     }
 
     const cloneVideo = () => {
-        if(form) {
+        if (form) {
             router.push({
                 pathname: '/admin/dashboard/videos/new',
                 query: {
@@ -148,106 +148,103 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
                         </button>
                     </div>
 
-                    <div style={{ backgroundColor: 'hsl(0, 0%, 22%)'}} className='p-3 rounded-lg mt-3'>
+                    <div style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='p-3 rounded-lg mt-3'>
                         <form onSubmit={onSubmitForm} action="" className='space-y-4'>
-                            <div className='flex justify-between'>
-                                <div className="space-y-2">
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="vid">Video id or link:</label>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            onChange={(e) => updateFormData({ name: 'vid', value: e.target.value })}
-                                            defaultValue={form.vid}
-                                            className='p-2 rounded text-black w-full' 
-                                            id='vid'
-                                            required
-                                        />
+                            <div className='space-y-2'>
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="vid">Video id or link:</label>
                                     </div>
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="seekto">Seek the video to:</label>
-                                        </div>
-                                        <input
-                                            type="number"
-                                            onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.valueAsNumber })}
-                                            defaultValue={form.seekTo}
-                                            className='p-2 rounded text-black w-full'
-                                            id='seekto'
-                                            min={1}
-                                            required
-                                        />
-                                    </div>
+                                    <input
+                                        type="text"
+                                        onChange={(e) => updateFormData({ name: 'vid', value: e.target.value })}
+                                        defaultValue={form.vid}
+                                        className='p-2 rounded bg-[#262626] text-white w-full'
+                                        id='vid'
+                                        required
+                                    />
                                 </div>
-                                <div className="space-y-2">
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="place">Place:</label>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            onChange={(e) => updateFormData({ name: 'place', value: e.target.value })}
-                                            defaultValue={form.place}
-                                            className='p-2 rounded text-black w-full'
-                                            id='place'
-                                            required
-                                        />
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="seekto">Seek the video to:</label>
                                     </div>
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="country">Select a country:</label>
-                                        </div>
-                                        <select
-                                            id="country"
-                                            onChange={(e) => updateFormData({ name: 'country', value: e.target.value })}
-                                            value={form.country}
-                                            className="p-2 text-black rounded w-full"
-                                            required
-                                        >
-                                            {countries?.map((country) => (
-                                                <option key={country.short_name} value={country.long_name}>{country.long_name}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                    <input
+                                        type="number"
+                                        onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.valueAsNumber })}
+                                        defaultValue={form.seekTo}
+                                        className='p-2 rounded bg-[#262626] text-white w-full'
+                                        id='seekto'
+                                        min={1}
+                                        required
+                                    />
                                 </div>
-                                <div className="space-y-2">
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="weather">Weather:</label>
-                                        </div>
-                                        <select
-                                            id="weather"
-                                            onChange={(e) => updateFormData({ name: 'weather', value: e.target.value })}
-                                            value={form.weather}
-                                            className="p-2 text-black rounded w-full"
-                                            required
-                                        >
-                                            <option value={'weather-normal-morning'}>Normal Morning</option>
-                                            <option value={'weather-normal-night'}>Normal Night</option>
-                                            <option value={'weather-rain-'}>Raining</option>
-                                            <option value={'weather-cloud-morning'}>Cloudy</option>
-                                            <option value={'weather-snow-'}>Snowing</option>
-                                        </select>
+
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="place">Place:</label>
                                     </div>
-                                    
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="verified">Verified:</label>
-                                        </div>
-                                        <select
-                                            id="verified"
-                                            onChange={(e) => updateFormData({ name: 'verified', value: e.target.value })}
-                                            value={form.verified}
-                                            className="p-2 text-black rounded w-full"
-                                            required
-                                        >
-                                            <option value={0}>No</option>
-                                            <option value={1}>Yes</option>
-                                        </select>
+                                    <input
+                                        type="text"
+                                        onChange={(e) => updateFormData({ name: 'place', value: e.target.value })}
+                                        defaultValue={form.place}
+                                        className='p-2 rounded bg-[#262626] text-white w-full'
+                                        id='place'
+                                        required
+                                    />
+                                </div>
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="country">Select a country:</label>
                                     </div>
+                                    <select
+                                        id="country"
+                                        onChange={(e) => updateFormData({ name: 'country', value: e.target.value })}
+                                        value={form.country}
+                                        className="p-2 bg-[#262626] text-white rounded w-full"
+                                        required
+                                    >
+                                        {countries?.map((country) => (
+                                            <option key={country.short_name} value={country.long_name}>{country.long_name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="weather">Weather:</label>
+                                    </div>
+                                    <select
+                                        id="weather"
+                                        onChange={(e) => updateFormData({ name: 'weather', value: e.target.value })}
+                                        value={form.weather}
+                                        className="p-2 bg-[#262626] text-white rounded w-full"
+                                        required
+                                    >
+                                        <option value={'weather-normal-morning'}>Normal Morning</option>
+                                        <option value={'weather-normal-night'}>Normal Night</option>
+                                        <option value={'weather-rain-'}>Raining</option>
+                                        <option value={'weather-cloud-morning'}>Cloudy</option>
+                                        <option value={'weather-snow-'}>Snowing</option>
+                                    </select>
+                                </div>
+
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="verified">Verified:</label>
+                                    </div>
+                                    <select
+                                        id="verified"
+                                        onChange={(e) => updateFormData({ name: 'verified', value: e.target.value })}
+                                        value={form.verified}
+                                        className="p-2 bg-[#262626] text-white rounded w-full"
+                                        required
+                                    >
+                                        <option value={0}>No</option>
+                                        <option value={1}>Yes</option>
+                                    </select>
                                 </div>
                             </div>
+
                             <div className="flex justify-center mt-3">
                                 <button type='submit' className='px-8 py-3 text-center bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded'>
                                     Save

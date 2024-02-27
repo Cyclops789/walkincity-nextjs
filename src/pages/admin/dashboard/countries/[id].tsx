@@ -118,9 +118,7 @@ export default function newCountry({ continents, country }: { continents: IConti
 
                     <div style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='p-3 rounded-lg mt-3'>
                         <form onSubmit={onSubmitForm} action="" className='space-y-4'>
-                            <div className='flex justify-around'>
-
-                                <div className="space-y-2 grid">
+                            <div className='space-y-2'>
                                     <div className='space-y-2'>
                                         <div>
                                             <label className={'font-semibold'} htmlFor="short_name">Short name</label>
@@ -130,7 +128,7 @@ export default function newCountry({ continents, country }: { continents: IConti
                                             id="short_name"
                                             onChange={(e) => updateFormData({ name: 'short_name', value: e.target.value })}
                                             defaultValue={form.short_name}
-                                            className='p-2 rounded text-black w-full'
+                                            className='p-2 rounded bg-[#262626] text-white w-full'
                                             required
                                         />
                                     </div>
@@ -142,15 +140,14 @@ export default function newCountry({ continents, country }: { continents: IConti
                                             type="text"
                                             onChange={(e) => updateFormData({ name: 'long_name', value: e.target.value })}
                                             defaultValue={form.long_name}
-                                            className='p-2 rounded text-black w-full'
+                                            className='p-2 rounded bg-[#262626] text-white w-full'
                                             id='long_name'
                                             min={1}
                                             required
                                         />
                                     </div>
-                                </div>
+                               
 
-                                <div className="space-y-2">
                                     <div className='space-y-2'>
                                         <div>
                                             <label className={'font-semibold'} htmlFor="border_color">Border color</label>
@@ -159,7 +156,7 @@ export default function newCountry({ continents, country }: { continents: IConti
                                             type="color"
                                             onChange={(e) => updateFormData({ name: 'border_color', value: e.target.value })}
                                             defaultValue={form.border_color?.startsWith('#') ? form.border_color : colorNames(form.border_color as string)}
-                                            className='p-2 rounded text-black w-full'
+                                            className='p-2 rounded bg-[#262626] text-white w-full'
                                             id='border_color'
                                             min={1}
                                             required
@@ -176,7 +173,7 @@ export default function newCountry({ continents, country }: { continents: IConti
                                             id="continent"
                                             onChange={(e) => updateFormData({ name: 'continent', value: e.target.value })}
                                             defaultValue={form.continent}
-                                            className="p-2 text-black rounded w-full"
+                                            className="p-2 bg-[#262626] text-white rounded w-full"
                                             required
                                         >
                                             {continents?.map((continent) => (
@@ -184,7 +181,6 @@ export default function newCountry({ continents, country }: { continents: IConti
                                             ))}
                                         </select>
                                     </div>
-                                </div>
 
                             </div>
                             <div className="flex justify-center mt-3 space-x-2">

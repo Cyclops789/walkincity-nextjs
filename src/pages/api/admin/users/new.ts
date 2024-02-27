@@ -2,6 +2,9 @@ import executeQuery from '@/lib/db';
 import query from '@/utils/db';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createHash } from '@/lib/password';
+import { sendMailAsAdmin } from '@/lib/mail';
+import { accountCreated } from '@/helpers/mail';
+import secrets from '@/utils/secrets';
 
 interface IEditVideoReq_ {
     username: string | undefined;
@@ -37,7 +40,10 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                     values: [username, email, hashedPassword, role],
                 }) as any;
 
-                console.log(newUser);
+                await sendMailAsAdmin({
+                    to: email,
+                    template: accountCreated(username, email, password, secrets.APP_URL as string)
+                });
 
                 return res.json({
                     success: true,

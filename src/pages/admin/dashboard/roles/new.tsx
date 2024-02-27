@@ -112,7 +112,7 @@ export default function newRole({ permissions }: { permissions: IPermissionsRetu
                                 type="text"
                                 id="name"
                                 onChange={(e) => updateFormData({ name: 'name', value: e.target.value })}
-                                className='p-2 rounded text-black w-full'
+                                className='p-2 rounded bg-[#262626] text-white w-full'
                                 required
                             />
                         </div>

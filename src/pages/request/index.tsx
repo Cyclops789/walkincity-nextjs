@@ -273,7 +273,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
                         <div className='space-y-2'>
                             <label htmlFor='vid'>Video <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>You can test the video before sending.</span></label>
                             <div className="flex space-x-2">
-                                <input disabled={tested !== ''} id='vid' value={form?.vid} onChange={(e) => updateFormData({ name: 'vid', value: e.target.value })} className='rounded p-2 text-black w-full' type="text" required />
+                                <input disabled={tested !== ''} id='vid' value={form?.vid} onChange={(e) => updateFormData({ name: 'vid', value: e.target.value })} className='rounded p-2 bg-[#262626] text-white w-full' type="text" required />
                                 <button onClick={testVideo} type='button' className={'bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-auto uppercase'}>
                                     {!tested ? 'test' : 'clear'}
                                 </button>
@@ -286,7 +286,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
                                 id="country"
                                 onChange={(e) => updateFormData({ name: 'country', value: e.target.value })}
                                 value={form?.country}
-                                className="rounded p-2 text-black w-full"
+                                className="rounded p-2 bg-[#262626] text-white w-full"
                                 required
                             >
                                 {countries?.map((country) => (
@@ -297,7 +297,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
 
                         <div className='space-y-2'>
                             <label htmlFor='place'>Place <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>It can be the city / village or both.</span></label>
-                            <input id='place' onChange={(e) => updateFormData({ name: 'place', value: e.target.value })} className='rounded p-2 text-black w-full' type="text" required />
+                            <input id='place' onChange={(e) => updateFormData({ name: 'place', value: e.target.value })} className='rounded p-2 bg-[#262626] text-white w-full' type="text" required />
                         </div>
 
                         <div className='space-y-2'>
@@ -306,7 +306,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
                                 id="weather"
                                 onChange={(e) => updateFormData({ name: 'weather', value: e.target.value })}
                                 value={form?.weather}
-                                className="rounded p-2 text-black w-full"
+                                className="rounded p-2 bg-[#262626] text-white w-full"
                                 required
                             >
                                 <option value={'weather-normal-morning'}>Normal Morning</option>
@@ -319,12 +319,12 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
 
                         <div className='space-y-2'>
                             <label htmlFor='seekTo'>Seek the video to (in seconds) <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>When the walk starts.</span></label>
-                            <input id='seekTo' onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.valueAsNumber })} className='rounded p-2 text-black w-full' type="number" required />
+                            <input id='seekTo' onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.valueAsNumber })} className='rounded p-2 bg-[#262626] text-white w-full' type="number" required />
                         </div>
 
                         <div className='space-y-2'>
                             <label htmlFor='email'>Your email <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>We will use this email to verify the request.</span></label>
-                            <input id='email' onChange={(e) => updateFormData({ name: 'email', value: e.target.value })} className='rounded p-2 text-black w-full' type="email" required />
+                            <input id='email' onChange={(e) => updateFormData({ name: 'email', value: e.target.value })} className='rounded p-2 bg-[#262626] text-white w-full' type="email" required />
                         </div>
 
                         <div className='flex justify-center pt-2'>

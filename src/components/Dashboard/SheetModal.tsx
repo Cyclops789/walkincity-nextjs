@@ -6,6 +6,8 @@ import { ICountryRes } from '../SideBar';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 import { INotificationType } from '../Notification';
+import { refreshRouteSilenced } from '@/helpers/routes';
+import { useRouter } from 'next/router';
 
 const Notification = dynamic(import('@/components/Dashboard/Notification'));
 
@@ -18,6 +20,7 @@ export default function SheetModal({
     currentEditVideo: CurrentEditVideo | null | undefined,
     countries: ICountryRes[]
 }) {
+    const router = useRouter()
     const wrapperRef = useRef(null);
     const [notify, setNotify] = useState<INotificationType>({ open: false, type: 'info', text: 'Simple' });
     const [validVideo, setValidVideo] = useState(false);
@@ -51,9 +54,7 @@ export default function SheetModal({
                     open: false
                 });
 
-                setTimeout(() => {
-                    if(window) window.location.reload();
-                }, 3000);
+                refreshRouteSilenced(router);
             } else if (res.data.error.message) {
                 setNotify({ open: true, text: res.data.error.message, type: 'warning' });
             }
@@ -110,7 +111,6 @@ export default function SheetModal({
             reason: '',
         })
     }, [currentEditVideo?.video]);
-
     return (
         <>
             <Notification

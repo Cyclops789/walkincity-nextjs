@@ -7,6 +7,7 @@ import query from '@/utils/db';
 import { ICountryRes } from '@/components/SideBar';
 import axios from 'axios'
 import { useRouter } from 'next/router';
+import { refreshRouteSilenced } from '@/helpers/routes';
 
 export interface IVideosRes {
     id: number;
@@ -47,6 +48,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
         }
     }, [videos, selectedCountry]);
 
+
     const handlePageChange = (pageNumber: number) => {
         setCurrentPage(pageNumber);
     };
@@ -75,7 +77,30 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                     verify: (verified === 1 || verified === "1") ? 0 : (verified === 0 || verified === "0") && 1
                 }).then((res) => {
                     setModalData((prevData: any) => ({ ...prevData, open: false }));
-                    router.reload()
+                    refreshRouteSilenced(router);
+                });
+            },
+            onDecline: () => {
+                setModalData((prevData: any) => ({ ...prevData, open: false }));
+            }
+        });
+    };
+
+    const deleteVideo = (id: number) => {
+        setModalData({
+            open: true,
+            text: `Are you sure you want to delete this video?`,
+            type: 'create',
+            button: {
+                accept: 'Yes, Im sure',
+                decline: 'No, cancel'
+            },
+            onAccept: () => {
+                axios.post('/api/admin/videos/delete', {
+                    id: id,
+                }).then((res) => {
+                    setModalData((prevData: any) => ({ ...prevData, open: false }));
+                    refreshRouteSilenced(router)
                 });
             },
             onDecline: () => {
@@ -83,7 +108,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
             }
         });
     }
-
+    
     return (
         <Layout title={'Videos'}>
             <ConfirmationModal
@@ -94,7 +119,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
             <div className={'flex justify-end'}>
                 <Link href={'/admin/dashboard/videos/new'} className={'bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] p-3 rounded font-bold'}>
                     Add new video
-                </Link>
+                </Link> 
             </div>
 
             <div className="relative overflow-x-auto mt-3 rounded-lg">
@@ -144,7 +169,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                     <thead style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className="text-xs uppercase  text-gray-300">
                         <tr className='rounded'>
                             <th scope="col" className="px-6 py-3">
-                                Video ID
+                                Video
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Continent
@@ -154,9 +179,6 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Place
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Verified
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Actions
@@ -182,22 +204,25 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 <td className="px-6 py-4">
                                     {video.place}
                                 </td>
-                                <td className="px-6 py-4">
-                                    {video.verified === 1 ? ('Yes') : video.verified === 0 && ('No')}
-                                </td>
                                 <td className="px-6 py-4 space-x-2">
                                     <Link
                                         className={'bg-[#d50c2d46] text-center items-center justify-center rounded border border-[var(--primary-text-color)] w-full'}
                                         href={`/admin/dashboard/videos/${video.id}`}
                                     >
                                         <span className={'font-bold text-[var(--primary-text-color)] p-2 w-full'}>
-                                            Edit
+                                            EDIT
                                         </span>
                                     </Link>
 
                                     <span draggable onClick={(e) => { e.preventDefault(); verifyVideo(video.id, video.verified) }} className={`${video.verified ? 'bg-[#d5450c60] border-[#d5450c]' : 'bg-[#23d50c46] border-[#23d50c]'} text-center items-center justify-center rounded border  w-full cursor-pointer`}>
                                         <span className={`font-bold ${video.verified ? 'text-[#d5450c] ' : 'text-[#23d50c]'}  p-2 w-full`}>
-                                            {video.verified ? 'Unverify' : 'Verify'}
+                                            {video.verified ? 'UNVERIFY' : 'VERIFY'}
+                                        </span>
+                                    </span>
+
+                                    <span draggable onClick={(e) => { e.preventDefault(); deleteVideo(video.id) }} className={`bg-[#d50c0c60] border-[#d50c0c] text-center items-center justify-center rounded border  w-full cursor-pointer`}>
+                                        <span className={`font-bold text-[#d50c0c]  p-2 w-full`}>
+                                            DELETE
                                         </span>
                                     </span>
                                 </td>
