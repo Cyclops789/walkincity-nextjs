@@ -123,73 +123,71 @@ export default function newCountry({ continents }: { continents: IContinentsRes[
 
                     <div style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='p-3 rounded-lg mt-3'>
                         <form onSubmit={onSubmitForm} action="" className='space-y-4'>
-                            <div className='flex justify-around'>
+                            <div className='space-y-2'>
 
-                                <div className="space-y-2 grid">
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="short_name">Short name</label>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            id="short_name"
-                                            onChange={(e) => updateFormData({ name: 'short_name', value: e.target.value })}
-                                            defaultValue={form.short_name}
-                                            className='p-2 rounded text-black w-full'
-                                            required
-                                        />
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="short_name">Short name</label>
                                     </div>
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="long_name">Long name</label>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            onChange={(e) => updateFormData({ name: 'long_name', value: e.target.value })}
-                                            defaultValue={form.long_name}
-                                            className='p-2 rounded text-black w-full'
-                                            id='long_name'
-                                            min={1}
-                                            required
-                                        />
+                                    <input
+                                        type="text"
+                                        id="short_name"
+                                        onChange={(e) => updateFormData({ name: 'short_name', value: e.target.value })}
+                                        defaultValue={form.short_name}
+                                        className='p-2 rounded bg-[#262626] text-white w-full'
+                                        required
+                                    />
+                                </div>
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="long_name">Long name</label>
                                     </div>
+                                    <input
+                                        type="text"
+                                        onChange={(e) => updateFormData({ name: 'long_name', value: e.target.value })}
+                                        defaultValue={form.long_name}
+                                        className='p-2 rounded bg-[#262626] text-white w-full'
+                                        id='long_name'
+                                        min={1}
+                                        required
+                                    />
                                 </div>
 
-                                <div className="space-y-2">
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="border_color">Border color</label>
-                                        </div>
-                                        <input
-                                            type="color"
-                                            onChange={(e) => updateFormData({ name: 'border_color', value: e.target.value })}
-                                            defaultValue={form.border_color}
-                                            className='p-2 rounded text-black w-full'
-                                            id='border_color'
-                                            min={1}
-                                            required
-                                        />
-                                        <div>
-                                            <label className='font-thin text-sm mt-[-5px]' htmlFor="border_color">Click to pick a color</label>
-                                        </div>
+
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="border_color">Border color</label>
                                     </div>
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="continent">Continent</label>
-                                        </div>
-                                        <select
-                                            id="continent"
-                                            onChange={(e) => updateFormData({ name: 'continent', value: e.target.value })}
-                                            defaultValue={form.continent}
-                                            className="p-2 text-black rounded w-full"
-                                            required
-                                        >
-                                            {continents?.map((continent) => (
-                                                <option key={continent.continent_name} value={continent.continent_name}>{continent.continent_name}</option>
-                                            ))}
-                                        </select>
+                                    <input
+                                        type="color"
+                                        onChange={(e) => updateFormData({ name: 'border_color', value: e.target.value })}
+                                        defaultValue={form.border_color}
+                                        className='p-2 rounded bg-[#262626] text-white w-full'
+                                        id='border_color'
+                                        min={1}
+                                        required
+                                    />
+                                    <div>
+                                        <label className='font-thin text-sm mt-[-5px]' htmlFor="border_color">Click to pick a color</label>
                                     </div>
                                 </div>
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="continent">Continent</label>
+                                    </div>
+                                    <select
+                                        id="continent"
+                                        onChange={(e) => updateFormData({ name: 'continent', value: e.target.value })}
+                                        defaultValue={form.continent}
+                                        className="p-2 bg-[#262626] text-white rounded w-full"
+                                        required
+                                    >
+                                        {continents?.map((continent) => (
+                                            <option key={continent.continent_name} value={continent.continent_name}>{continent.continent_name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+
 
                             </div>
                             <div className="flex justify-center mt-3 space-x-2">

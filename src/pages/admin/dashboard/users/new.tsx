@@ -31,8 +31,8 @@ export default function newUser({ roles }: { roles: IRoleReturns[] }) {
 
         if (!form ||
             form.username === '' ||
-            form.email    === '' ||
-            form.role     === '' ||
+            form.email === '' ||
+            form.role === '' ||
             form.password === ''
         ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });;
 
@@ -52,21 +52,21 @@ export default function newUser({ roles }: { roles: IRoleReturns[] }) {
                     password: form.password
                 }).then((res) => {
                     setModalData((prevData: any) => ({ ...prevData, open: false }));
-                    if(res.data.success) {
+                    if (res.data.success) {
                         setNotify({ open: true, type: 'success', text: res.data.message });
-                        
-                        if(createAnOther) {
+
+                        if (createAnOther) {
                             setTimeout(() => {
                                 window.location.reload();
                             }, 5000);
                         } else {
                             setTimeout(() => {
                                 router.push({
-                                    pathname: '/admin/dashboard/users/'+res.data.user,
-                                }); 
+                                    pathname: '/admin/dashboard/users/' + res.data.user,
+                                });
                             }, 5000);
                         }
-                    } else if(res.data.error?.message) {
+                    } else if (res.data.error?.message) {
                         setNotify({ open: true, type: 'warning', text: res.data.error.message });
                     }
                 });
@@ -83,10 +83,10 @@ export default function newUser({ roles }: { roles: IRoleReturns[] }) {
 
     useEffect(() => {
         setFormData({
-            'username' : '',
-            'email'    : '',
-            'role'     : 0 ,
-            'password' : ''
+            'username': '',
+            'email': '',
+            'role': 0,
+            'password': ''
         });
     }, []);
 
@@ -113,70 +113,66 @@ export default function newUser({ roles }: { roles: IRoleReturns[] }) {
                         </button>
                     </div>
 
-                    <div style={{ backgroundColor: 'hsl(0, 0%, 22%)'}} className='p-3 rounded-lg mt-3'>
+                    <div style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='p-3 rounded-lg mt-3'>
                         <form onSubmit={onSubmitForm} action="" className='space-y-4'>
-                            <div className='flex justify-around'>
-                                <div className="space-y-2 grid">
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="username">Username:</label>
-                                        </div>
-                                        <input
-                                            type="text"
-                                            id="username"
-                                            onChange={(e) => updateFormData({ name: 'username', value: e.target.value })}
-                                            defaultValue={form.username}
-                                            className='p-2 rounded text-black w-full'
-                                            required
-                                        />
+                            <div className='space-y-2'>
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="username">Username:</label>
                                     </div>
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="email">Email:</label>
-                                        </div>
-                                        <input
-                                            type="email"
-                                            onChange={(e) => updateFormData({ name: 'email', value: e.target.value })}
-                                            defaultValue={form.email}
-                                            className='p-2 rounded text-black w-full'
-                                            id='email'
-                                            min={1}
-                                            required
-                                        />
+                                    <input
+                                        type="text"
+                                        id="username"
+                                        onChange={(e) => updateFormData({ name: 'username', value: e.target.value })}
+                                        defaultValue={form.username}
+                                        className='p-2 rounded bg-[#262626] text-white w-full'
+                                        required
+                                    />
+                                </div>
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="email">Email:</label>
                                     </div>
+                                    <input
+                                        type="email"
+                                        onChange={(e) => updateFormData({ name: 'email', value: e.target.value })}
+                                        defaultValue={form.email}
+                                        className='p-2 rounded bg-[#262626] text-white w-full'
+                                        id='email'
+                                        min={1}
+                                        required
+                                    />
                                 </div>
 
-                                <div className="space-y-2">
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="password">Password:</label>
-                                        </div>
-                                        <input
-                                            type="password"
-                                            onChange={(e) => updateFormData({ name: 'password', value: e.target.value })}
-                                            className='p-2 rounded text-black w-full'
-                                            id='password'
-                                        />
-                                        <div>
-                                            <label className='font-thin text-sm mt-[-5px]' htmlFor="password">Leave blank to not change</label>
-                                        </div>
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="password">Password:</label>
                                     </div>
-                                    <div className='space-y-2'>
-                                        <div>
-                                            <label className={'font-semibold'} htmlFor="role">Role:</label>
-                                        </div>
-                                        <select
-                                            id="role"
-                                            onChange={(e) => updateFormData({ name: 'role', value: e.target.value })}
-                                            value={form.role}
-                                            className="p-2 text-black rounded w-full"
-                                            required
-                                        >
-                                            {roles?.map((role) => (
-                                                <option key={role.id} value={role.id}>{role.name}</option>
-                                            ))}
-                                        </select>
+                                    <input
+                                        type="password"
+                                        onChange={(e) => updateFormData({ name: 'password', value: e.target.value })}
+                                        className='p-2 rounded bg-[#262626] text-white w-full'
+                                        id='password'
+                                    />
+                                    <div>
+                                        <label className='font-thin text-sm mt-[-5px]' htmlFor="password">Leave blank to not change</label>
                                     </div>
+                                </div>
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="role">Role:</label>
+                                    </div>
+                                    <select
+                                        id="role"
+                                        onChange={(e) => updateFormData({ name: 'role', value: e.target.value })}
+                                        value={form.role}
+                                        className="p-2 bg-[#262626] text-white rounded w-full"
+                                        required
+                                    >
+                                        {roles?.map((role) => (
+                                            <option key={role.id} value={role.id}>{role.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                             </div>
                             <div className="flex justify-center mt-3 space-x-2">

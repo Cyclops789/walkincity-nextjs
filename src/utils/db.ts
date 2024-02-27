@@ -91,23 +91,23 @@ SELECT * FROM tokens WHERE token = ?
 `;
 
 const getAllVideos = `
-SELECT * FROM videos
+SELECT * FROM videos WHERE hide = 0
 `;
 
 const getAllVerifiedVideos = `
-SELECT * FROM videos WHERE verified = 1
+SELECT * FROM videos WHERE verified = 1 AND hide = 0
 `;
 
 const getVideoById = `
-SELECT * FROM videos WHERE id = ?
+SELECT * FROM videos WHERE id = ? AND hide = 0
 `;
 
 const getVideoByVid = `
-SELECT * FROM videos WHERE vid = ?
+SELECT * FROM videos WHERE vid = ? AND hide = 0
 `;
 
 const getVideosByVerified = `
-SELECT * FROM videos WHERE verified = ?
+SELECT * FROM videos WHERE verified = ? AND hide = 0
 `;
 
 const getAllCountries = `
@@ -131,14 +131,14 @@ SELECT * FROM continents
 `;
 
 const getVideosByContinent = `
-SELECT * FROM videos WHERE continent = ?
+SELECT * FROM videos WHERE continent = ? AND hide = 0
 `;
 
 const getVideosByWeather = `
-SELECT * FROM videos WHERE weather = ?
+SELECT * FROM videos WHERE weather = ? AND hide = 0
 `;
 const getVideosByWeatherAndContinent = `
-SELECT * FROM videos WHERE weather = ? AND continent = ?
+SELECT * FROM videos WHERE weather = ? AND continent = ? AND hide = 0
 `;
 
 const getAllRadios = `

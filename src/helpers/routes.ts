@@ -1,5 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { faChartLine, faUsers, faPhotoFilm, faFlag, faAddressBook, faClosedCaptioning } from "@fortawesome/free-solid-svg-icons";
+import { NextRouter } from "next/router";
 
 export interface IDashboardRoutes {
     name: string;
@@ -11,16 +12,22 @@ export interface IDashboardRoutes {
 
 export const DashboardRoutes: IDashboardRoutes[] = [
     {
+        name: 'Videos Requests',
+        path: '/admin/dashboard/requests',
+        icon: faClosedCaptioning,
+        permissionID: 5
+    },
+    {
         name: 'Videos',
         path: '/admin/dashboard/videos',
         icon: faPhotoFilm,
         permissionID: 1
     },
     {
-        name: 'Videos Requests',
-        path: '/admin/dashboard/requests',
-        icon: faClosedCaptioning,
-        permissionID: 5
+        name: 'Countries',
+        path: '/admin/dashboard/countries',
+        icon: faFlag,
+        permissionID: 10
     },
     {
         name: 'Users',
@@ -34,10 +41,8 @@ export const DashboardRoutes: IDashboardRoutes[] = [
         icon: faAddressBook,
         permissionID: 14
     },
-    {
-        name: 'Countries',
-        path: '/admin/dashboard/countries',
-        icon: faFlag,
-        permissionID: 10
-    },
-]
+];
+
+export const refreshRouteSilenced = (router: NextRouter) => {
+    router.replace(router.asPath);
+}

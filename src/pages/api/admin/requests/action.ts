@@ -76,7 +76,13 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                     await sendMailAsVerfiy({
                         subject: "Your request has been declined.",
                         to: requestedVideo[0].by_email,
-                        template: requestDeclined(secrets.APP_URL as string, reason as string)
+                        template: requestDeclined(
+                            secrets.APP_URL as string, 
+                            reason as string,
+                            requestedVideo[0].country,
+                            requestedVideo[0].place,
+                            requestedVideo[0].vid
+                        )
                     });
 
                     return res.json({ success: true, message: 'Request has been rejected successfully!' });

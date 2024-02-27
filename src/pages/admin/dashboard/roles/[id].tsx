@@ -101,7 +101,7 @@ export default function editRole({ role, permissions }: { role: IRoleReturnsJSON
                                             id="name"
                                             onChange={(e) => updateFormData({ name: 'name', value: e.target.value })}
                                             defaultValue={form.name}
-                                            className='p-2 rounded text-black w-full'
+                                            className='p-2 rounded bg-[#262626] text-white w-full'
                                             required
                                         />
                                     </div>

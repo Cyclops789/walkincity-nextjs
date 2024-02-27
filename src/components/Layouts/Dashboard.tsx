@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
-import { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react'
 import sha256 from 'sha256';
 import { faChartLine } from '@fortawesome/free-solid-svg-icons';
@@ -32,6 +32,14 @@ type LayoutProps = {
   className?: string;
 }
 
+const ParentComponent = ({ children } : { children: React.ReactNode}) => {
+  return (
+    <div className={'p-3 h-auto'}>
+      {children}
+    </div>
+  )
+}
+
 export default function Layout({
   children,
   title,
@@ -43,7 +51,7 @@ export default function Layout({
   const wrapperRef = useRef(null);
   const [getTitle, setTitle] = useState('Dashboard');
   const [userSession, setUserSession] = useState<IUserWithoutPassword>();
-  const [sideBarOpen, setSideBarOpen] = useState<any>('0');
+  const [sideBarOpen, setSideBarOpen] = useState<any>('1');
   const [userPermissions, setUserPermissions] = useState('');
 
   useEffect(() => {
@@ -176,13 +184,13 @@ export default function Layout({
                     }
                   }}
                   className='cursor-pointer w-[40px] h-[40px] px-2 py-1 rounded flex items-center justify-center bg-[#d50c2d46] border border-[var(--primary-text-color)]'>
-                    <FontAwesomeIcon 
-                      style={{
-                        transition: 'all 0.5s ease',
-                      }}
-                      className={`text-[var(--primary-text-color)] ${sideBarOpen === "1" ? "" : "rotate-180"}`} 
-                      icon={faAnglesLeft} 
-                    />
+                  <FontAwesomeIcon
+                    style={{
+                      transition: 'all 0.5s ease',
+                    }}
+                    className={`text-[var(--primary-text-color)] ${sideBarOpen === "1" ? "" : "rotate-180"}`}
+                    icon={faAnglesLeft}
+                  />
                 </div>
               </div>
             </div>
@@ -205,16 +213,13 @@ export default function Layout({
             </div>
           </div>
           {userSession ? (
-            <div className={'p-3 h-auto'}>
-              {children}
-            </div>
+            <ParentComponent children={children} />
           ) : (
             <div className='w-full h-[calc(100%-50px)] flex justify-center items-center'>
               <div className="custom-loader"></div>
             </div>
           )}
         </section>
-
       </div>
     </div>
   )
