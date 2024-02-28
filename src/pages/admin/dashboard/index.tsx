@@ -11,11 +11,54 @@ import { IUserWithoutPassword } from '@/components/Layouts/Dashboard';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import date from 'date-and-time';
+
+interface IVideosRequests {
+  id: number;
+  vid: string;
+  country: string;
+  place: string;
+  weather: string;
+  continent: string;
+  by_email: string;
+  action: 'accept' | 'reject';
+  verified: number;
+}
 
 const Notification = dynamic(import('@/components/Dashboard/Notification')),
-  Layout = dynamic(import('@/components/Layouts/Dashboard'));
+  Layout = dynamic(import('@/components/Layouts/Dashboard')),
+  Chart = dynamic(import('@/components/Dashboard/Chart'));
 
-function dashboard({ videos, unverified: unverifiedVideos, unverified: verifiedVideos, users, allUsers, admins }: { videos: number, unverified: number, verified: number, users: number, allUsers: number, admins: number }) {
+function dashboard({
+  videos,
+  unverified: unverifiedVideos,
+  unverified: verifiedVideos,
+  users, allUsers,
+  admins,
+  allRequests,
+  unverifiedRequests,
+  verifiedRequests,
+  acceptedRequests,
+  rejectedRequests,
+  monthlyVideos,
+  monthlyVideosRequests
+}: {
+  videos: number,
+  unverified: number,
+  verified: number,
+  users: number,
+  allUsers: number,
+  admins: number,
+
+  allRequests: number,
+  unverifiedRequests: number,
+  verifiedRequests: number,
+  acceptedRequests: number,
+  rejectedRequests: number,
+
+  monthlyVideos: any[],
+  monthlyVideosRequests: any[]
+}) {
   const router = useRouter();
   const { error } = router.query;
   const [notify, setNotify] = useState<any>();
@@ -33,7 +76,7 @@ function dashboard({ videos, unverified: unverifiedVideos, unverified: verifiedV
     if (error && error === 'permission') {
       setNotify({ open: true, type: 'warning', text: 'You are not allowed to do this action!' });;
     }
-  }, [error])
+  }, [error]);
 
   return (
     <Layout>
@@ -47,57 +90,47 @@ function dashboard({ videos, unverified: unverifiedVideos, unverified: verifiedV
       <div className='my-4 text-2xl text-center'>
         Hello, <span className='font-bold capitalize'>{userSession?.username}</span>!
       </div>
-      <div className='font-bold text-2xl mb-3'>Videos</div>
-      <div className={'flex space-x-2'}>
+      <div className='font-bold text-2xl mb-3'>Summary</div>
+      <div className={'flex space-x-2 mb-3'}>
         <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
           <div className="p-5 text-2xl">
-            <div className='flex justify-between'>{videos} <FontAwesomeIcon icon={faSignal} /></div>
-            <div className='text-start font-bold mt-5'>Total</div>
+            <div className='flex justify-between text-xl'>Total Requests <FontAwesomeIcon icon={faSignal} /></div>
+            <div className='text-start text-2xl font-semibold mt-2'>{allRequests}</div>
+            <div className="text-sm font-light flex justify-between"><span>Accepted: {acceptedRequests}</span> <span>Rejected: {rejectedRequests}</span></div>
           </div>
         </div>
 
         <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
           <div className="p-5 text-2xl">
-            <div className='flex justify-between'>{unverifiedVideos} <FontAwesomeIcon icon={faSignal} /></div>
-            <div className='text-start font-bold mt-5'>Total unverified</div>
+            <div className='flex justify-between text-xl'>Total Videos <FontAwesomeIcon icon={faSignal} /></div>
+            <div className='text-start text-2xl font-semibold mt-2'>{videos}</div>
+            <div className="text-sm font-light flex justify-between"><span>Verified: {verifiedVideos}</span> <span>UnVerified: {unverifiedVideos}</span></div>
           </div>
         </div>
-
-        <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
-          <div className="p-5 text-2xl">
-            <div className='flex justify-between'>{verifiedVideos} <FontAwesomeIcon icon={faSignal} /></div>
-            <div className='text-start font-bold mt-5'>Total verified</div>
+        {(userSession?.role?.id || 3) <= 2 && (
+          <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
+            <div className="p-5 text-2xl">
+              <div className='flex justify-between text-xl'>Total Users <FontAwesomeIcon icon={faSignal} /></div>
+              <div className='text-start text-2xl font-semibold mt-2'>{allUsers}</div>
+              <div className="text-sm font-light flex justify-between"><span>Admins: {admins}</span> <span>Users: {users}</span></div>
+            </div>
           </div>
+        )}
+      </div>
+      <div className={'flex space-x-2 mb-3'}>
+        <div className='w-full bg-[var(--primary-text-color)] rounded text-white'>
+          <Chart
+            labelName='Videos'
+            dataSet={monthlyVideos}
+          />
+        </div>
+        <div className='w-full bg-[var(--primary-text-color)] rounded text-white'>
+          <Chart
+            labelName='Videos Requests'
+            dataSet={monthlyVideosRequests}
+          />
         </div>
       </div>
-      {(userSession?.role?.id || 3) <= 2 && (
-        <>
-          <div className='font-bold text-2xl my-3'>Users</div>
-          <div className={'flex space-x-2'}>
-            <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
-              <div className="p-5 text-2xl">
-                <div className='flex justify-between'>{allUsers} <FontAwesomeIcon icon={faSignal} /></div>
-                <div className='text-start font-bold mt-5'>Total</div>
-              </div>
-            </div>
-
-            <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
-              <div className="p-5 text-2xl">
-                <div className='flex justify-between'>{users}  <FontAwesomeIcon icon={faSignal} /></div>
-                <div className='text-start font-bold mt-5'>Total users</div>
-              </div>
-            </div>
-
-            <div className={'w-full h-[130px] bg-[var(--primary-text-color)] rounded text-center items-center justify-center shadow'}>
-              <div className="p-5 text-2xl">
-                <div className='flex justify-between'>{admins} <FontAwesomeIcon icon={faSignal} /></div>
-                <div className='text-start font-bold mt-5'>Total admins</div>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
-
     </Layout>
   )
 }
@@ -113,17 +146,61 @@ export const getServerSideProps = (async () => {
     values: []
   }) as IUserReturns[];
 
+  const allRequests = await executeQueryReturnsJSON({
+    query: query.getAllVideosRequests,
+    values: []
+  }) as IVideosRequests[];
+
+  const monthlyVideos = await executeQueryReturnsJSON({
+    query: query.getVideosOfThisMonth,
+    values: []
+  }) as any[];
+
+  const monthlyVideosRequests = await executeQueryReturnsJSON({
+    query: query.getVideosRequestsOfThisMonth,
+    values: []
+  }) as any[];
+
+  const acceptedRequests = allRequests.filter((request) => request.action == 'accept');
+  const rejectedRequests = allRequests.filter((request) => request.action == 'reject');
+
   return {
     props: {
-      unverified: allVideos.filter((video) => video.verified === 0).length,
-      verified: allVideos.filter((video) => video.verified === 1).length,
-      videos: allVideos.length,
+      unverified: allVideos.filter((video) => video.verified === 0).length || 0,
+      verified: allVideos.filter((video) => video.verified === 1).length || 0,
+      videos: allVideos.length || 0,
 
-      allUsers: allUsers.length,
-      admins: allUsers.filter((user) => parseInt(user.role as string) <= 2).length,
-      users:  allUsers.filter((user) => parseInt(user.role as string) > 2).length
+      allUsers: allUsers.length || 0,
+      admins: allUsers.filter((user) => parseInt(user.role as string) <= 2).length || 0,
+      users: allUsers.filter((user) => parseInt(user.role as string) > 2).length || 0,
+
+      allRequests: allRequests.length || 0,
+      unverifiedRequests: allRequests.filter((request) => request.verified == 0).length || 0,
+      verifiedRequests: allRequests.filter((request) => request.verified == 1).length || 0,
+      acceptedRequests: acceptedRequests.length || 0,
+      rejectedRequests: rejectedRequests.length || 0,
+
+      monthlyVideos: monthlyVideos || [],
+      monthlyVideosRequests: monthlyVideosRequests || []
     }
   }
-}) satisfies GetServerSideProps<{ videos: number, unverified: number, verified: number,  allUsers: number, admins: number, users: number }>
+}) satisfies GetServerSideProps<{
+  videos: number,
+  unverified: number,
+  verified: number,
+
+  allUsers: number,
+  admins: number,
+  users: number,
+
+  allRequests: number,
+  unverifiedRequests: number,
+  verifiedRequests: number,
+  acceptedRequests: number,
+  rejectedRequests: number,
+
+  monthlyVideos: any[],
+  monthlyVideosRequests: any[]
+}>
 
 export default dashboard;

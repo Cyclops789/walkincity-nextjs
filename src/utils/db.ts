@@ -40,6 +40,14 @@ const getAllAvailableVideosRequests = `
 SELECT *, 'hidden' AS by_email FROM videos_requests WHERE action IS NULL AND verified = 1;
 `;
 
+const getAllAcceptedVideosRequests = `
+SELECT *, 'hidden' AS by_email FROM videos_requests WHERE action = 'accept' AND verified = 1;
+`;
+
+const getAllRejectedVideosRequests = `
+SELECT *, 'hidden' AS by_email FROM videos_requests WHERE action = 'reject' AND verified = 1;
+`;
+
 const getVideoRequestByID = `
 SELECT * FROM videos_requests WHERE id = ?
 `;
@@ -110,6 +118,14 @@ const getVideosByVerified = `
 SELECT * FROM videos WHERE verified = ? AND hide = 0
 `;
 
+const getVideosOfThisMonth = `
+SELECT created_on FROM videos WHERE YEAR(created_on) = YEAR(CURRENT_DATE()) AND MONTH(created_on) = MONTH(CURRENT_DATE()) AND verified = 1
+`;
+
+const getVideosRequestsOfThisMonth = `
+SELECT created_on FROM videos_requests WHERE YEAR(created_on) = YEAR(CURRENT_DATE()) AND MONTH(created_on) = MONTH(CURRENT_DATE()) AND verified = 1
+`;
+
 const getAllCountries = `
 SELECT * FROM countries
 `;
@@ -171,6 +187,8 @@ const query = {
     getUserByID,
     getRoleByID,
     getAllVideosRequests,
+    getVideosRequestsOfThisMonth,
+    getVideosOfThisMonth,
     getVideoRequestByVid,
     getTokenByToken,
     getVideoRequestByID, 
@@ -179,6 +197,8 @@ const query = {
     getAllUsers,
     getCountryByID,
     getUsersByRole,
+    getAllAcceptedVideosRequests,
+    getAllRejectedVideosRequests,
     createNewToken,
     getRoleByName,
     createNewCountry,

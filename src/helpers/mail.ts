@@ -243,7 +243,7 @@ export const accountCreated = (
     <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request Declined</title>
+    <title>Account Created</title>
     <style>
         /* Reset styles */
         body, html {
@@ -296,11 +296,13 @@ export const accountCreated = (
             <h2>Account created</h2>
         </div>
         <div class="content">
-            <p>Here is your account credentials, once you have logged in please change your password immediately.</p>
+            <p>Here is your account credentials, Please change your password immediately once you have logged in.</p>
             <p></p>
             <p>Username: ${username}</p>
             <p>Email: ${email}</p>
             <p>Password: ${password}</p>
+            <p></p>
+            <a href="${base_url}/auth/login" style="color:white;" class="btn">Log in</a>
             <p></p>
             <a href="${base_url}" style="font-weight: bold; color: black; text-decoration: none;">Walkin<span style="font-size: 30px; color:red; border-radius: 25px">.</span>City</a>
         </div>

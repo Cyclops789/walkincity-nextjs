@@ -9,9 +9,10 @@ import dynamic from 'next/dynamic';
 import React, { useRef, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react'
 import sha256 from 'sha256';
-import { faChartLine } from '@fortawesome/free-solid-svg-icons';
+import { faChartLine, faBell } from '@fortawesome/free-solid-svg-icons';
 
-const UserProfile = dynamic(import('@/components/Dashboard/UserProfile'));
+const UserProfile = dynamic(import('@/components/Dashboard/UserProfile')),
+  NotificationArea = dynamic(import('@/components/Dashboard/NotificationArea'));
 
 export interface IUserWithoutPassword {
   id: number;
@@ -32,7 +33,7 @@ type LayoutProps = {
   className?: string;
 }
 
-const ParentComponent = ({ children } : { children: React.ReactNode}) => {
+const ParentComponent = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className={'p-3 h-auto'}>
       {children}
@@ -47,8 +48,10 @@ export default function Layout({
 }: LayoutProps) {
   const { data: session, status: status } = useSession();
   const router = useRouter();
-  const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
+  const wrapperRefNotification = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [openNotifications, setNotificationOpen] = useState(false);
   const [getTitle, setTitle] = useState('Dashboard');
   const [userSession, setUserSession] = useState<IUserWithoutPassword>();
   const [sideBarOpen, setSideBarOpen] = useState<any>('1');
@@ -78,6 +81,19 @@ export default function Layout({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [wrapperRef]);
+
+  useEffect(() => {
+    function handleClickOutside(event: any) {
+      // @ts-ignore
+      if (wrapperRefNotification.current && !wrapperRefNotification.current.contains(event.target)) {
+        setNotificationOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [wrapperRefNotification]);
 
   useEffect(() => {
     if (typeof title === 'string' && title) {
@@ -196,6 +212,15 @@ export default function Layout({
             </div>
 
             <div className={'flex justify-end'}>
+              <div
+                onClick={() => setNotificationOpen(!openNotifications)}
+                className='cursor-pointer mt-1 w-[40px] h-[40px] px-2 py-1 rounded flex items-center justify-center bg-[#d50c2d46] border border-[var(--primary-text-color)]'>
+                <FontAwesomeIcon icon={faBell} className={`text-[var(--primary-text-color)]`} />
+              </div>
+              <div ref={wrapperRefNotification}>
+                <NotificationArea open={openNotifications} />
+              </div>
+
               <div onClick={() => setOpen(!open)} className={'cursor-pointer px-2 py-1'}>
                 <Image
                   className={'rounded border border-slate-900'}
