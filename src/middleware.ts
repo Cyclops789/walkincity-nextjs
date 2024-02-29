@@ -53,10 +53,19 @@ export default withAuth(
             });
         
             if (!hasAnyPerm) {
-                const dashboardURL = new URL('/admin/dashboard', req.url);
-                dashboardURL.searchParams.append('error', 'permission');
-                
-                return NextResponse.redirect(dashboardURL);
+                if(pathname.startsWith('/api/admin')) {
+                    return NextResponse.json({
+                        success: false,
+                        error: {
+                            message: 'You dont have permission for this action.'
+                        }
+                    })
+                } else {
+                    const dashboardURL = new URL('/admin/dashboard', req.url);
+                    dashboardURL.searchParams.append('error', 'permission');
+                    
+                    return NextResponse.redirect(dashboardURL);
+                }
             }
         }
     },
