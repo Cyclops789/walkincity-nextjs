@@ -10,6 +10,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react'
 import sha256 from 'sha256';
 import { faChartLine, faBell } from '@fortawesome/free-solid-svg-icons';
+//import { useUserStore } from '@/store/userStore';
 
 const UserProfile = dynamic(import('@/components/Dashboard/UserProfile')),
   NotificationArea = dynamic(import('@/components/Dashboard/NotificationArea'));
@@ -56,6 +57,7 @@ export default function Layout({
   const [userSession, setUserSession] = useState<IUserWithoutPassword>();
   const [sideBarOpen, setSideBarOpen] = useState<any>('1');
   const [userPermissions, setUserPermissions] = useState('');
+  //const { setUser } = useUserStore();
 
   useEffect(() => {
     if (session) {
@@ -71,8 +73,7 @@ export default function Layout({
 
   useEffect(() => {
     function handleClickOutside(event: any) {
-      // @ts-ignore
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      if (wrapperRef.current && !event.target.className.includes('user-picture') && !(wrapperRefNotification.current as any).contains(event.target)) {
         setOpen(false);
       }
     }
@@ -84,9 +85,8 @@ export default function Layout({
 
   useEffect(() => {
     function handleClickOutside(event: any) {
-      // @ts-ignore
-      if (wrapperRefNotification.current && !wrapperRefNotification.current.contains(event.target)) {
-        setNotificationOpen(false)
+      if (wrapperRefNotification.current && !event.target.className.includes('notifications') && !(wrapperRefNotification.current as any).contains(event.target)) {
+        setNotificationOpen(false);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -119,8 +119,24 @@ export default function Layout({
     if (sideBarOpen) {
       localStorage.setItem("sidebar", `${sideBarOpen}`);
     }
-  }, [sideBarOpen])
-
+  }, [sideBarOpen]);
+  
+  /*
+  useEffect(() => {
+    if(userSession) {
+      setUser({
+        id: userSession!.id,
+        username: userSession!.username,
+        email: userSession!.email,
+        role: {
+          id: userSession!.role!.id!,
+          name: userSession!.role!.name!,
+          permissions: userSession!.role!.permissions!
+        }
+      });
+    };
+  }, [userSession]);
+  */
   return (
     <div>
       <Head>
@@ -214,14 +230,14 @@ export default function Layout({
             <div className={'flex justify-end'}>
               <div
                 onClick={() => setNotificationOpen(!openNotifications)}
-                className='cursor-pointer mt-1 w-[40px] h-[40px] px-2 py-1 rounded flex items-center justify-center bg-[#d50c2d46] border border-[var(--primary-text-color)]'>
+                className='notifications cursor-pointer mt-1 w-[40px] h-[40px] px-2 py-1 rounded flex items-center justify-center bg-[#d50c2d46] border border-[var(--primary-text-color)]'>
                 <FontAwesomeIcon icon={faBell} className={`text-[var(--primary-text-color)]`} />
               </div>
               <div ref={wrapperRefNotification}>
                 <NotificationArea open={openNotifications} />
               </div>
 
-              <div onClick={() => setOpen(!open)} className={'cursor-pointer px-2 py-1'}>
+              <div onClick={() => setOpen(!open)} className={'user-picture cursor-pointer px-2 py-1'}>
                 <Image
                   className={'rounded border border-slate-900'}
                   height={40}

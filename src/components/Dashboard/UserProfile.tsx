@@ -4,8 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOut } from '@fortawesome/free-solid-svg-icons';
 import { IUserWithoutPassword } from '../Layouts/Dashboard';
 import { signOut } from 'next-auth/react';
+import { useUserStore } from '@/store/userStore';
 
 function UserProfile({ open, user } : { open: boolean, user: IUserWithoutPassword }) {
+    //const { user: UserData } = useUserStore();
     const [show, setShow] = useState(false);
 
     useEffect(() => {
