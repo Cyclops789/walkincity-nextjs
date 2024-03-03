@@ -4,7 +4,6 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 import { INotificationType } from '@/components/Dashboard/Notification';
 import { executeQueryReturnsJSON } from '@/lib/db';
-import { IVideosRes } from '@/components/SideBar';
 import { ICountryRes } from '@/components/SideBar';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
@@ -157,6 +156,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
                 break;
         }
     }
+    
     const onStateChange: YouTubeProps['onStateChange'] = (e) => {
         switch (e.target.getPlayerState()) {
             case -1: // unstarted
