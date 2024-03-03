@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Layout from '@/components/Layouts/Main'
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 function login() {
     const router = useRouter();
+    const ref = useRef<any>(null);
     const { error } : { error?: string } = router.query;
     const [form, setForm] = useState({ email: '', password: '' });
     const [errorMessage, setErrorMessage] = useState('');
 
-    const onSubmitForm = (e: React.MouseEvent<HTMLFormElement, MouseEvent>) => {
+    const onSubmitForm = async (e: React.MouseEvent<HTMLFormElement, MouseEvent>) => {
         e.preventDefault();
-
         if(form.email === '' || form.password === '') return;
+
+        const token = await ref.current.executeAsync();
 
         signIn('credentials', {
             callbackUrl: '/admin/dashboard', 
             email: form.email, 
-            password: form.password
+            password: form.password,
+            token: token,
         }).then((res) => {
             if(res?.error) {
                 setErrorMessage(res?.error)
@@ -59,6 +63,13 @@ function login() {
                     </div>
                 </form>
             </div>
+
+            <ReCAPTCHA
+                ref={ref}
+                size={'invisible'}
+                badge={'bottomleft'}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || '_invalid_key'}
+            />
         </Layout>
     )
 }
