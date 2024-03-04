@@ -130,6 +130,10 @@ const getAllCountries = `
 SELECT * FROM countries
 `;
 
+const getWeekVideosRequestsByEmail = `
+SELECT * FROM videos_requests WHERE by_email = ? AND created_on >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+`;
+
 const getCountryByID = `
 SELECT * FROM countries WHERE id = ?
 `;
@@ -197,6 +201,7 @@ const query = {
     getAllUsers,
     getCountryByID,
     getUsersByRole,
+    getWeekVideosRequestsByEmail,
     getAllAcceptedVideosRequests,
     getAllRejectedVideosRequests,
     createNewToken,
