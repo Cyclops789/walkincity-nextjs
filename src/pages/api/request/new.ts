@@ -69,6 +69,20 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             }
         }).then(async (r) => {
             if (r.data.success) {
+                const getWeekRequests = await executeQuery({
+                    query: query.getWeekVideosRequestsByEmail,
+                    values: [by_email]
+                }) as any[];
+
+                if(getWeekRequests.length >= 10) {
+                    return res.json({
+                        success: false,
+                        error: {
+                            message: 'You are limited to 10 requests per week!'
+                        }
+                    });
+                }
+
                 const targetedCountry = await executeQuery({
                     query: query.getCountryByLongName,
                     values: [country],
@@ -99,8 +113,6 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                             query: query.createNewVideosRequests,
                             values: [youtube_id, country, place, weather, type, seekTo, continent, by_email],
                         }) as any[] | any;
-
-                        console.log(newRequestVideo)
 
                         const token = await generateToken({ videoID: newRequestVideo.insertId });
 
