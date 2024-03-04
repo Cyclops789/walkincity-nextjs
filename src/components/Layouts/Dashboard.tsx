@@ -10,7 +10,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react'
 import sha256 from 'sha256';
 import { faChartLine, faBell } from '@fortawesome/free-solid-svg-icons';
-//import { useUserStore } from '@/store/userStore';
+import { useUserStore } from '@/store/userStore';
 
 const UserProfile = dynamic(import('@/components/Dashboard/UserProfile')),
   NotificationArea = dynamic(import('@/components/Dashboard/NotificationArea'));
@@ -57,7 +57,7 @@ export default function Layout({
   const [userSession, setUserSession] = useState<IUserWithoutPassword>();
   const [sideBarOpen, setSideBarOpen] = useState<any>('1');
   const [userPermissions, setUserPermissions] = useState('');
-  //const { setUser } = useUserStore();
+  const { setUser } = useUserStore();
 
   useEffect(() => {
     if (session) {
@@ -121,7 +121,7 @@ export default function Layout({
     }
   }, [sideBarOpen]);
   
-  /*
+  
   useEffect(() => {
     if(userSession) {
       setUser({
@@ -136,7 +136,7 @@ export default function Layout({
       });
     };
   }, [userSession]);
-  */
+  
   return (
     <div>
       <Head>
