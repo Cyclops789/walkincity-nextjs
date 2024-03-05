@@ -68,6 +68,9 @@ export const verifyRequest = (
                 <p>${country}, ${place}</p>
                 <p>Video: <a style="color:red" target="_blank" href="https://www.youtube.com/watch?v=${videoID}">${videoID}</a></p>
                 <a href="${base_url}/request/verify/${verification_token}" style="color:white;" class="btn">Verify request</a>
+                <p></p>
+                <p>If you can't click on the button then copy this link to your browser <a href="${base_url}/request/verify/${verification_token}" style="color:red" target="_blank">${base_url}/request/verify/${verification_token}</a></p>
+                <p></p>
                 <p>If you did not send this request, please ignore this email.</p>
                 <a href="${base_url}" style="font-weight: bold; color: black; text-decoration: none;">Walkin<span style="font-size: 30px; color:red; border-radius: 25px">.</span>City</a>
             </div>
@@ -143,6 +146,8 @@ export const requestAccepted = (
             <div class="content">
                 <p>Congratulation! your requested video has been accepted.</p>
                 <a href="${base_url}/?v=${videoID}&c=${countryID}" style="color:white;" class="btn">Take me in!</a>
+                <p></p>
+                <p>If you can't click on the button then copy this link to your browser <a href="${base_url}/?v=${videoID}&c=${countryID}" style="color:red" target="_blank">${base_url}/?v=${videoID}&c=${countryID}</a></p>
                 <p></p>
                 <a href="${base_url}" style="font-weight: bold; color: black; text-decoration: none;">Walkin<span style="font-size: 30px; color:red; border-radius: 25px">.</span>City</a>
             </div>
@@ -303,6 +308,8 @@ export const accountCreated = (
             <p>Password: ${password}</p>
             <p></p>
             <a href="${base_url}/auth/login" style="color:white;" class="btn">Log in</a>
+            <p></p>
+            <p>If you can't click on the button then copy this link to your browser <a href="${base_url}/auth/login" style="color:red" target="_blank">${base_url}/auth/login</a></p>
             <p></p>
             <a href="${base_url}" style="font-weight: bold; color: black; text-decoration: none;">Walkin<span style="font-size: 30px; color:red; border-radius: 25px">.</span>City</a>
         </div>
