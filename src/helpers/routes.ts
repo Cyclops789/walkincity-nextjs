@@ -1,5 +1,5 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { faChartLine, faUsers, faPhotoFilm, faFlag, faAddressBook, faClosedCaptioning } from "@fortawesome/free-solid-svg-icons";
+import { faUsers, faPhotoFilm, faFlag, faAddressBook, faClosedCaptioning, faUser } from "@fortawesome/free-solid-svg-icons";
 import { NextRouter } from "next/router";
 
 export interface IDashboardRoutes {
@@ -11,6 +11,12 @@ export interface IDashboardRoutes {
 }
 
 export const DashboardRoutes: IDashboardRoutes[] = [
+    {
+        name: 'Account',
+        path: '/admin/account',
+        icon: faUser,
+        permissionID: null
+    },
     {
         name: 'Videos Requests',
         path: '/admin/dashboard/requests',

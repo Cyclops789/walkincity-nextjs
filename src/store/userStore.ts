@@ -1,9 +1,10 @@
 import { create } from 'zustand'
 
-interface IUser {
+export interface IUser {
     id: number;
     username: string;
     email: string;
+    image: string;
     role: {
         id: number,
         name: string,
@@ -11,14 +12,16 @@ interface IUser {
     }
 }
 
-interface IUserStore {
-    user: IUser | {};
+export interface IUserStore {
+    user: IUser | null;
     setUser: (user: IUser) => void;
+    modifyUser: ({ ...keys }) => void;
     removeUser: () => void;
 }
 
 export const useUserStore = create<IUserStore>((set) => ({
-    user: {},
+    user: null,
     setUser: (user) => set(() => ({ user })),
-    removeUser: () => set(() => ({ user: {} })),
+    modifyUser: ({ ...keys }) => set((user) => ({ user: user.user, keys })),
+    removeUser: () => set(() => ({ user: null })),
 }));

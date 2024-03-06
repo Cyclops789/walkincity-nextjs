@@ -9,6 +9,7 @@ import { useUserStore } from '@/store/userStore';
 function UserProfile({ open, user } : { open: boolean, user: IUserWithoutPassword }) {
     //const { user: UserData } = useUserStore();
     const [show, setShow] = useState(false);
+    const { removeUser } = useUserStore();
 
     useEffect(() => {
         if(open) {
@@ -40,7 +41,7 @@ function UserProfile({ open, user } : { open: boolean, user: IUserWithoutPasswor
                 </div>
             </div>
             <hr className='border-[var(--primary-text-color)]' />
-            <div onClick={() => signOut({ callbackUrl: '/auth/login' })} className='cursor-pointer'>
+            <div onClick={() => {removeUser(); signOut({ callbackUrl: '/auth/login' })}} className='cursor-pointer'>
                 <div className='p-3 w-auto'>
                     <FontAwesomeIcon className='mr-3' icon={faSignOut} /> Sign out
                 </div>

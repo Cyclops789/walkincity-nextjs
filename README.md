@@ -2,6 +2,7 @@
 
 - [DONE] Recaptcha for login
 - [DONE] Limit requests to 10 per email / week
-- [CURRENT] Dynamic state with zustand (10%)
+- [DONE] Dynamic state with zustand (10%)
+- [DONE] ~~Middlewares~~, Use dynamic role checker ~~instead~~ with ~~of~~ token
 - Notifications Area (10%)
 - User Profile
