@@ -67,16 +67,11 @@ export const authOptions: NextAuthOptions = {
                                     query: query.getRoleByID,
                                     values: [user[0].role],
                                 }) as any[];
-                
-                                const userReturns: IUserWithoutPassword = {
+
+                                return {
                                     id: user[0].id,
-                                    username: user[0].username,
-                                    email: user[0].email,
                                     role: role[0],
-                                    created_at: user[0].created_at
                                 };
-                
-                                return userReturns;
                             } else {
                                 return null;
                             }
@@ -94,9 +89,33 @@ export const authOptions: NextAuthOptions = {
         }),
     ],
     callbacks: {
-        jwt: async ({ token, user }) => {
+        jwt: async ({ token, user, trigger }) => {
             if (user) {
                 token.user = user;
+            }
+
+            // This is the best way to update the user token
+            // we are using the token in middleware to check 
+            // for roles and permissions.
+            // Direct API requests or mysql queries cannot be
+            // used inside middleware.ts because its using edge runtime
+            
+            if(trigger === "update" || trigger === "signIn") {
+                const userDB = await executeQueryReturnsJSON({
+                    query: query.getUserByID,
+                    values: [(token.user as { id: number, role: any }).id],
+                }) as any[];
+
+                if(userDB.length > 0) {
+                    const role = await executeQueryReturnsJSON({
+                        query: query.getRoleByID,
+                        values: [userDB[0].role],
+                    }) as any[];
+
+                    if(role.length > 0) {
+                        (token.user as { id: number, role: any }).role = role[0];
+                    }
+                }
             }
             return token;
         },

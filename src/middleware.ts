@@ -2,6 +2,7 @@ import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import permissions from "./helpers/permissions";
+import { getSession } from "next-auth/react";
 
 export default withAuth(
     async function middleware(req) {
@@ -13,7 +14,6 @@ export default withAuth(
 
         if(pathname !== '/admin/dashboard') {
             const token = await getToken({ req: req });
-    
             const user: {
                 id: number,
                 username: string,
@@ -40,6 +40,11 @@ export default withAuth(
             const extractedID = Number(id[id.length - 1]) || null;
     
             const hasAnyPerm = userPermissions.some((permission) => {
+                // Account APIs / Pages doesnt need a permission
+                if (pathname.startsWith('/api/admin/account') || pathname.startsWith('/admin/account')) {
+                    return true;
+                };
+
                 if (pathname.startsWith('/api/admin')) {
                     if (permission?.apiPath && pathname.includes(permission.apiPath)) {
                         return true;
