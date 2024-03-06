@@ -138,6 +138,14 @@ const getCountryByID = `
 SELECT * FROM countries WHERE id = ?
 `;
 
+const createNewNotification = `
+INSERT INTO notifications (user_id, message, link) VALUES (?, ?, ?)
+`;
+
+const getNotificationsByUserID = `
+SELECT * FROM notifications WHERE user_id = ?
+`;
+
 const getCountryByShortName = `
 SELECT * FROM countries WHERE short_name = ?
 `;
@@ -191,6 +199,8 @@ const query = {
     getUserByID,
     getRoleByID,
     getAllVideosRequests,
+    createNewNotification,
+    getNotificationsByUserID,
     getVideosRequestsOfThisMonth,
     getVideosOfThisMonth,
     getVideoRequestByVid,

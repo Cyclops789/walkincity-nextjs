@@ -22,6 +22,6 @@ export interface IUserStore {
 export const useUserStore = create<IUserStore>((set) => ({
     user: null,
     setUser: (user) => set(() => ({ user })),
-    modifyUser: ({ ...keys }) => set((user) => ({ user: user.user, keys })),
+    modifyUser: ({ ...keys }) => set(({ user }) => ({ user: { ...user as IUser, keys } })),
     removeUser: () => set(() => ({ user: null })),
 }));
