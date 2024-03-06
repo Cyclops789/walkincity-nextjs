@@ -7,11 +7,12 @@ import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import React, { useRef, useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react'
 import sha256 from 'sha256';
 import { faChartLine, faBell } from '@fortawesome/free-solid-svg-icons';
 import { IUser, IUserStore, useUserStore } from '@/store/userStore';
 import axios from 'axios';
+import { useNotificationsStore } from '@/store/notificationsStore';
+import { INotification } from '@/store/notificationsStore';
 
 const UserProfile = dynamic(import('@/components/Dashboard/UserProfile')),
   NotificationArea = dynamic(import('@/components/Dashboard/NotificationArea'));
@@ -55,6 +56,7 @@ export default function Layout({
   const [getTitle, setTitle] = useState('Dashboard');
   const [sideBarOpen, setSideBarOpen] = useState<any>('1');
   const { setUser, user: user } = useUserStore();
+  const { notifications, markNotificationAsRead, setNotifications } = useNotificationsStore();
 
   useEffect(() => {
     function handleClickOutside(event: any) {
@@ -108,10 +110,11 @@ export default function Layout({
 
   // We are going to set the user state everytime the main component re-renders
   // to prevent setting the state twice we are going to check if the user is already set
+  // WHY: at least hide the routes before renewing the token
   useEffect(() => {
     if (user === null) {
       (async () => {
-        const res = await axios.get('/api/admin/account/get');
+        const res = await axios.get('/api/admin/account/state');
         const userResponse = res.data as IUserWithoutPassword;
 
         setUser({
@@ -128,6 +131,20 @@ export default function Layout({
       })();
     };
   }, [user]);
+
+  // We are going to set the notifications on each request
+  // better than opening a websocket?
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get('/api/admin/account/notifications');
+      const notificationsResponse = res.data as INotification[];
+      console.log(notificationsResponse);
+/*
+      setNotifications(notificationsResponse)
+*/
+
+    })();
+  }, [notifications])
 
   return (
     <div>
@@ -226,7 +243,7 @@ export default function Layout({
                   <FontAwesomeIcon icon={faBell} className={`text-[var(--primary-text-color)]`} />
                 </div>
                 <div ref={wrapperRefNotification}>
-                  <NotificationArea open={openNotifications} />
+                  <NotificationArea markNotificationAsRead={markNotificationAsRead} notifications={notifications} open={openNotifications} />
                 </div>
 
                 <div onClick={() => setOpen(!open)} className={'userpicture cursor-pointer px-2 py-1'}>
@@ -243,7 +260,7 @@ export default function Layout({
                 </div>
               </div>
             </div>
-              <ParentComponent children={children} />
+            <ParentComponent children={children} />
           </section>
         </div>
       )}

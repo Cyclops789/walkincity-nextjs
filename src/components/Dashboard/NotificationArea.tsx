@@ -2,10 +2,18 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faBell } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from "@material-tailwind/react";
+import { INotification } from '@/store/notificationsStore';
+import Link from 'next/link';
 
-export default function NotificationArea(
-    { open }:
-        { open: boolean }
+export default function NotificationArea({ 
+        open, 
+        notifications,
+        markNotificationAsRead
+    }: { 
+        open: boolean, 
+        notifications: INotification[] | null,
+        markNotificationAsRead: (id: number) => void
+    }
 ) {
     const [page, setPage] = useState(0);
 
@@ -39,14 +47,20 @@ export default function NotificationArea(
                 </div>
                 <div className={'bg-black w-full h-[80%]'}>
                     <div className='h-full overflow-x-auto p-3'>
-                        <a href='#' className='flex hover:bg-[#ffffff50] rounded p-3 cursor-pointer'>
-                            <div className='text-[50px]'>
-                                <FontAwesomeIcon icon={faBell} />
-                            </div>
-                            <div className='ml-3 mt-4 items-center text-center'>
-                                New video request has been added
-                            </div>
-                        </a>
+                        {notifications?.map((notification) => (
+                            <Link 
+                                onClick={() => markNotificationAsRead(notification.id)}
+                                href={notification.link} 
+                                className='flex hover:bg-[#ffffff50] rounded p-3 cursor-pointer'
+                            >
+                                <div className='text-[50px]'>
+                                    <FontAwesomeIcon icon={faBell} />
+                                </div>
+                                <div className='ml-3 mt-4 items-center text-center'>
+                                    {notification.message}
+                                </div>
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </div>
