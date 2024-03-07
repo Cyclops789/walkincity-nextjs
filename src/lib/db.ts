@@ -20,7 +20,7 @@ export default async function executeQuery({ query, values }: IQuery) {
     try {
         const results = await db.query(query, values);
         await db.end();
-        return results;
+        return results as any;
     } catch (error) {
         return { error };
     }

@@ -143,7 +143,7 @@ INSERT INTO notifications (user_id, message, link) VALUES (?, ?, ?)
 `;
 
 const getNotificationsByUserID = `
-SELECT * FROM notifications WHERE user_id = ?
+SELECT id, message, is_read, link FROM notifications WHERE user_id = ?
 `;
 
 const getCountryByShortName = `
@@ -177,10 +177,10 @@ const getAllIcons = `
 SELECT * FROM icons
 `;
 
-const updateField = (table: string, id: number | string, options: IOptions[] = []): string => {
+const updateField = (table: string, id: number | string, options: IOptions[] = [], additionalQuery: string = ''): string => {
     const setClauses = options.map((option) => `${option.name} = ${escape(`${option.value}`)}`).join(', ');
     
-    return `UPDATE ${table} SET ${setClauses} WHERE id = ${id}`;
+    return `UPDATE ${table} SET ${setClauses} WHERE id = ${id} ${additionalQuery}`;
 }
 
 const query = {
