@@ -98,7 +98,11 @@ export default function Layout({
     } else if (sidebar == "1") {
       setSideBarOpen("1")
     } else {
-      setSideBarOpen("1")
+      if (window.innerWidth < 1314) {
+        setSideBarOpen("0")
+      } else {
+        setSideBarOpen("1")
+      }
     }
   }, []);
 
@@ -108,9 +112,9 @@ export default function Layout({
     }
   }, [sideBarOpen]);
 
-  // We are going to set the user state everytime the main component re-renders
-  // to prevent setting the state twice we are going to check if the user is already set
-  // WHY: at least hide the routes before renewing the token
+  // We are going to set the user state everytime the layout component renders
+  // to prevent setting the state twice we are going to check if the user already set
+  // WHY: at least we hide the routes before renewing the token...
   useEffect(() => {
     if (user === null) {
       (async () => {
@@ -136,13 +140,12 @@ export default function Layout({
   // better than opening a websocket?
   useEffect(() => {
     (async () => {
-      const res = await axios.get('/api/admin/account/notifications');
-      const notificationsResponse = res.data as INotification[];
-      console.log(notificationsResponse);
-/*
-      setNotifications(notificationsResponse)
-*/
-
+      if (notifications === null) {
+        const res = await axios.get('/api/admin/account/notifications');
+        const notificationsResponse = res.data.notifications as INotification[];
+        //console.log(notificationsResponse);
+        setNotifications(notificationsResponse)
+      }
     })();
   }, [notifications])
 
@@ -240,6 +243,11 @@ export default function Layout({
                 <div
                   onClick={() => setNotificationOpen(!openNotifications)}
                   className='notifications cursor-pointer mt-1 w-[40px] h-[40px] px-2 py-1 rounded flex items-center justify-center bg-[#d50c2d46] border border-[var(--primary-text-color)]'>
+                  {notifications && notifications?.filter((notification) => notification.is_read == false)?.length > 0 && (
+                    <div className='absolute text-[8px] font-bold text-center top-2 ml-3 bg-black rounded-full w-3 h-3'>
+                      {notifications?.filter((notification) => notification.is_read == false).length || 0}
+                    </div>
+                  )}
                   <FontAwesomeIcon icon={faBell} className={`text-[var(--primary-text-color)]`} />
                 </div>
                 <div ref={wrapperRefNotification}>

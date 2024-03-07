@@ -119,7 +119,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                         await sendMailAsVerfiy({
                             to: by_email,
                             template: verifyRequest(country, place, vid, secrets.APP_URL as string, token)
-                        })
+                        });
 
                         return res.json({ success: true, message: 'A verification email has been sent, please check your inbox!' });
 

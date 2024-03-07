@@ -13,7 +13,7 @@ export interface IDashboardRoutes {
 export const DashboardRoutes: IDashboardRoutes[] = [
     {
         name: 'Account',
-        path: '/admin/account',
+        path: '/admin/dashboard/account',
         icon: faUser,
         permissionID: null
     },

@@ -41,7 +41,7 @@ export default withAuth(
     
             const hasAnyPerm = userPermissions.some((permission) => {
                 // Account APIs / Pages doesnt need a permission
-                if (pathname.startsWith('/api/admin/account') || pathname.startsWith('/admin/account')) {
+                if (pathname.startsWith('/api/admin/account') || pathname.startsWith('/admin/dashboard/account')) {
                     return true;
                 };
 

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import axios from 'axios';
 
 export interface INotification {
     id: number;
@@ -14,6 +15,7 @@ export interface INotificationsStore {
     setNotifications: (notifications: INotification[]) => void;
     markNotificationAsRead: (id: number) => void;
     addNotification: (notification: INotification) => void;
+    refreshNotifications: () => void;
 }
 
 const updateNotificationsMarkAsRead = (id: number, notifications: INotification[] | null): INotification[] | null => {
@@ -27,9 +29,15 @@ const updateNotificationsMarkAsRead = (id: number, notifications: INotification[
     return (updatedNotifications || null);
 }
 
+const useRefreshNotifications = async (): Promise<INotification[]> => {
+    const res = await axios.get('/api/admin/account/notifications');
+    return res.data.notifications as INotification[]; 
+}
+
 export const useNotificationsStore = create<INotificationsStore>((set) => ({
     notifications: null,
     setNotifications: (notifications) => set(() => ({ notifications })),
     markNotificationAsRead: (id) => set(({ notifications }) => ({ notifications: updateNotificationsMarkAsRead(id, notifications) })),
     addNotification: (notification) => set(({ notifications }) => ({ notifications: [...notifications as INotification[], notification] })),
+    refreshNotifications: () => useRefreshNotifications().then((notifications) => set({ notifications })),
 }));
