@@ -5,6 +5,7 @@ export interface IUser {
     username: string;
     email: string;
     image: string;
+    created_at: string;
     role: {
         id: number,
         name: string,
