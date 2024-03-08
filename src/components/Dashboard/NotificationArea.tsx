@@ -69,6 +69,7 @@ export default function NotificationArea({
                         {page === 0 ? (
                             notifications && notifications?.map((notification) => (
                                 <Link
+                                    key={notification.id}
                                     onClick={() => setNotificationAsRead(notification)}
                                     href={`/admin/dashboard/${notification.link}`}
                                     className={`flex ${notification.is_read == false ? 'bg-[#ffffff50] hover:bg-[#ffffffa6]' : 'hover:bg-[#ffffff50]'} rounded p-3 cursor-pointer`}
@@ -86,6 +87,7 @@ export default function NotificationArea({
                                 <>
                                     {notification.is_read == false && (
                                         <Link
+                                            key={notification.id}
                                             onClick={() => markNotificationAsRead(notification.id)}
                                             href={`/admin/dashboard/${notification.link}`}
                                             className={`flex bg-[#ffffff50] hover:bg-[#ffffffa6] rounded p-3 cursor-pointer`}

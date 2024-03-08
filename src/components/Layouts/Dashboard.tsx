@@ -22,6 +22,7 @@ export interface IUserWithoutPassword {
   username: string;
   email: string;
   image: string;
+  created_at: string;
   role: {
     id: number;
     name: string;
@@ -125,7 +126,8 @@ export default function Layout({
           id: userResponse.id,
           username: userResponse.username,
           email: userResponse.email,
-          image: `https://gravatar.com/avatar/${sha256(userResponse.email)}?s=50&d=identicon`,
+          created_at: userResponse.created_at || '',
+          image: `/storage/uploads/profiles/${userResponse.image}`,
           role: {
             id: userResponse.role.id,
             name: userResponse.role.name,
@@ -136,7 +138,7 @@ export default function Layout({
     };
   }, [user]);
 
-  // We are going to set the notifications on each request
+  // We are going to fetch the notifications on each request
   // better than opening a websocket?
   useEffect(() => {
     (async () => {

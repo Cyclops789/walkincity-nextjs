@@ -30,6 +30,8 @@ export default async function GET(_req: NextApiRequest, res: NextApiResponse) {
             id: userReturns.id,
             email: userReturns.email,
             username: userReturns.username,
+            image: userReturns.image,
+            created_at: userReturns.created_at,
             role: role[0]
         });
 
