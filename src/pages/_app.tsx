@@ -8,7 +8,7 @@ export default function MyApp({ Component, pageProps: { session, ...pageProps } 
 
   return ( 
     <SessionProvider session={session} refetchInterval={24 * 3600}>
-      <NextNProgress color='var(--primary-text-color)' /> 
+      <NextNProgress options={{ showSpinner: false }} color='var(--primary-text-color)' /> 
       <Component {...pageProps} />
       <SessionRefresh />
     </SessionProvider>

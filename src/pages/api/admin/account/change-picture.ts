@@ -1,53 +1,92 @@
+import { NextApiHandler, NextApiRequest } from "next";
+import formidable from "formidable";
+import path from "path";
+import fs from "fs/promises";
 import executeQuery from '@/lib/db';
 import query from '@/utils/db';
-import { v4 as uuidv4 } from "uuid";
-import { writeFile } from 'fs/promises'
-import { IncomingForm } from 'formidable';
 import { getToken } from 'next-auth/jwt';
-import { NextApiRequest, NextApiResponse } from 'next';
-import fs from 'fs';
-
-export default async function POST(req: NextApiRequest, res: NextApiResponse) {
-    try {
-        const token = await getToken({ req });
-        const { id: userID }: { id: number } = token?.user as { id: number };
-
-        const data = await req.json();
-        const file: File | null = data.get('file') as unknown as File;
-
-        if (!file) {
-            console.log('There is no file')
-            return res.json({ success: false });
-        };
-        console.log('There is a file, ', file.name)
-        const bytes = await file.arrayBuffer()
-        const buffer = Buffer.from(bytes)
-
-        const getFileName = (file: string): string => { return uuidv4() + "-" + new Date().getTime() + "." + file.substring( file.lastIndexOf(".") + 1, file.length ) };
-        const filename = getFileName(file.name);
-        console.log(filename);
-        const path = `/public/storage/uploads/profiles/${filename}`;
-        
-        await writeFile(path, buffer);
-
-        await executeQuery({
-            query: query.updateField('users', userID, [ { name: 'image', value: filename }]),
-            values: []
-        });
-        return res.json({ success: true });
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            success: true,
-            error: {
-                message: 'Internal Server Error'
-            }
-        });
-    }
-};
 
 export const config = {
     api: {
         bodyParser: false,
     },
 };
+
+const fileExists = async (filePath: string) => {
+    try {
+        await fs.access(filePath, fs.constants.F_OK);
+        return true;
+    } catch (err) {
+        return false;
+    }
+}
+
+const readFile = (
+    req: NextApiRequest
+): Promise<{ fields: formidable.Fields; files: formidable.Files }> => {
+    const options: formidable.Options = {};
+
+    options.uploadDir = path.join(process.cwd(), "/public/storage/uploads/profiles");
+    options.keepExtensions = true;
+    options.allowEmptyFiles = false;
+    options.multiples = false;
+
+    options.filter = ({ name, originalFilename, mimetype }) => {
+        if (!(originalFilename && name)) return false;
+        
+        return (mimetype && mimetype.includes("image") ? true : false);
+    };
+
+
+    options.maxFileSize = 4000 * 1024 * 1024;
+    const form = formidable(options);
+
+    return new Promise((resolve, reject) => {
+        form.parse(req, (err, fields, files) => {
+            if (err) reject(err);
+            resolve({ fields, files });
+        });
+    });
+};
+
+const handler: NextApiHandler = async (req, res) => {
+    try {
+        await fs.readdir(path.join(process.cwd() + "/public", "/storage", "/uploads", "/profiles"))
+    } catch (error) {
+        await fs.mkdir(path.join(process.cwd() + "/public", "/storage", "/uploads", "/profiles"));
+    }
+
+    const token = await getToken({ req });
+    const { id: userID }: { id: number } = token?.user as { id: number };
+    const { files } = await readFile(req);
+
+    const user = await executeQuery({
+        query: query.getUserByID,
+        values: [userID]
+    }) as any[];
+
+    if(user[0].image !== "placeholder.png") {
+        try {
+            const filePath = path.join(process.cwd() + "/public", "/storage", "/uploads", "/profiles", `/${user[0].image}`);
+            const fileExist = await fileExists(filePath);
+            
+            if(fileExist) {
+                await fs.unlink(filePath);
+            }
+        } catch (error) {
+            console.log(error)   
+        }
+    }
+
+    await executeQuery({
+        query: query.updateField('users', userID, [ { name: 'image', value: path.basename((files.image as any)?.path) }]),
+        values: []
+    });
+
+    res.json({ 
+        success: true,
+        message: 'Profile has been updated successfully.'
+    });
+};
+
+export default handler;

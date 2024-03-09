@@ -252,7 +252,7 @@ export default function Layout({
                   )}
                   <FontAwesomeIcon icon={faBell} className={`text-[var(--primary-text-color)]`} />
                 </div>
-                <div ref={wrapperRefNotification}>
+                <div className={'relative'} ref={wrapperRefNotification}>
                   <NotificationArea markNotificationAsRead={markNotificationAsRead} notifications={notifications} open={openNotifications} />
                 </div>
 

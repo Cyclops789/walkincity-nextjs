@@ -37,7 +37,7 @@ export default function NotificationArea({
     }
 
     return (
-        <div style={{ zIndex: 999 }} className={`${open ? 'fixed' : 'hidden'} right-[55px] top-[55px] w-[400px] h-[500px] rounded overflow-hidden`}>
+        <div style={{ zIndex: 999 }} className={`${open ? 'absolute' : 'hidden'} right-0 top-[55px] w-[400px] h-[500px] rounded overflow-hidden`}>
             <div className='w-full h-full text-white'>
                 <div className={'bg-[var(--primary-text-color)] w-full h-[20%] p-3'}>
                     <div className='text-xl font-semibold'>
