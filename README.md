@@ -5,4 +5,5 @@
 - [DONE] Dynamic state with zustand
 - [DONE] ~~Middlewares~~, Use dynamic role checker ~~instead~~ with ~~of~~ token
 - [DONE] Notifications Area
-- [CURRENT] User Profile
+- [DONE] User Profile
+- Custom 404 page
