@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOut, faChartLine, faUser } from '@fortawesome/free-solid-svg-icons';
 import { IUserWithoutPassword } from '../Layouts/Dashboard';
@@ -8,7 +7,6 @@ import { useUserStore } from '@/store/userStore';
 import Link from 'next/link';
 
 function UserProfile({ open, user }: { open: boolean, user: IUserWithoutPassword }) {
-    //const { user: UserData } = useUserStore();
     const [show, setShow] = useState(false);
     const { removeUser } = useUserStore();
 
@@ -22,7 +20,7 @@ function UserProfile({ open, user }: { open: boolean, user: IUserWithoutPassword
 
     return (
         <div
-        style={{ zIndex: 999 }}
+            style={{ zIndex: 999 }}
             className={`${!show ? 'hidden' : 'absolute'} right-2 top-[55px] text-white h-auto w-[200px] bg-[#626060] rounded overflow-hidden`}
         >
             <div className='p-1 space-y-1 text-sm'>

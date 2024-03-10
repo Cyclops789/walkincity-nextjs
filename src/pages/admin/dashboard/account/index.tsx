@@ -14,9 +14,8 @@ interface IUserProfileForm {
     confirmationPassword?: string;
 }
 
-const Layout = dynamic(import('@/components/Layouts/Dashboard')),
-    Notification = dynamic(import('@/components/Dashboard/Notification')),
-    ConfirmationModal = dynamic(import('@/components/Dashboard/ConfirmationModal'));
+const Layout = dynamic(import('@/components/Layouts/Dashboard')), Notification = dynamic(import('@/components/Dashboard/Notification'));
+
 function account() {
     const router = useRouter();
     const { user, modifyUser } = useUserStore();
@@ -24,6 +23,7 @@ function account() {
     const [selectedImage, setSelectedImage] = useState("");
     const [form, setForm] = useState<IUserProfileForm>();
     const [notify, setNotify] = useState<INotificationType>({ open: false, type: 'info', text: 'Simple' });
+
     const changeUserPfp = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && (e.target.files?.length || 0) >= 1) {
             let image = e.target.files[0];
@@ -47,12 +47,13 @@ function account() {
         if (pfp) {
             try {
                 const formData = new FormData();
-
                 formData.append('image', pfp as any);
 
                 axios.post('/api/admin/account/change-picture', formData).then((res) => {
                     if(res.data.success) {
                         setPfp(undefined);
+                        modifyUser({ image: selectedImage })
+                        refreshRouteSilenced(router);
                         setNotify({ open: true, type: 'success', text: res.data.message });
                     } else {
                         setNotify({ open: true, type: 'warning', text: res.data.error.message });
@@ -60,9 +61,6 @@ function account() {
                 });
             } catch (e: any) {
                 console.error(e)
-            } finally {
-                modifyUser({ image: selectedImage })
-                refreshRouteSilenced(router);
             }
         }
 
@@ -82,7 +80,7 @@ function account() {
                 }
             })
         }
-    }
+    };
 
     return (
         <Layout title={'Account'}>
