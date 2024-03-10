@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOut } from '@fortawesome/free-solid-svg-icons';
+import { faSignOut, faChartLine, faUser } from '@fortawesome/free-solid-svg-icons';
 import { IUserWithoutPassword } from '../Layouts/Dashboard';
 import { signOut } from 'next-auth/react';
 import { useUserStore } from '@/store/userStore';
+import Link from 'next/link';
 
-function UserProfile({ open, user } : { open: boolean, user: IUserWithoutPassword }) {
+function UserProfile({ open, user }: { open: boolean, user: IUserWithoutPassword }) {
     //const { user: UserData } = useUserStore();
     const [show, setShow] = useState(false);
     const { removeUser } = useUserStore();
 
     useEffect(() => {
-        if(open) {
+        if (open) {
             setShow(true);
         } else if (!open) {
             setShow(false);
@@ -21,29 +22,27 @@ function UserProfile({ open, user } : { open: boolean, user: IUserWithoutPasswor
 
     return (
         <div
-            style={{
-                transition: 'all 0.4s ease',
-                transform: show ? 'translate(0, 0)' : 'translate(100%, 0)',
-            }} 
-            className={`${!show ? 'right-0' : 'right-[55px]'} fixed top-6 z-20 text-white h-auto w-[250px] bg-[#626060] rounded-lg border-2 border-[var(--primary-text-color)]`}
+        style={{ zIndex: 999 }}
+            className={`${!show ? 'hidden' : 'absolute'} right-2 top-[55px] text-white h-auto w-[200px] bg-[#626060] rounded overflow-hidden`}
         >
-            <div className='p-3 flex space-x-1'>
-                <Image
-                  className={'rounded border border-slate-900'}
-                  height={40}
-                  width={50}
-                  alt={'User picture'}
-                  src={user.image}
-                />
-                <div className=''>
-                    <div className='capitalize text-blue-400'>@{user.username}</div>
-                    <div className=''>{user.email}</div>
+            <div className='p-1 space-y-1 text-sm'>
+            <div className='rounded cursor-pointer hover:bg-[#858484]'>
+                    <Link href={'/admin/dashboard'}>
+                        <div className={'p-2'}>
+                            <FontAwesomeIcon icon={faChartLine} /> Dashboard
+                        </div>
+                    </Link>
                 </div>
-            </div>
-            <hr className='border-[var(--primary-text-color)]' />
-            <div onClick={() => {removeUser(); signOut({ callbackUrl: '/auth/login' })}} className='cursor-pointer'>
-                <div className='p-3 w-auto'>
-                    <FontAwesomeIcon className='mr-3' icon={faSignOut} /> Sign out
+                <div className='rounded cursor-pointer hover:bg-[#858484]'>
+                    <Link href={'/admin/dashboard/account'}>
+                        <div className={'p-2'}>
+                            <FontAwesomeIcon icon={faUser} /> Account
+                        </div>
+                    </Link>
+                </div>
+                <hr className={'border-black'} />
+                <div onClick={() => {removeUser(); signOut({ callbackUrl: '/auth/login' })}} className='p-2 rounded cursor-pointer hover:bg-[#858484]'>
+                    <FontAwesomeIcon icon={faSignOut} /> Sign Out
                 </div>
             </div>
         </div>

@@ -16,14 +16,6 @@ interface IUserReturns {
     created_at: string;
 }
 
-interface IUserWithoutPassword {
-    id: number;
-    username: string;
-    email: string;
-    role: number;
-    created_at: string;
-}
-
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
@@ -125,7 +117,6 @@ export const authOptions: NextAuthOptions = {
             return session;
         },
     },
-    debug: true,
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
         signIn: '/auth/login'
