@@ -7,12 +7,12 @@ import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import React, { useRef, useEffect, useState } from 'react';
-import sha256 from 'sha256';
 import { faChartLine, faBell } from '@fortawesome/free-solid-svg-icons';
-import { IUser, IUserStore, useUserStore } from '@/store/userStore';
+import { useUserStore } from '@/store/userStore';
 import axios from 'axios';
 import { useNotificationsStore } from '@/store/notificationsStore';
 import { INotification } from '@/store/notificationsStore';
+import useClickOutside from '@/components/Dashboard/useClickOutside';
 
 const UserProfile = dynamic(import('@/components/Dashboard/UserProfile')),
   NotificationArea = dynamic(import('@/components/Dashboard/NotificationArea'));
@@ -50,38 +50,23 @@ export default function Layout({
   className = ''
 }: LayoutProps) {
   const router = useRouter();
-  const wrapperRef = useRef(null);
-  const wrapperRefNotification = useRef(null);
+  const userRef = useRef(null);
+  const userButtonRef = useRef(null);
+
+  const notificationRef = useRef(null);
+  const notificationButtonRef = useRef(null);
+
   const [open, setOpen] = useState(false);
   const [openNotifications, setNotificationOpen] = useState(false);
+
   const [getTitle, setTitle] = useState('Dashboard');
   const [sideBarOpen, setSideBarOpen] = useState<any>('1');
+
   const { setUser, user: user } = useUserStore();
   const { notifications, markNotificationAsRead, setNotifications } = useNotificationsStore();
 
-  useEffect(() => {
-    function handleClickOutside(event: any) {
-      if (wrapperRef.current && !(wrapperRefNotification.current as any).contains(event.target)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [wrapperRef]);
-
-  useEffect(() => {
-    function handleClickOutside(event: any) {
-      if (wrapperRefNotification.current && !(wrapperRefNotification.current as any).contains(event.target)) {
-        setNotificationOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [wrapperRefNotification]);
+  useClickOutside(notificationRef, () => setNotificationOpen(false), notificationButtonRef);
+  useClickOutside(userRef, () => setOpen(false), userButtonRef);
 
   useEffect(() => {
     if (typeof title === 'string' && title) {
@@ -231,9 +216,7 @@ export default function Layout({
                     }}
                     className='cursor-pointer w-[40px] h-[40px] px-2 py-1 rounded flex items-center justify-center bg-[#d50c2d46] border border-[var(--primary-text-color)]'>
                     <FontAwesomeIcon
-                      style={{
-                        transition: 'all 0.5s ease',
-                      }}
+                      style={{ transition: 'all 0.5s ease' }}
                       className={`text-[var(--primary-text-color)] ${sideBarOpen === "1" ? "" : "rotate-180"}`}
                       icon={faAnglesLeft}
                     />
@@ -243,6 +226,7 @@ export default function Layout({
 
               <div className={'flex justify-end'}>
                 <div
+                  ref={notificationButtonRef}
                   onClick={() => setNotificationOpen(!openNotifications)}
                   className='notifications cursor-pointer mt-1 w-[40px] h-[40px] px-2 py-1 rounded flex items-center justify-center bg-[#d50c2d46] border border-[var(--primary-text-color)]'>
                   {notifications && notifications?.filter((notification) => notification.is_read == false)?.length > 0 && (
@@ -252,11 +236,11 @@ export default function Layout({
                   )}
                   <FontAwesomeIcon icon={faBell} className={`text-[var(--primary-text-color)]`} />
                 </div>
-                <div className={'relative'} ref={wrapperRefNotification}>
+                <div className={'relative'} ref={notificationRef}>
                   <NotificationArea markNotificationAsRead={markNotificationAsRead} notifications={notifications} open={openNotifications} />
                 </div>
 
-                <div onClick={() => setOpen(!open)} className='border border-[var(--primary-text-color)] rounded flex justify-center h-[40px] overflow-hidden mx-2 mt-1 cursor-pointer'>
+                <div ref={userButtonRef} onClick={() => setOpen(!open)} className='border border-[var(--primary-text-color)] rounded flex justify-center h-[40px] overflow-hidden mx-2 mt-1 cursor-pointer'>
                   <div>
                     <Image
                       className='mr-1'
@@ -279,7 +263,7 @@ export default function Layout({
                   </div>
                 </div>
 
-                <div className={'relative'} ref={wrapperRef}>
+                <div className={'relative'} ref={userRef} >
                   <UserProfile user={user} open={open} />
                 </div>
               </div>

@@ -30,63 +30,88 @@ const readFile = (
     options.keepExtensions = true;
     options.allowEmptyFiles = false;
     options.multiples = false;
+    options.maxFileSize = 4000 * 1024 * 1024;
 
     options.filter = ({ name, originalFilename, mimetype }) => {
         if (!(originalFilename && name)) return false;
-        
+
         return (mimetype && mimetype.includes("image") ? true : false);
     };
 
-
-    options.maxFileSize = 4000 * 1024 * 1024;
     const form = formidable(options);
 
     return new Promise((resolve, reject) => {
-        form.parse(req, (err, fields, files) => {
-            if (err) reject(err);
-            resolve({ fields, files });
+        form.parse(req, async (err, fields, files) => {
+            if (path.basename((files.image as any)?.path).endsWith('png')) {
+                resolve({ fields, files });
+            } else if (path.basename((files.image as any)?.path).endsWith('jpeg')) {
+                resolve({ fields, files });
+            } else if (path.basename((files.image as any)?.path).endsWith('webp')) {
+                resolve({ fields, files });
+            } else {
+                try {
+                    const filePath = (files.image as any)?.path;
+                    const fileExist = await fileExists(filePath);
+
+                    if (fileExist) {
+                        await fs.unlink(filePath);
+                    }
+                } catch (error) { }
+
+                reject('Image type isn\'t supported, please use one of those [jpeg, png, webp]');
+            }
+
+            if(err) {
+                reject('There was an error uploading the file');
+            };
         });
     });
 };
 
 const handler: NextApiHandler = async (req, res) => {
-    try {
-        await fs.readdir(path.join(process.cwd() + "/public", "/storage", "/uploads", "/profiles"))
-    } catch (error) {
-        await fs.mkdir(path.join(process.cwd() + "/public", "/storage", "/uploads", "/profiles"));
-    }
+    try { await fs.readdir(path.join(process.cwd() + "/public", "/storage", "/uploads", "/profiles")) } catch (error) { await fs.mkdir(path.join(process.cwd() + "/public", "/storage", "/uploads", "/profiles")) };
 
     const token = await getToken({ req });
     const { id: userID }: { id: number } = token?.user as { id: number };
-    const { files } = await readFile(req);
 
-    const user = await executeQuery({
-        query: query.getUserByID,
-        values: [userID]
-    }) as any[];
+    await readFile(req)
+        .then(async ({ files }) => {
+            const user = await executeQuery({
+                query: query.getUserByID,
+                values: [userID]
+            }) as any[];
 
-    if(user[0].image !== "placeholder.png") {
-        try {
-            const filePath = path.join(process.cwd() + "/public", "/storage", "/uploads", "/profiles", `/${user[0].image}`);
-            const fileExist = await fileExists(filePath);
-            
-            if(fileExist) {
-                await fs.unlink(filePath);
+            if (user[0].image !== "placeholder.png") {
+                try {
+                    const filePath = path.join(process.cwd() + "/public", "/storage", "/uploads", "/profiles", `/${user[0].image}`);
+                    const fileExist = await fileExists(filePath);
+
+                    if (fileExist) {
+                        await fs.unlink(filePath);
+                    }
+                } catch (error) {
+                    console.log(error)
+                }
             }
-        } catch (error) {
-            console.log(error)   
-        }
-    }
 
-    await executeQuery({
-        query: query.updateField('users', userID, [ { name: 'image', value: path.basename((files.image as any)?.path) }]),
-        values: []
-    });
+            await executeQuery({
+                query: query.updateField('users', userID, [{ name: 'image', value: path.basename((files.image as any)?.path) }]),
+                values: []
+            });
 
-    res.json({ 
-        success: true,
-        message: 'Profile has been updated successfully.'
-    });
+            res.json({
+                success: true,
+                message: 'Profile has been updated successfully.'
+            });
+        })
+        .catch((e) => {
+            res.json({
+                success: false,
+                error: {
+                    message: e
+                }
+            });
+        })
 };
 
 export default handler;
