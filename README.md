@@ -7,4 +7,4 @@
 - [DONE] Notifications Area
 - [DONE] User Profile
 - [DONE] Custom 404 page
-- [CURRENT] Customize user profile area
+- [DONE] Customize user profile area
