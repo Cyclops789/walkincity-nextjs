@@ -256,16 +256,30 @@ export default function Layout({
                   <NotificationArea markNotificationAsRead={markNotificationAsRead} notifications={notifications} open={openNotifications} />
                 </div>
 
-                <div onClick={() => setOpen(!open)} className={'userpicture cursor-pointer px-2 py-1'}>
-                  <Image
-                    className={'rounded border border-slate-900'}
-                    height={40}
-                    width={40}
-                    alt={'User picture'}
-                    src={user.image as string}
-                  />
+                <div onClick={() => setOpen(!open)} className='border border-[var(--primary-text-color)] rounded flex justify-center h-[40px] overflow-hidden mx-2 mt-1 cursor-pointer'>
+                  <div>
+                    <Image
+                      className='mr-1'
+                      height={40}
+                      width={40}
+                      alt={'User picture'}
+                      src={user.image as string}
+                    />
+                  </div>
+
+                  <div className={'items-center mr-1'}>
+                    <div className={'text-start text-[12px]'}>
+                      <div className='text-blue-500 capitalize'>
+                        {user?.username}
+                      </div>
+                      <div className=''>
+                        {user?.email}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div ref={wrapperRef}>
+
+                <div className={'relative'} ref={wrapperRef}>
                   <UserProfile user={user} open={open} />
                 </div>
               </div>
