@@ -6,4 +6,5 @@
 - [DONE] ~~Middlewares~~, Use dynamic role checker ~~instead~~ with ~~of~~ token
 - [DONE] Notifications Area
 - [DONE] User Profile
-- Custom 404 page
+- [DONE] Custom 404 page
+- Customize user profile area
