@@ -13,14 +13,16 @@ interface IEditVideoReq_ {
     continent: string | undefined;
     seekTo: string | number | undefined;
     verified: string | number | undefined;
+    latitude: string | number | undefined;
+    longitude: string | number | undefined;
 }
 
 
 export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { id, vid, country, place, weather, type, continent, seekTo, verified }: IEditVideoReq_ = _req.body
+        const { id, vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude }: IEditVideoReq_ = _req.body
     
-        if (!id || !vid || !country || !place || !weather || !type || !continent || !seekTo || verified === undefined || verified === '') {
+        if (!id || !vid || !country || !place || !weather || !type || !continent || !seekTo || verified === undefined || verified === '' || !latitude || !longitude) {
             return res.json({ 
                 success: false,
                 error: { 
@@ -34,6 +36,15 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                 success: false,
                 error: { 
                     message: 'Invalid ID.' 
+                } 
+            });
+        }
+
+        if(Number.isNaN(latitude) && Number.isNaN(longitude) || Number.isNaN(parseFloat(`${latitude}`)) && Number.isNaN(parseFloat(`${longitude}`))) {
+            return res.json({ 
+                success: false,
+                error: { 
+                    message: 'Invalid longitude or latitude.' 
                 } 
             });
         }
@@ -100,6 +111,14 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                 {
                     name: 'verified',
                     value: verified
+                },
+                {
+                    name: 'latitude',
+                    value: latitude
+                },
+                {
+                    name: 'longitude',
+                    value: longitude
                 }
             ];
 

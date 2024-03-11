@@ -21,6 +21,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
   const { query } = router;
   const v = query.v as number | undefined;
   const c = query.c as number | undefined;
+  const cn = query.cn as string | undefined;
   const [currentVideo, setCurrentVideo] = useState<IVideosRes>();
   const [currentCountry, setCurrentCountry] = useState<ICountryRes>();
   const [playing, setPlaying] = useState(false);
@@ -54,6 +55,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
               <Video
                 v={v}
                 c={c}
+                cn={cn}
                 volume={volume}
                 countries={countries}
                 ended={ended}
@@ -101,7 +103,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
 
 export const getServerSideProps = (async () => {
   const videos = await executeQueryReturnsJSON({
-    query: query.getAllVerifiedVideos,
+    query: query.getAllVerifiedVideosForProduction,
     values: [],
   });
 

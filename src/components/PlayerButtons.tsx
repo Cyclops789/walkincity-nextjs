@@ -42,11 +42,12 @@ function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVid
     }
 
     const copyToClipBoard = () => {
-        navigator.clipboard.writeText(`${window.location.href}?v=${currentVideo?.id}&c=${currentCountry?.id}`);
+        navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_URL}/?v=${currentVideo?.id}&c=${currentCountry?.id}`);
         setNotify({ open: true, type: 'bg-white', text: 'Copied !' })
     }
 
     const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(e.target.value)
         setVolume(e.target.value)
     }
 
@@ -73,7 +74,7 @@ function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVid
                     icon={parseInt(volume) >= 50 ? (faVolumeHigh) : parseInt(volume) >= 20 ? (faVolumeLow) : faVolumeOff} 
                 />
                 <input
-                    min={0}
+                    min={-1}
                     max={100}
                     step={10}
                     defaultValue={0}

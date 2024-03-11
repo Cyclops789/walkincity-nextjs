@@ -18,6 +18,7 @@ import {
     faCloud,
     faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'next/router';
 
 export interface ICountryRes {
     id: number;
@@ -36,6 +37,8 @@ export interface IVideosRes {
     continent: string;
     weather: string;
     seekTo: number;
+    latitude?: number;
+    longitude?: number;
     type: 'walk' | 'drive';
 }
 
@@ -65,6 +68,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
     const [getCountries, setCountries] = useState<ICountryRes[]>(countries);
     const [search, setSearch] = useState(false);
     const wrapperRef = useRef(null);
+    const router = useRouter();
 
     const changeWeatherFilter = (weather: string) => {
         if (weatherFilter == weather) {
@@ -349,6 +353,19 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                 </form>
 
                 <div className='ml-2 space-y-2'>
+                    <div 
+                        onClick={() => router.push('/global')}
+                        className={'py-3 w-full text-center rounded bg-white hover:bg-slate-300 cursor-pointer relative overflow-hidden'}
+                    >
+                            <Image
+                                alt=''
+                                height={1}
+                                width={70}
+                                src={`/earth/earth-overview.png`}
+                                className="absolute top-[8px] left-[-8px] h-auto transform -translate-y-1/2 rotate-[-49deg]"
+                            />
+                        Global Mode
+                    </div>
                     {getCountries.map((country: ICountryRes, index: number) => (
                         <div
                             key={`country-${country.id}`}

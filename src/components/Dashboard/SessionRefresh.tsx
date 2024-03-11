@@ -7,7 +7,6 @@ export default function SessionRefresh() {
 
     useEffect(() => {
         if (status === 'authenticated' && !isInitialized) {
-            console.log('Token refreshed');
             update(); // Refresh session from database on first load
             setIsInitialized(true);
         }

@@ -1,12 +1,13 @@
 
 import React, { useEffect, useState } from 'react'
-import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
+import YouTube, { YouTubeProps, YouTubePlayer } from 'react-youtube';
 import { Dispatch, SetStateAction } from 'react';
 import { IVideosRes, ICountryRes } from '@/components/SideBar';
 
 export interface IVideoComponent {
     v: number | undefined;
     c: number | undefined;
+    cn: string | undefined;
     volume: string;
     countries: ICountryRes[];
     setPlaying: Dispatch<SetStateAction<boolean>>;
@@ -20,7 +21,7 @@ export interface IVideoComponent {
     setEnded: Dispatch<SetStateAction<boolean>>;
 }
 
-function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo, setCurrentCountry, currentCountry, countries, c, volume, setEnded, ended }: IVideoComponent) {
+function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo, setCurrentCountry, currentCountry, countries, c, volume, setEnded, ended, cn }: IVideoComponent) {
     const [player, setPlayer] = useState<YouTubePlayer>();
     const [originURL, setOriginURL] = useState('');
 
@@ -86,7 +87,7 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                 setEnded(!ended);
                 break;
             case 1: // playing - enable in production
-                setPlaying(false);
+                setPlaying(true);
                 break;
             case 2: // paused
                 setPlaying(false);
@@ -102,7 +103,13 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
     }
 
     useEffect(() => {
-        const foundCountry = countries.filter((country) => (country.id == c))
+        let foundCountry: ICountryRes[];
+
+        if (cn) {
+            foundCountry = countries.filter((country) => (country.long_name.toLowerCase() == cn.toLowerCase()))
+        } else {
+            foundCountry = countries.filter((country) => (country.id == c))
+        }
 
         if (foundCountry.length >= 1) {
             const foundVideo = foundCountry[0].videos.filter((video) => (video.id == v))
@@ -112,10 +119,14 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                 setCurrentVideo(foundVideo[0]);
             }
         }
-    }, [c, v]);
+    }, [c, v, cn]);
 
     useEffect(() => {
         if (player) {
+            if (volume == '-1') {
+                player.mute();
+            }
+
             if (volume != '0') {
                 player.unMute();
                 player.setVolume(parseInt(volume));
