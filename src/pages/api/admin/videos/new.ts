@@ -11,19 +11,30 @@ interface IEditVideoReq_ {
     continent: string | undefined;
     seekTo: string | number | undefined;
     verified: string | number | undefined;
+    latitude: string | number | undefined;
+    longitude: string | number | undefined;
 }
 
 
 export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { vid, country, place, weather, type, continent, seekTo, verified }: IEditVideoReq_ = _req.body
+        const { vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude }: IEditVideoReq_ = _req.body
 
-        if (!vid || !country || !place || !weather || !type || !continent || !seekTo || verified === undefined || verified === '') {
+        if (!vid || !country || !place || !weather || !type || !continent || !seekTo || verified === undefined || verified === '' || !latitude || !longitude) {
             return res.json({
                 success: false,
                 error: {
                     message: 'All values are required for this action.'
                 }
+            });
+        }
+
+        if(Number.isNaN(latitude) && Number.isNaN(longitude) || Number.isNaN(parseFloat(`${latitude}`)) && Number.isNaN(parseFloat(`${longitude}`))) {
+            return res.json({ 
+                success: false,
+                error: { 
+                    message: 'Invalid longitude or latitude.' 
+                } 
             });
         }
 
@@ -59,7 +70,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
 
                 const newVideo = await executeQuery({
                     query: query.createNewVideo,
-                    values: [vid, country, place, weather, type, continent, seekTo, verified],
+                    values: [vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude],
                 }) as any;
 
                 const getVideo = await executeQuery({
@@ -69,7 +80,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
 
                 return res.json({
                     success: true,
-                    video: getVideo[0] || [],
+                    video: getVideo[0] || {},
                     message: 'Video has been created successfully! redirecting in 5s'
                 });
             } catch (error) {

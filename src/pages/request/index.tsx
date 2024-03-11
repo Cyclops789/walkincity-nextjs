@@ -218,7 +218,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
             />
             <div style={{ backgroundColor: 'hsl(0, 0%, 8%)' }} className='sm:flex w-screen h-screen justify-center items-center overflow-auto'>
                 <div className='flex p-4 sm:p-0 sm:pl-4 text-white justify-center items-center sm:py-4 mt-6'>
-                    <div style={{ backgroundColor: 'hsl(0, 0%, 32.5%)' }} className='p-5 h-[650px] space-y-2 sm:w-[500px] rounded-s'>
+                    <div style={{ backgroundColor: 'hsl(0, 0%, 32.5%)' }} className='p-5 h-full sm:h-[650px] space-y-2 sm:w-[500px] rounded sm:rounded-s sm:rounded-none'>
                         <div className="font-semibold text-[#fc002a] text-center uppercase text-2xl underline">
                             Important
                         </div>
@@ -238,18 +238,18 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
                         </ul>
 
                         <div className="font-semibold text-[#ff284b]">
-                            - The video must be 15min or more otherwise if will be rejected.
+                            - The video must be 15min or more otherwise it will be rejected.
                         </div>
                         <div className="font-semibold text-[#fc002a] text-center uppercase text-2xl underline">
                             Video
                         </div>
                         <span className={'font-semibold text-[#ff284b]'}>Status:</span> {(videoError && !playing) ? videoError : (videoState && !playing) ? videoState : playing && (<span className='text-green-400'>Verified</span>)}
-                        <div className='bg-black p-3 w-[460px] h-[226px] justify-center items-center flex rounded'>
+                        <div className='bg-black p-3 w-full h-[170px] sm:w-[460px] sm:h-[226px] justify-center items-center flex rounded'>
                             {(sending || !tested || form?.vid === '') && (
                                 <div className="custom-loader"></div>
                             )}
                             <YouTube
-                                iframeClassName={`w-[460px] h-[226px] ${(!tested) && 'hidden'}`}
+                                iframeClassName={`w-full h-[170px] sm:w-[460px] sm:h-[226px] ${(!tested) && 'hidden'}`}
                                 opts={{
                                     playerVars: {
                                         autoplay: 0
@@ -264,8 +264,8 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
                     </div>
                 </div>
 
-                <div className='flex sm:pr-4 text-white justify-center items-center sm:py-4 mt-6'>
-                    <form style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='p-5 h-[650px] space-y-2 sm:w-[500px] rounded-e' onSubmit={submitForm}>
+                <div className='flex p-4 sm:pr-4 sm:p-0 text-white justify-center items-center sm:py-4 mt-6'>
+                    <form style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='p-5 h-full sm:h-[650px] space-y-2 sm:w-[500px] rounded sm:rounded-e sm:rounded-none' onSubmit={submitForm}>
                         <div className='text-2xl uppercase text-center'>
                             video request
                         </div>

@@ -18,6 +18,8 @@ export interface IVideosRes {
     weather: string;
     type: string;
     seekTo: number;
+    latitude: number;
+    longitude: number;
     verified: string | number;
     created_on: string;
 }
@@ -181,6 +183,9 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 Place
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                Location
+                            </th>
+                            <th scope="col" className="px-6 py-3">
                                 Actions
                             </th>
                         </tr>
@@ -203,6 +208,9 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 </td>
                                 <td className="px-6 py-4">
                                     {video.place}
+                                </td>
+                                <td className={`px-6 py-4 ${(video.latitude && video.longitude) ? 'text-green-600' : 'text-red-600'}`}>
+                                    {(video.latitude && video.longitude) ? 'Set' : 'Not set'}
                                 </td>
                                 <td className="px-6 py-4 space-x-2">
                                     <Link

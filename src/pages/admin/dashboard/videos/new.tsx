@@ -26,6 +26,8 @@ interface IFormData {
     type?: string;
     seekTo?: string | number;
     verified?: string | number;
+    latitude?: number;
+    longitude?: number;
 }
 
 export default function newVideo({ countries }: IVideo) {
@@ -49,7 +51,9 @@ export default function newVideo({ countries }: IVideo) {
             form.seekTo === 0 ||
 
             form.verified == undefined ||
-            form.verified == ''
+            form.verified == '' || 
+            !form.latitude || form.latitude === 0 ||
+            !form.longitude || form.longitude === 0
         ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });;
 
         setModalData({
@@ -69,7 +73,9 @@ export default function newVideo({ countries }: IVideo) {
                     type: form.type,
                     continent: countries.filter((country) => country.long_name.toLowerCase() === form.country?.toLowerCase())[0].continent,
                     seekTo: form.seekTo,
-                    verified: form.verified
+                    verified: form.verified,
+                    latitude: form.latitude,
+                    longitude: form.longitude
                 }).then((res) => {
                     setModalData((prevData: any) => ({ ...prevData, open: false }));
                     if (res.data.success) {
@@ -108,7 +114,9 @@ export default function newVideo({ countries }: IVideo) {
             'weather': weather || '',
             'type': type || '',
             'seekTo': seekTo || '',
-            'verified': verified || 0
+            'verified': verified || 0,
+            'latitude': 0,
+            'longitude': 0
         });
     }, []);
 
@@ -230,6 +238,36 @@ export default function newVideo({ countries }: IVideo) {
                                         <option value={1}>Yes</option>
                                     </select>
                                 </div>
+
+                                <div className={'flex justify-between space-x-3'}>
+                                    <div className='space-y-2 w-full'>
+                                        <div>
+                                            <label className={'font-semibold'} htmlFor="latitude">Latitude:</label>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            onChange={(e) => updateFormData({ name: 'latitude', value: e.target.value })}
+                                            className='p-2 rounded bg-[#262626] text-white w-full'
+                                            defaultValue={form.place}
+                                            id='latitude'
+                                            required
+                                        />
+                                    </div>                                
+                                    <div className='space-y-2 w-full'>
+                                        <div>
+                                            <label className={'font-semibold'} htmlFor="longitude">Longitude:</label>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            onChange={(e) => updateFormData({ name: 'longitude', value: e.target.value })}
+                                            className='p-2 rounded bg-[#262626] text-white w-full'
+                                            defaultValue={form.place}
+                                            id='longitude'
+                                            required
+                                        />
+                                    </div>
+                                </div>
+
                             </div>
 
                             <div className="flex justify-center mt-3 space-x-2">

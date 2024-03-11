@@ -17,13 +17,6 @@ interface IVideo {
     countries: ICountryRes[];
 }
 
-interface IContinentsRes {
-    id: number;
-    continent_color: string;
-    continent_icon: string;
-    continent_name: string;
-}
-
 interface IFormData {
     vid?: string;
     country?: string;
@@ -32,6 +25,8 @@ interface IFormData {
     type?: string;
     seekTo?: string | number;
     verified?: string | number;
+    latitude?: number;
+    longitude?: number;
 }
 
 export default function editVideo({ currentVideo, countries }: IVideo) {
@@ -57,7 +52,9 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
             form.type === '' ||
             form.seekTo === 0 ||
             form.verified === undefined ||
-            form.verified === ''
+            form.verified === '' ||
+            !form.latitude || form.latitude === 0 ||
+            !form.longitude || form.longitude === 0
         ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });;
 
         // Check if the user did actually changed something in the data
@@ -67,7 +64,9 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
             form.weather == video.weather &&
             form.type == video.type &&
             form.seekTo == video.seekTo &&
-            form.verified == video.verified
+            form.verified == video.verified && 
+            form.latitude == video.latitude &&
+            form.longitude == video.longitude
         ) {
             return setNotify({ open: true, type: 'warning', text: 'No data has been edited, rejecting!' });
         }
@@ -82,6 +81,8 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
             continent: countries.filter((country) => country.long_name.toLowerCase() === form.country?.toLowerCase())[0].continent,
             seekTo: form.seekTo,
             verified: form.verified,
+            latitude: form.latitude,
+            longitude: form.longitude
         }).then((res) => {
             if (res.data.success) {
                 setNotify({ open: true, type: 'success', text: res.data.message });
@@ -123,7 +124,9 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
             'weather': video.weather,
             'type': video.type,
             'seekTo': video.seekTo,
-            'verified': video.verified
+            'verified': video.verified,
+            'latitude': video.latitude,
+            'longitude': video.longitude,
         });
     }, [])
 
@@ -242,6 +245,34 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
                                         <option value={0}>No</option>
                                         <option value={1}>Yes</option>
                                     </select>
+                                </div>
+                                <div className={'flex justify-between space-x-3'}>
+                                    <div className='space-y-2 w-full'>
+                                        <div>
+                                            <label className={'font-semibold'} htmlFor="latitude">Latitude:</label>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            onChange={(e) => updateFormData({ name: 'latitude', value: e.target.value })}
+                                            className='p-2 rounded bg-[#262626] text-white w-full'
+                                            defaultValue={form.latitude}
+                                            id='latitude'
+                                            required
+                                        />
+                                    </div>                                
+                                    <div className='space-y-2 w-full'>
+                                        <div>
+                                            <label className={'font-semibold'} htmlFor="longitude">Longitude:</label>
+                                        </div>
+                                        <input
+                                            type="text" 
+                                            onChange={(e) => updateFormData({ name: 'longitude', value: e.target.value })}
+                                            className='p-2 rounded bg-[#262626] text-white w-full'
+                                            defaultValue={form.longitude}
+                                            id='longitude'
+                                            required
+                                        />
+                                    </div>
                                 </div>
                             </div>
 

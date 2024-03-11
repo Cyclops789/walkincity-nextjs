@@ -1,5 +1,5 @@
 module.exports = {
   images: {
-    domains: ['gravatar.com'],
+    domains: ['gravatar.com' ,'eoimages.gsfc.nasa.gov'],
   },
 };
