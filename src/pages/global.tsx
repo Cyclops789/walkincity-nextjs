@@ -6,9 +6,12 @@ import query from '@/utils/db';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import randomcolor from 'randomcolor';
 import { useRouter } from "next/router";
+
 const Loading = () => {
     return (
-        <div className='w-screen h-screen bg-black text-white justify-center items-center flex fixed text-xl z-[99999]'>Please wait, it might take some seconds to load the earth ...</div>
+        <div className='w-screen h-screen bg-black text-white justify-center items-center flex fixed text-xl z-[99999]'>
+            <div className={"dot-loader"}></div>
+        </div>
     )
 }
 
