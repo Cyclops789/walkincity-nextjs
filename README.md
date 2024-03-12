@@ -8,3 +8,4 @@
 - [DONE] User Profile
 - [DONE] Custom 404 page
 - [DONE] Customize user profile area
+- [CURRENT] Overlayer in global

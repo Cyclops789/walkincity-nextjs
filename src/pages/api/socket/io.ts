@@ -29,7 +29,7 @@ function ioHandler(_req: NextApiRequest, res: NextApiResponse) {
                 io.emit(`usersCount`, globalConnectors);
 
                 io.in(videoID as string).emit(`userCount-${videoID}`, sockets.length);
-                console.log(`user-${videoID} connected: `, sockets.length);
+                //console.log(`user-${videoID} connected: `, sockets.length);
 
                 socket.on(`reaction-${videoID}`, (msg) => {
                     console.log(`reaction-${videoID}: ` + msg);
@@ -47,16 +47,12 @@ function ioHandler(_req: NextApiRequest, res: NextApiResponse) {
                     io.in(videoID as string).emit(`userCount-${videoID}`, currentSockets.length);
                     socket.leave(videoID as string);
                     
-                    console.log(`user-${videoID} disconnected: `, sockets.length);
+                    //console.log(`user-${videoID} disconnected: `, sockets.length);
                 });
-            } else {
-                console.log('Video Id Doesnt exist ')
             }
         });
 
         (res.socket as any).server.io = io;
-    } else {
-        console.log('socket.io already running');
     }
     res.end();
 }

@@ -108,6 +108,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "eslint-config-prettier": "^8.5.0",
+    "next-css-obfuscator": "^2.2.13",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.1.13",
