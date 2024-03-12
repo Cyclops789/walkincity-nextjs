@@ -13,7 +13,7 @@ function Bubble({ id, onAnimationEnd, icon, color }: { id: string | number, onAn
 
     const size = useRef(random(0.7, 1.5));
 
-    const element = useRef();
+    const element = useRef(null);
 
     const initialOptions = useRef({
         animationDuration: random(2, 5),
@@ -63,7 +63,6 @@ function Bubble({ id, onAnimationEnd, icon, color }: { id: string | number, onAn
                 transition: `transform ${initialOptions.current.animationDuration}s linear, opacity ${opacityDuration}s ease-in-out`,
                 zIndex: 20
             }}
-            // @ts-ignore this is valid
             ref={element}
         >
             <FontAwesomeIcon className='w-[40px]' icon={icon} />
