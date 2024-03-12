@@ -2,7 +2,7 @@
   "name": "next-tailwind-typescript-starter",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next dev -p 4000",
+    "dev": "rm -rf .next && next dev -p 4000",
     "build": "next build",
     "build:production": "rm -rf .next && next build",
     "start": "next start -p 4000",
@@ -108,7 +108,6 @@
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "eslint-config-prettier": "^8.5.0",
-    "next-css-obfuscator": "^2.2.13",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.1.13",
