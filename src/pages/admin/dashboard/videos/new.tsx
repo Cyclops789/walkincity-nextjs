@@ -51,7 +51,7 @@ export default function newVideo({ countries }: IVideo) {
             form.seekTo === 0 ||
 
             form.verified == undefined ||
-            form.verified == '' || 
+            form.verified == '' ||
             !form.latitude || form.latitude === 0 ||
             !form.longitude || form.longitude === 0
         ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });;
@@ -252,7 +252,7 @@ export default function newVideo({ countries }: IVideo) {
                                             id='latitude'
                                             required
                                         />
-                                    </div>                                
+                                    </div>
                                     <div className='space-y-2 w-full'>
                                         <div>
                                             <label className={'font-semibold'} htmlFor="longitude">Longitude:</label>

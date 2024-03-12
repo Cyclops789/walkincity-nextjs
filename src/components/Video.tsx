@@ -87,7 +87,7 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                 setEnded(!ended);
                 break;
             case 1: // playing - enable in production
-                setPlaying(false);
+                setPlaying(true);
                 break;
             case 2: // paused
                 setPlaying(false);
