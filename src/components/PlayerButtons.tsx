@@ -47,7 +47,6 @@ function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVid
     }
 
     const changeVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(e.target.value)
         setVolume(e.target.value)
     }
 
