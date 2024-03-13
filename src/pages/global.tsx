@@ -57,31 +57,40 @@ const World = ({ videos }: { videos: IVideosRes[] }) => {
         (globeRef.current as any).controls().autoRotateSpeed = 1;
     }, [globeReady]);
 
-    const zoomModel = (isZoomOut: boolean) => {
-        if (isZoomOut) {
-            for (let i = 0; i < 60; i++) {
-                (globeRef.current as any).camera().position.z -= 10 / 60;   
-            }
+    const clickZoom = (value: number, zoomType: "zoomIn" | "zoomOut") => {
+        if (value >= 20 && zoomType === "zoomIn") {
+            return value - 5;
+        } else if (value <= 75 && zoomType === "zoomOut") {
+            return value + 5;
         } else {
-            for (let i = 0; i < 60; i++) {
-                (globeRef.current as any).camera().position.z += -10 / 60;   
-            }
+            return value;
         }
+    };
+
+    const zoomModel = (zoomType: "zoomIn" | "zoomOut") => {
+        const value = Math.floor(
+            (2 *
+                Math.atan((globeRef.current as any).camera().getFilmHeight() / 2 / (globeRef.current as any).camera().getFocalLength()) *
+                180) /
+            Math.PI
+        );
+        (globeRef.current as any).camera().fov = clickZoom(value, zoomType);
+        (globeRef.current as any).camera().updateProjectionMatrix();
     }
 
 
     return (
         <>
-            <div className={'fixed h-full w-[35px] right-0 flex flex-col justify-center space-y-2 z-[99999]'}>
+            <div className={'fixed h-full w-[45px] right-0 flex flex-col justify-center space-y-2 z-[99999]'}>
                 <button
-                    onClick={() => { zoomModel(true); }}
-                    className={'text-white bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded w-[30px]'}
+                    onClick={() => zoomModel("zoomIn")}
+                    className={'text-white bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded w-[40px]'}
                 >
                     +
                 </button>
                 <button
-                    onClick={() => { zoomModel(false); }}
-                    className={'text-white bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded w-[30px]'}
+                    onClick={() => zoomModel("zoomOut")}
+                    className={'text-white bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded w-[40px]'}
                 >
                     -
                 </button>

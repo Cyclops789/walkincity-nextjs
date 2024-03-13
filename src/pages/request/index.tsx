@@ -227,7 +227,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
                         </div>
 
                         <div className="font-semibold text-[#ff284b]">
-                            - Make sure that the youtube field is like one of those:
+                            - Make sure that the <span className={'font-extrabold'}>Video</span> field is like one of those:
                         </div>
                         <ul className=' text-sm'>
                             <li><span className='text-red-600 font-bold'>*</span> https://www.youtube.com/watch?v=KBeCMiUPuic</li>
