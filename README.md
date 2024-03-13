@@ -12,3 +12,4 @@
 - Add report bug in main page
 - Add option for hiding reactions
 - Add info page, edit able in dashboard area
+- Set seek to for all videos
