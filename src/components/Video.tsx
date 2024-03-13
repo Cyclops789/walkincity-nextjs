@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import YouTube, { YouTubeProps, YouTubePlayer } from 'react-youtube';
 import { Dispatch, SetStateAction } from 'react';
 import { IVideosRes, ICountryRes } from '@/components/SideBar';
@@ -22,14 +22,14 @@ export interface IVideoComponent {
 }
 
 function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo, setCurrentCountry, currentCountry, countries, c, volume, setEnded, ended, cn }: IVideoComponent) {
-    const [player, setPlayer] = useState<YouTubePlayer>();
     const [originURL, setOriginURL] = useState('');
+    const ytPlayer = useRef<YouTubePlayer | null>(null);
 
     const onReady: YouTubeProps['onReady'] = (e) => {
         e.target.mute();
         e.target.playVideo();
 
-        setPlayer(e.target);
+        ytPlayer.current = e.target;
     }
 
     const onError: YouTubeProps['onError'] = (e) => {
@@ -122,17 +122,17 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
     }, [c, v, cn]);
 
     useEffect(() => {
-        if (player) {
+        if (ytPlayer.current) {
             if (volume == '-1') {
-                player.mute();
+                ytPlayer.current.mute();
             }
 
             if (volume != '0') {
-                player.unMute();
-                player.setVolume(parseInt(volume));
+                ytPlayer.current.unMute();
+                ytPlayer.current.setVolume(parseInt(volume));
             }
         }
-    }, [volume, player])
+    }, [volume, ytPlayer.current])
 
 
     useEffect(() => {
@@ -141,29 +141,78 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
     }, [currentVideo]);
 
     return (
-        <YouTube
-            iframeClassName={`w-screen h-screen ${!playing && 'hidden'}`}
-            opts={{
-                playerVars: {
-                    autoplay: 1,
-                    accelerometer: 1,
-                    'clipboard-write': 1,
-                    'encrypted-media': 1,
-                    gyroscope: 1,
-                    'picture-in-picture': 1,
-                    'web-share': 1,
-                    controls: 0,
-                    start: currentVideo?.seekTo || 1,
-                    origin: originURL
-                },
-            }}
-            videoId={currentVideo?.vid}
-            onStateChange={onStateChange}
-            onError={onError}
-            onReady={onReady}
-            style={{ pointerEvents: 'none' }}
-        />
+        <div className={`w-full h-full`}>
+            <div className='w-screen h-screen bg-black justify-center items-center flex overflow-hidden pointer-events-none'>
+                {!playing && (
+                    <div className={`w-full h-full bg-black flex justify-center items-center`}>
+                        <div className="custom-loader">
+
+                        </div>
+                    </div>
+                )}
+                <YouTube
+                    iframeClassName={`overflow-hidden w-full h-full ${!playing && 'hidden'} pointer-events-none`}
+                    opts={{
+                        playerVars: {
+                            autoplay: 1,
+                            accelerometer: 1,
+                            'clipboard-write': 1,
+                            'encrypted-media': 1,
+                            gyroscope: 1,
+                            'picture-in-picture': 1,
+                            'web-share': 1,
+                            controls: 0,
+                            start: currentVideo?.seekTo || 1,
+                            origin: originURL
+                        },
+                    }}
+                    videoId={currentVideo?.vid}
+                    onStateChange={onStateChange}
+                    onError={onError}
+                    onReady={onReady}
+                    style={{
+                        overflow: 'hidden',
+                        width: !playing ? '0px' : '100%',
+                        aspectRatio: '16/9',
+                        pointerEvents: 'none'
+                    }}
+                />
+            </div>
+        </div>
     )
 }
+
+/*
+
+        <div className={`w-full h-full`}>
+            <div className='w-screen h-screen bg-black justify-center items-center flex overflow-hidden pointer-events-none'>
+                {!playing && (
+                    <div className="custom-loader"></div>
+                )}
+                <YouTube
+                    iframeClassName={`w-screen h-screen ${!playing && 'hidden'} pointer-events-none`}
+                    opts={{
+                        playerVars: {
+                            autoplay: 1,
+                            accelerometer: 1,
+                            'clipboard-write': 1,
+                            'encrypted-media': 1,
+                            gyroscope: 1,
+                            'picture-in-picture': 1,
+                            'web-share': 1,
+                            controls: 0,
+                            start: currentVideo?.seekTo || 1,
+                            origin: originURL
+                        },
+                    }}
+                    videoId={currentVideo?.vid}
+                    onStateChange={onStateChange}
+                    onError={onError}
+                    onReady={onReady}
+                    style={{ pointerEvents: 'none' }}
+                />
+            </div>
+        </div>
+*/
 
 export default video

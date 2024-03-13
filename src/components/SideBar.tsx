@@ -19,6 +19,8 @@ import {
     faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'next/router';
+import { Socket } from 'socket.io-client';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 export interface ICountryRes {
     id: number;
@@ -58,7 +60,7 @@ interface IUserCountSideBar {
 }
 
 function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, setCurrentCountry, currentCountry }: ISideBar) {
-    const socketRef = useRef<any>();
+    const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
     const [connectors, setConnectors] = useState<IUserCountSideBar[]>();
     const [open, setOpen] = useState(false);
     const [weatherFilter, setWeatherFilter] = useState('');
@@ -145,7 +147,6 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
         }
     }, [continentFilter]);
 
-
     // Filter the videos using the weather filter buttons 
     useEffect(() => {
         if (weatherFilter === '') {
@@ -186,7 +187,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
             });
 
             return () => {
-                socketRef.current.disconnect();
+                socketRef.current?.disconnect();
             };
         })
     }, []);
@@ -292,6 +293,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                         onClick={() => { changeWeatherFilter('weather-normal-morning') }}
                     >
                         <FontAwesomeIcon
+                            className='w-[20px]'
                             size='lg'
                             icon={faSun}
                         />
@@ -302,6 +304,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                         onClick={() => { changeWeatherFilter('weather-normal-night') }}
                     >
                         <FontAwesomeIcon
+                            className='w-[20px]'
                             size='lg'
                             icon={faMoon}
                         />
@@ -312,6 +315,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                         onClick={() => { changeWeatherFilter('weather-rain-') }}
                     >
                         <FontAwesomeIcon
+                            className='w-[20px]'
                             size='lg'
                             icon={faCloudRain}
                         />
@@ -322,6 +326,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                         onClick={() => { changeWeatherFilter('weather-cloud-morning') }}
                     >
                         <FontAwesomeIcon
+                            className='w-[20px]'
                             size='lg'
                             icon={faCloud}
                         />
@@ -332,6 +337,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                         onClick={() => { changeWeatherFilter('weather-snow-') }}
                     >
                         <FontAwesomeIcon
+                            className='w-[20px]'
                             size='lg'
                             icon={faSnowflake}
                         />
@@ -355,7 +361,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                 <div className='ml-2 space-y-2'>
                     <div 
                         onClick={() => router.push('/global')}
-                        className={'py-3 w-full text-center rounded bg-white hover:bg-slate-300 cursor-pointer relative overflow-hidden'}
+                        className={'py-3 w-full text-center rounded bg-white hover:bg-slate-200 cursor-pointer relative overflow-hidden'}
                     >
                             <Image
                                 alt=''
@@ -373,7 +379,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                                 borderColor: country.border_color,
                                 marginBottom: index + 1 === getCountries.length ? '7px' : '0px',
                             }}
-                            className={`border-r-[5px] py-3 w-full text-center rounded bg-white cursor-pointer relative overflow-hidden ${(countryOpen.id === country.id && countryOpen.state === true) ? 'h-auto' : ''}`}
+                            className={`border-r-[5px] hover:bg-slate-200 py-3 w-full text-center rounded bg-white cursor-pointer relative overflow-hidden ${(countryOpen.id === country.id && countryOpen.state === true) ? 'h-auto' : ''}`}
                             onClick={() => {
                                 if (countryOpen.id === country.id && countryOpen.state === true) {
                                     setCountryOpen({ id: 0, state: false })
@@ -398,7 +404,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                             <div className="flex items-center justify-center h-full">
                                 <FontAwesomeIcon
                                     style={{
-                                        animation: `${((currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) && (countryOpen.id !== country.id && countryOpen.state !== true)) && 'currentLableCountry'} 1s ease 0s infinite normal none`,
+                                        animation: `${((currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) && (countryOpen.id !== country.id && countryOpen.state !== true)) && 'clc1'} 1s ease 0s infinite normal none`,
                                         color: `${(currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) ? 'var(--primary-text-color)' : 'black'}`,
                                     }}
                                     className={`absolute top-3.5 right-5 ${currentCountry !== country && 'transition-transform duration-200 ease-in-out'} ${(countryOpen.id === country.id && countryOpen.state === true) ? 'rotate-[90deg]' : ''}`}
