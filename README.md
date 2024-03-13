@@ -9,3 +9,6 @@
 - [DONE] Custom 404 page
 - [DONE] Customize user profile area
 - [DONE] Overlayer in global
+- Add report bug in main page
+- Add option for hiding reactions
+- Add info page, edit able in dashboard area
