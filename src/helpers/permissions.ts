@@ -113,7 +113,15 @@ const permissions = [
         name: 'create_roles',
         dashboardPath: '/admin/dashboard/roles/new',
         apiPath: '/api/admin/roles/new'
-    }
+    },
+
+    // Bugs
+    {
+        id: 19,
+        name: 'actions_bugs',
+        dashboardPath: '/admin/dashboard/bugs',
+        apiPath: '/api/admin/bugs/action'
+    },
 ];
 
 export default permissions;

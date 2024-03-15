@@ -13,7 +13,7 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    TimeScale
+    TimeScale,
 );
 ChartJS.defaults.color = 'white';
 
@@ -27,11 +27,24 @@ export default function Chart({ labelName, dataSet }: { labelName: string, dataS
         responsive: true,
         plugins: {
             legend: {
-                position: 'top' as const,
+                position: "top"
             },
             title: {
                 display: false,
+            }
+        },
+        layout: {
+            padding: 2,
+        },
+        elements: {
+            line: {
+                backgroundColor: "#171a18",
+                borderColor: "#171a18",
+                fill: true,
             },
+            point: {
+                backgroundColor: "#171a18",
+            }
         },
         scales: {
             x: {
@@ -54,7 +67,7 @@ export default function Chart({ labelName, dataSet }: { labelName: string, dataS
             }
         }
     };
-    
+
 
     const getAllDaysOfMonth = (year: number, month: number): string[] => {
         const numDays = new Date(year, month + 1, 0).getDate();
@@ -85,8 +98,6 @@ export default function Chart({ labelName, dataSet }: { labelName: string, dataS
             {
                 label: labelName,
                 data: convertDataToDataSetAndReturnArrayOfObjects(),
-                borderColor: 'black',
-                backgroundColor: 'grey',
             },
         ],
     };
