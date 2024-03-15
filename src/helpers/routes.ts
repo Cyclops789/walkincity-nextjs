@@ -1,5 +1,5 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { faUsers, faPhotoFilm, faFlag, faAddressBook, faClosedCaptioning, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUsers, faPhotoFilm, faFlag, faAddressBook, faClosedCaptioning, faUser, faBug } from "@fortawesome/free-solid-svg-icons";
 import { NextRouter } from "next/router";
 
 export interface IDashboardRoutes {
@@ -46,6 +46,12 @@ export const DashboardRoutes: IDashboardRoutes[] = [
         path: '/admin/dashboard/roles',
         icon: faAddressBook,
         permissionID: 14
+    },
+    {
+        name: 'Bugs',
+        path: '/admin/dashboard/bugs',
+        icon: faBug,
+        permissionID: 19
     },
 ];
 
