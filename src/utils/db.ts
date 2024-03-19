@@ -32,6 +32,14 @@ const getRoleByName = `
 SELECT * FROM roles WHERE name = ?
 `;
 
+const getAllVideosBugs = `
+SELECT id, vid, reason, action FROM videos_bugs
+`;
+
+const getVideoBugById = `
+SELECT id, vid, reason, action FROM videos_bugs WHERE id = ?
+`;
+
 const getAllVideosRequests = `
 SELECT *, 'hidden' AS by_email FROM videos_requests
 `;
@@ -200,6 +208,7 @@ const query = {
     getAllCountries,
     getUserByEmail,
     getAllRoles,
+    getAllVideosBugs,
     getUserByID,
     getRoleByID,
     getAllVideosRequests,
@@ -215,6 +224,7 @@ const query = {
     getAllUsers,
     getCountryByID,
     getUsersByRole,
+    getVideoBugById,
     getWeekVideosRequestsByEmail,
     getAllAcceptedVideosRequests,
     getAllRejectedVideosRequests,

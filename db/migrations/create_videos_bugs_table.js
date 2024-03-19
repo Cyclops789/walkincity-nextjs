@@ -7,7 +7,7 @@ const query = `
 CREATE TABLE ${table} (
     id int(11) NOT NULL AUTO_INCREMENT,
     by_email varchar(50) DEFAULT NULL,
-    vid varchar(50) NOT NULL,
+    vid varchar(50) DEFAULT NULL,
     reason varchar(255) NOT NULL,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
