@@ -10,6 +10,11 @@ export interface IDashboardRoutes {
     permissionID: number | null;
 }
 
+interface IGroupsRoutes {
+    name: string;
+    before: number;
+};
+
 export const DashboardRoutes: IDashboardRoutes[] = [
     {
         name: 'Account',
@@ -18,16 +23,22 @@ export const DashboardRoutes: IDashboardRoutes[] = [
         permissionID: null
     },
     {
-        name: 'Videos Requests',
-        path: '/admin/dashboard/requests',
-        icon: faClosedCaptioning,
-        permissionID: 5
-    },
-    {
         name: 'Videos',
         path: '/admin/dashboard/videos',
         icon: faPhotoFilm,
         permissionID: 1
+    },
+    {
+        name: 'Videos Bugs',
+        path: '/admin/dashboard/bugs',
+        icon: faBug,
+        permissionID: 19
+    },
+    {
+        name: 'Videos Requests',
+        path: '/admin/dashboard/requests',
+        icon: faClosedCaptioning,
+        permissionID: 5
     },
     {
         name: 'Countries',
@@ -47,11 +58,20 @@ export const DashboardRoutes: IDashboardRoutes[] = [
         icon: faAddressBook,
         permissionID: 14
     },
+];
+
+export const GroupsRoutes: IGroupsRoutes[] = [
     {
-        name: 'Bugs',
-        path: '/admin/dashboard/bugs',
-        icon: faBug,
-        permissionID: 19
+        name: 'Videos',
+        before: 1
+    },
+    {
+        name: 'Countries',
+        before: 10
+    },
+    {
+        name: 'Administration',
+        before: 6
     },
 ];
 

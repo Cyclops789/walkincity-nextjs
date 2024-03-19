@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link';
-import { DashboardRoutes } from '@/helpers/routes';
+import { DashboardRoutes, GroupsRoutes } from '@/helpers/routes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import { faAnglesLeft } from '@fortawesome/free-solid-svg-icons';
@@ -170,6 +170,9 @@ export default function Layout({
             </div>
             <hr className='text-[var(--primary-text-color)]' style={{ borderTop: '2px dashed' }} />
             <div className='p-3 space-y-3'>
+              {sideBarOpen === "1" && (
+                <div className={' font-semibold text-[var(--primary-text-color)]'}>Dashboard</div>
+              )}
               <Link
                 href={'/admin/dashboard'}
                 key={'Dashboard'}
@@ -184,18 +187,21 @@ export default function Layout({
               </Link>
               {DashboardRoutes.map((route) => (
                 (user.role.permissions.includes(String(route.permissionID)) || route.permissionID === null) && (
-                  <Link
-                    href={route.path}
-                    key={route.name}
-                    className={`${router.pathname.startsWith(route.path) || route.path === router.pathname ? "bg-[#1a1919]" : "bg-[#262626] hover:bg-[#1a1919]"} h-10 py-2 px-5 flex space-x-3  items-center rounded-lg ${sideBarOpen === "0" && "justify-center"}`}
-                  >
-                    <FontAwesomeIcon className='w-[20px]' icon={route.icon} />
-                    {sideBarOpen === "1" && (
-                      <div>
-                        {route.name}
-                      </div>
-                    )}
-                  </Link>
+                  <>
+                    {GroupsRoutes.map((group) => (((sideBarOpen === "1") && (group.before === route.permissionID)) && <div className={' font-semibold text-[var(--primary-text-color)]'}>{group.name}</div>) )}
+                    <Link
+                      href={route.path}
+                      key={route.name}
+                      className={`border-l-[4px] ${router.pathname.startsWith(route.path) || route.path === router.pathname ? "bg-[#1a1919] border-[var(--primary-text-color)]" : "bg-[#262626] hover:bg-[#1a1919] border-transparent"} h-10 py-2 px-5 flex space-x-3  items-center rounded-lg ${sideBarOpen === "0" && "justify-center"}`}
+                    >
+                      <FontAwesomeIcon className='w-[20px]' icon={route.icon} />
+                      {sideBarOpen === "1" && (
+                        <div>
+                          {route.name}
+                        </div>
+                      )}
+                    </Link>
+                  </>
                 )
               ))}
             </div>
