@@ -401,13 +401,13 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                                 <div className='text-sm'>{connectors?.reduce((accumulator, connector) => { const filteredVideos = country.videos.filter((video) => video.vid === connector.vid); return accumulator + filteredVideos.length }, 0) || 0} watching</div>
                             </div>
 
-                            <div className="flex items-center justify-center h-full">
+                            <div className="flex items-center justify-center h-full relative">
                                 <FontAwesomeIcon
                                     style={{
                                         animation: `${((currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) && (countryOpen.id !== country.id && countryOpen.state !== true)) && 'clc1'} 1s ease 0s infinite normal none`,
                                         color: `${(currentCountry?.id === country.id || country?.videos.includes(currentVideo as IVideosRes)) ? 'var(--primary-text-color)' : 'black'}`,
                                     }}
-                                    className={`absolute top-3.5 right-5 ${currentCountry !== country && 'transition-transform duration-200 ease-in-out'} ${(countryOpen.id === country.id && countryOpen.state === true) ? 'rotate-[90deg]' : ''}`}
+                                    className={`absolute top-[-25px] right-[14px] ${currentCountry !== country && 'transition-transform duration-200 ease-in-out'} ${(countryOpen.id === country.id && countryOpen.state === true) ? 'rotate-[90deg]' : ''}`}
                                     size='lg'
                                     icon={faChevronRight}
                                 />
@@ -416,7 +416,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
                             <div className={`ml-3 mt-[35px] grid justify-start items-start ${(countryOpen.id === country.id && countryOpen.state === true) ? '' : 'hidden'}`}>
                                 {country.videos.map((video: IVideosRes) => (
                                     <div key={video.vid} onClick={() => { setCurrentCountry(country); setCurrentVideo(video) }} className={`text-start cursor-pointer ${currentVideo === video ? 'text-blue-400' : 'hover:text-blue-400'}`}>
-                                        {video.country}, {video.place}
+                                        {video.place}
                                     </div>
                                 ))}
                             </div>
