@@ -7,7 +7,6 @@ import { executeQueryReturnsJSON } from '@/lib/db';
 import { ICountryRes } from '@/components/SideBar';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
-import { useRouter } from 'next/router';
 import YouTubeVideoId from '@/helpers/youtube';
 import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
 import Link from 'next/link';
@@ -26,7 +25,6 @@ const Layout = dynamic(import('@/components/Layouts/Main')),
     Notification = dynamic(import('@/components/Dashboard/Notification'));
 
 export default function request({ countries }: { countries: ICountryRes[] }) {
-    const router = useRouter();
     const ref = useRef<any>(null);
     const [form, setForm] = useState<INewVideoForm>();
     const [tested, setTested] = useState('');

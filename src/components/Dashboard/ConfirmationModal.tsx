@@ -46,11 +46,14 @@ function ConfirmationModal({ modal, setModalData }: IConfirmationModal) {
                 style={{
                     zIndex: 100
                 }}
-                className={`overflow-y-auto overflow-x-hidden ${modal.open ? 'fixed' : 'hidden'} inset-0 flex justify-center items-center w-full max-h-full bg-black bg-opacity-50 shadow-lg`}
+                className={`${modal.open ? 'fixed' : 'hidden'} inset-0 flex justify-center items-center w-full h-full bg-black bg-opacity-50`}
             >
                 <div className={"relative p-4 w-full max-w-md max-h-full"}>
                     <div style={{ backgroundColor: 'rgb(56, 56, 56)' }} className={"relative rounded-lg shadow"}>
-                        <button onClick={() => { modal.onDecline(); clearModal() }} className={"absolute top-3 end-2.5 bg-transparent rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white"}>
+                        <button 
+                            onClick={() => { modal.onDecline(); clearModal() }} 
+                            className={"absolute top-3 end-2.5 bg-transparent rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white"}
+                        >
                             <FontAwesomeIcon className={"w-3 h-3"} icon={faX} />
                         </button>
                         <div className={"p-4 md:p-5 text-center"}>

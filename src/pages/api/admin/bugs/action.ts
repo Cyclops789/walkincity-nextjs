@@ -38,7 +38,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             const options = [
                 {
                     name: 'action',
-                    value: action ? action : ''
+                    value: action
                 }
             ];
 

@@ -3,7 +3,7 @@ import { escape } from 'sqlstring';
 
 interface IOptions {
     name: string;
-    value: string | number | boolean;
+    value: string | number | boolean | null | undefined;
 }
 
 const createDB = `CREATE DATABASE IF NOT EXISTS ${secrets.MYSQL_DATABASE}`;
@@ -33,7 +33,12 @@ SELECT * FROM roles WHERE name = ?
 `;
 
 const getAllVideosBugs = `
-SELECT id, vid, reason, action FROM videos_bugs
+SELECT id, vid, reason, action FROM videos_bugs WHERE hide = 0
+`;
+
+const createNewVideoBug = `
+INSERT INTO videos_bugs (vid, reason, by_email, action)
+VALUES (?, ?, ?, ?);
 `;
 
 const getVideoBugById = `
@@ -222,6 +227,7 @@ const query = {
     getVideoRequestByEmail,
     createNewVideosRequests,
     getAllUsers,
+    createNewVideoBug,
     getCountryByID,
     getUsersByRole,
     getVideoBugById,
