@@ -51,8 +51,8 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
               <div ref={actionRef} style={{ backgroundColor: 'hsl(0, 0%, 32.5%)' }} className={'w-[500px] h-auto rounded z-[9999]'}>
                 <div className={'p-3 text-center'}>
                   <div className={'flex justify-end'}>
-                    <div onClick={() => setActionOpen(false)} className={'w-[20px] h-[20px] hover:bg-white/20 rounded cursor-pointer mb-3'}>
-                      <FontAwesomeIcon className={'w-[20px] pb-[1px]'} icon={faX} />
+                    <div onClick={() => setActionOpen(false)} className={'hover:bg-white/20 rounded cursor-pointer mb-3'}>
+                      <FontAwesomeIcon className={'px-2 py-1 mt-1'} icon={faX} />
                     </div>
                   </div>
                   <div className={'flex space-x-2'}>

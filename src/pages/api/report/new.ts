@@ -2,11 +2,6 @@ import executeQuery from '@/lib/db';
 import query from '@/utils/db';
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
-import YouTubeVideoId from '@/helpers/youtube';
-import { generateToken } from '@/lib/token';
-import { sendMailAsVerfiy } from '@/lib/mail';
-import { verifyRequest } from '@/helpers/mail';
-import secrets from '@/utils/secrets';
 
 interface INewVideoRequest_ {
     vid: string | undefined;

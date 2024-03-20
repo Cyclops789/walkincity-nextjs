@@ -22,16 +22,20 @@ const Layout = dynamic(import('@/components/Layouts/Dashboard')),
     BugList = dynamic(import('@/components/Dashboard/BugList'));
 
 export default function videos({ bugs }: { bugs: IVideosBugs[] }) {
-    
+
     return (
         <Layout title={'Videos'}>
-            <DndProvider backend={HTML5Backend}>
-                <div className={'flex w-full space-x-4'}>
-                    <BugList bugs={bugs} name={'To Fix'} action='to_fix' />
-                    <BugList bugs={bugs} name={'In Progress'} action='in_progress' />
-                    <BugList bugs={bugs} name={'Done'} action='done' />
-                </div>
-            </DndProvider>
+            <div className={'bg-[#262626] w-full h-full rounded'}>
+                <div className={'pb-1'}></div>
+                <DndProvider backend={HTML5Backend}>
+                    <div className={'flex w-full space-x-4'}>
+                        <BugList bugs={bugs} name={'To Fix'} action='to_fix' />
+                        <BugList bugs={bugs} name={'In Progress'} action='in_progress' />
+                        <BugList bugs={bugs} name={'Done'} action='done' />
+                    </div>
+                </DndProvider>
+                <div className={'pt-3'}></div>
+            </div>
         </Layout>
     )
 }
