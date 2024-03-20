@@ -21,14 +21,16 @@ interface IPlayerButtons {
     setCurrentVideo: Dispatch<SetStateAction<IVideosRes | undefined>>;
     setNotify: Dispatch<SetStateAction<INotificationType>>;
     setVolume: Dispatch<SetStateAction<string>>;
+    setReactionsShow: Dispatch<SetStateAction<boolean>>;
+    setViewersShow: Dispatch<SetStateAction<boolean>>;
+    reactionsShow: boolean;
+    viewersShow: boolean;
 }
 
-function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef }: IPlayerButtons) {
+function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef, reactionsShow, setReactionsShow, viewersShow, setViewersShow }: IPlayerButtons) {
     const [fullScreen, setFullScreen] = useState(false);
     const [openVolume, setOpenVolume] = useState(false);
     const [openSetting, setOpenSetting] = useState(false);
-    const [reactionsShow, setReactionsShow] = useState<any>();
-    const [viewersShow, setViewersShow] = useState<any>();
     const wrapperRef = useRef(null);
     const settingsRef = useRef(null);
     const settingsRefButton = useRef(null);
@@ -65,13 +67,11 @@ function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVid
     }
 
     useEffect(() => {
-        const reactions = Boolean(localStorage.getItem('reactions'));
-        const viewers = Boolean(localStorage.getItem('viewers'));
+        const reactions = localStorage.getItem('reactions') == 'false' ? false : true;
+        const viewers = localStorage.getItem('viewers') == 'false' ? false : true;
 
         setReactionsShow(reactions)
         setViewersShow(viewers)
-
-        console.log(`reactionsShow: ${reactionsShow} | viewersShow: ${viewersShow} `)
     }, []);
 
     useClickOutsideNoIgnore(wrapperRef, () => setOpenVolume(false));
@@ -123,10 +123,10 @@ function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVid
             <div ref={settingsRefButton} onClick={() => setOpenSetting(!openSetting)} className='fixed top-[350px] right-3 cursor-pointer text-white border border-white hover:bg-white hover:border-black hover:text-black w-9 h-9 flex rounded-full items-center justify-center'>
                 <FontAwesomeIcon className='w-[15px]' icon={faSliders} />
             </div>
-            <div ref={settingsRef} className={`${openSetting ? 'fixed' : 'hidden'} top-[380px] right-[50px] bg-white rounded w-[200px]`}>
+            <div ref={settingsRef} className={`${openSetting ? 'fixed' : 'hidden'} top-[380px] right-[50px] bg-white rounded w-[200px] z-[9999]`}>
                 <div className={'p-3'}>
-                    <div className='flex justify-between'>Reactions <input type="checkbox" checked={reactionsShow} onChange={(e) => changeUserSetting('reactions', e.target.checked)} /></div>
-                    <div className='flex justify-between'>Viewers <input type="checkbox" checked={viewersShow} onChange={(e) => changeUserSetting('viewers', e.target.checked)} /></div>
+                    <div className='flex justify-between'>Reactions <input type="checkbox" checked={reactionsShow} onChange={(e) => {setReactionsShow(e.target.checked); changeUserSetting('reactions', e.target.checked)}} /></div>
+                    <div className='flex justify-between'>Viewers <input type="checkbox" checked={viewersShow} onChange={(e) => {setViewersShow(e.target.checked); changeUserSetting('viewers', e.target.checked)}} /></div>
                 </div>
             </div>
         </>

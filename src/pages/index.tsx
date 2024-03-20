@@ -8,7 +8,7 @@ import { executeQueryReturnsJSON } from '@/lib/db';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { INotificationType } from '@/components/Notification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBug, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
+import { faBug, faPlus, faX, faEye } from '@fortawesome/free-solid-svg-icons';
 import useClickOutside from '@/components/Dashboard/useClickOutside';
 
 const Reactions = dynamic(import('@/components/Reactions'));
@@ -27,6 +27,9 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
   const cn = query.cn as string | undefined;
   const [currentVideo, setCurrentVideo] = useState<IVideosRes>();
   const [currentCountry, setCurrentCountry] = useState<ICountryRes>();
+  const [reactionsShow, setReactionsShow] = useState(false);
+  const [viewersShow, setViewersShow] = useState(false);
+  const [connectors, setConnectors] = useState('0');
   const [playing, setPlaying] = useState(false);
   const [title, setTitle] = useState('Some, Where');
   const [ended, setEnded] = useState(false);
@@ -56,10 +59,10 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
                     </div>
                   </div>
                   <div className={'flex space-x-2'}>
-                    <button onClick={() => router.push({ pathname: '/report', query: { 'type': 'website' }})} className={'hover:shadow-xl font-[500] bg-[var(--primary-text-color)] disabled:bg-slate-700 hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'}>
+                    <button onClick={() => router.push({ pathname: '/report', query: { 'type': 'website' } })} className={'hover:shadow-xl font-[500] bg-[var(--primary-text-color)] disabled:bg-slate-700 hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'}>
                       <FontAwesomeIcon className={'w-[20px]'} icon={faBug} /> Report a website bug
                     </button>
-                    <button onClick={() => router.push({ pathname: '/report', query: { 'type': 'video' ,'v': currentVideo?.vid }})} className={'hover:shadow-xl font-[500] bg-[var(--primary-text-color)] disabled:bg-slate-700 hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'}>
+                    <button onClick={() => router.push({ pathname: '/report', query: { 'type': 'video', 'v': currentVideo?.vid } })} className={'hover:shadow-xl font-[500] bg-[var(--primary-text-color)] disabled:bg-slate-700 hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'}>
                       <FontAwesomeIcon className={'w-[20px]'} icon={faBug} /> Report a video bug
                     </button>
                   </div>
@@ -109,6 +112,10 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
             ended={ended}
             volume={volume}
             actionButtonRef={actionButtonRef}
+            reactionsShow={reactionsShow}
+            setReactionsShow={setReactionsShow}
+            viewersShow={viewersShow}
+            setViewersShow={setViewersShow}
             setEnded={setEnded}
             setActionOpen={setActionOpen}
             setVolume={setVolume}
@@ -120,9 +127,26 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
             handleFullScreen={handleFullScreen}
           />
 
-          <Reactions
-            video={currentVideo}
-          />
+          {reactionsShow && (
+            <Reactions
+              connectors={connectors}
+              setConnectors={setConnectors}
+              video={currentVideo}
+            />
+          )}
+
+          {viewersShow && (
+            <div
+              className={`fixed bottom-4 w-full flex justify-start ml-3 sm:justify-center sm:ml-0 z-[1]`}
+            >
+              <div className='flex h-9 rounded-full items-center space-x-2 w-[60px] text-white border border-white justify-center'>
+                <FontAwesomeIcon className='w-[20px]' icon={faEye} />
+                <div className='text-sm'>
+                  {connectors}
+                </div>
+              </div>
+            </div>
+          )}
 
           <Notification
             setNotify={setNotify}

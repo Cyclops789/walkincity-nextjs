@@ -4,7 +4,6 @@ import { IVideosRes } from './SideBar';
 import dynamic from 'next/dynamic';
 import reactionsIcons from '@/helpers/reactions';
 import io from 'socket.io-client';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 const Bubble = dynamic(import('@/components/Player/Bubble'));
 
@@ -13,8 +12,7 @@ interface ILikes {
     name: string;
 }
 
-function Reactions({ video }: { video: IVideosRes | undefined}) {
-    const [connectors, setConnectors] = useState('0');
+function Reactions({ video, setConnectors, connectors }: { video: IVideosRes | undefined, setConnectors: React.Dispatch<React.SetStateAction<string>>, connectors: string }) {
     const [likes, setLikes] = useState<ILikes[]>([]);
     const socketRef = useRef<any>();
     const cleanLike = useRef((id: any) => { setLikes((currentLikes) => currentLikes.filter((like) => like.id !== id)) });
@@ -73,16 +71,6 @@ function Reactions({ video }: { video: IVideosRes | undefined}) {
                         <FontAwesomeIcon className='w-[20px]' icon={reaction.icon} />
                     </div>
                 ))}
-            </div>
-            <div
-                className={`fixed bottom-4 w-full flex justify-start ml-3 sm:justify-center sm:ml-0 z-[1]`}
-            >
-                <div className='flex h-9 rounded-full items-center space-x-2 w-[60px] text-white border border-white justify-center'>
-                    <FontAwesomeIcon className='w-[20px]' icon={faEye} />
-                    <div className='text-sm'>
-                        {connectors}
-                    </div>
-                </div>
             </div>
         </>
     )
