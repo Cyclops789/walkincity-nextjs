@@ -35,10 +35,14 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
         }) as any[];
 
         if(videoBug.length >= 1) {
+
             const options = [
-                {
+                (action !== 'delete') ? {
                     name: 'action',
                     value: action
+                } : {
+                    name: 'hide',
+                    value: 1
                 }
             ];
 

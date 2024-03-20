@@ -4,11 +4,10 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import axios from 'axios';
 import { INotificationType } from '@/components/Dashboard/Notification';
 import { executeQueryReturnsJSON } from '@/lib/db';
-import { ICountryRes, IVideosRes } from '@/components/SideBar';
+import { IVideosRes } from '@/components/SideBar';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
 import YouTubeVideoId from '@/helpers/youtube';
-import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 

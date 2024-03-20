@@ -23,36 +23,12 @@ function BugList({ bugs, name, action }: { bugs: IVideosBug[], name: string, act
         accept: "card",
         drop: (item: any) => {
             if (item.action !== action) {
-                if (action == 'done') {
-                    console.log('Inside done')
-                    setModalData({
-                        open: true,
-                        text: 'Are you sure you want to mark this bug as done?',
-                        type: 'delete',
-                        button: {
-                            accept: 'Yes, Im sure',
-                            decline: 'No, cancel'
-                        },
-                        onAccept: () => {
-                            axios.post('/api/admin/bugs/action', {
-                                id: item.id,
-                                action: action || null
-                            }).finally(() => {
-                                refreshRouteSilenced(router);
-                            })
-                        },
-                        onDecline: () => {
-                            setModalData((prevData: any) => ({ ...prevData, open: false }));
-                        }
-                    });
-                } else {
-                    axios.post('/api/admin/bugs/action', {
-                        id: item.id,
-                        action: action || null
-                    }).finally(() => {
-                        refreshRouteSilenced(router);
-                    })
-                }
+                axios.post('/api/admin/bugs/action', {
+                    id: item.id,
+                    action: action || null
+                }).finally(() => {
+                    refreshRouteSilenced(router);
+                })
             }
         },
         collect: (monitor) => ({
