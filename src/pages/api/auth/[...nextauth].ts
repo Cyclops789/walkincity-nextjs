@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
                     if (!credentials?.email || !credentials?.password || !credentials?.token) {
                         return null;
                     }
-                
+
                     // Verify the recaptcha token
                     const response = await axios.post(
                         'https://www.google.com/recaptcha/api/siteverify',
@@ -44,16 +44,16 @@ export const authOptions: NextAuthOptions = {
                             }
                         }
                     );
-                
+
                     if (response.data.success) {
                         const user = await executeQueryReturnsJSON({
                             query: query.getUserByEmail,
                             values: [credentials?.email],
                         }) as IUserReturns[];
-                
+
                         if (user.length >= 1) {
                             const verify = verifyHash(credentials?.password as string, user[0].password);
-                
+
                             if (verify) {
                                 const role = await executeQueryReturnsJSON({
                                     query: query.getRoleByID,
@@ -76,7 +76,7 @@ export const authOptions: NextAuthOptions = {
                 } catch (error) {
                     console.error("Error:", error);
                     return null;
-                }                
+                }
             }
         }),
     ],
@@ -91,20 +91,20 @@ export const authOptions: NextAuthOptions = {
             // for roles and permissions.
             // Direct API requests or mysql queries cannot be
             // used inside middleware.ts because its using edge runtime
-            
-            if(trigger === "update" || trigger === "signIn") {
+
+            if (trigger === "update" || trigger === "signIn") {
                 const userDB = await executeQueryReturnsJSON({
                     query: query.getUserByID,
                     values: [(token.user as { id: number, role: any }).id],
                 }) as any[];
 
-                if(userDB.length > 0) {
+                if (userDB.length > 0) {
                     const role = await executeQueryReturnsJSON({
                         query: query.getRoleByID,
                         values: [userDB[0].role],
                     }) as any[];
 
-                    if(role.length > 0) {
+                    if (role.length > 0) {
                         (token.user as { id: number, role: any }).role = role[0];
                     }
                 }
