@@ -29,12 +29,6 @@ export const DashboardRoutes: IDashboardRoutes[] = [
         permissionID: 1
     },
     {
-        name: 'Videos Bugs',
-        path: '/admin/dashboard/bugs',
-        icon: faBug,
-        permissionID: 19
-    },
-    {
         name: 'Videos Requests',
         path: '/admin/dashboard/requests',
         icon: faClosedCaptioning,
@@ -45,6 +39,12 @@ export const DashboardRoutes: IDashboardRoutes[] = [
         path: '/admin/dashboard/countries',
         icon: faFlag,
         permissionID: 10
+    },
+    {
+        name: 'Bugs',
+        path: '/admin/dashboard/bugs',
+        icon: faBug,
+        permissionID: 19
     },
     {
         name: 'Users',
@@ -71,7 +71,7 @@ export const GroupsRoutes: IGroupsRoutes[] = [
     },
     {
         name: 'Administration',
-        before: 6
+        before: 19
     },
 ];
 

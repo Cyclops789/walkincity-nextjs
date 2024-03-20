@@ -5,10 +5,10 @@ interface IVideosBug {
     id: number;
     vid?: string;
     reason: string;
-    action: string;
+    action: string | null;
 }
 
-function BugCard({ bug, action }: { bug: IVideosBug, action: string }) {
+function BugCard({ bug, action }: { bug: IVideosBug, action: string | null }) {
     const [{isDragging}, drag] = useDrag(() => ({
         type: "card",
         item: {
@@ -23,8 +23,7 @@ function BugCard({ bug, action }: { bug: IVideosBug, action: string }) {
     return (
         <div 
             key={bug.id}
-            draggable={true}
-            style={{ backgroundColor: 'rgb(56, 56, 56)' }} className={` border-l-[5px] ${action == '' ? 'border-yellow-600' : action == 'in_progress' ? 'border-orange-600' : action == 'done' ? 'border-green-600' : 'border-white' } border-yellow-50 rounded w-full h-[150px] m-2 ${isDragging ? 'cursor-move' : 'cursor-pointer'}`}
+            style={{ backgroundColor: 'rgb(56, 56, 56)' }} className={`border-l-[5px] ${action == 'to_fix'  ? 'border-yellow-600' : action == 'in_progress' ? 'border-orange-600' : action == 'done' ? 'border-green-600' : 'border-white' } rounded w-full h-[150px] m-2 cursor-move`}
             ref={drag}
         >
             <div className={'p-3 text-xl font-semibold'}>

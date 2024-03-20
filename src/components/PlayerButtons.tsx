@@ -1,16 +1,18 @@
 import React, { useState, SetStateAction, Dispatch, useEffect, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faVolumeHigh, faShuffle, faCompress, faVolumeOff, faExpand, faShare, faVolumeLow, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faVolumeHigh, faShuffle, faCompress, faVolumeOff, faExpand, faShare, faVolumeLow, faPlus, faInfo } from '@fortawesome/free-solid-svg-icons'
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { FullScreenHandle } from 'react-full-screen';
 import { INotificationType } from './Notification';
 import { ICountryRes, IVideosRes } from '@/components/SideBar';
-import Link from 'next/link';
+import { MutableRefObject } from 'react';
 
 interface IPlayerButtons {
     ended: boolean;
     volume: string;
+    actionButtonRef: MutableRefObject<null>;
     setEnded: Dispatch<SetStateAction<boolean>>;
+    setActionOpen: Dispatch<SetStateAction<boolean>>;
     currentVideo: IVideosRes | undefined;
     currentCountry: ICountryRes | undefined;
     handleFullScreen: FullScreenHandle;
@@ -20,7 +22,7 @@ interface IPlayerButtons {
     setVolume: Dispatch<SetStateAction<string>>;
 }
 
-function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVideo, setVolume, volume, ended, setEnded }: IPlayerButtons) {
+function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef }: IPlayerButtons) {
     const [fullScreen, setFullScreen] = useState(false);
     const [openVolume, setOpenVolume] = useState(false);
     const wrapperRef = useRef(null);
@@ -102,10 +104,10 @@ function PlayerButtons({ handleFullScreen, setNotify, currentCountry, currentVid
             <div onClick={copyToClipBoard} className='fixed top-[250px] right-3 cursor-pointer text-white border border-white hover:bg-white hover:border-black hover:text-black w-9 h-9 flex rounded-full items-center justify-center'>
                 <FontAwesomeIcon className='w-[20px]' icon={faShare} />
             </div>
-
-            <Link href={`/request`} className='fixed top-[300px] right-3 cursor-pointer text-white border border-white hover:bg-white hover:border-black hover:text-black w-9 h-9 flex rounded-full items-center justify-center'>
-                <FontAwesomeIcon className='w-[20px]' icon={faPlus} />
-            </Link>
+            
+            <div ref={actionButtonRef} onClick={() => setActionOpen(true)} className='fixed top-[300px] right-3 cursor-pointer text-white border border-white hover:bg-white hover:border-black hover:text-black w-9 h-9 flex rounded-full items-center justify-center'>
+                <FontAwesomeIcon className='w-[20px]' icon={faInfo} />
+            </div>
         </>
     )
 }
