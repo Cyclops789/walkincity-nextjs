@@ -45,6 +45,10 @@ const getVideoBugById = `
 SELECT id, vid, reason, action FROM videos_bugs WHERE id = ?
 `;
 
+const getVideoBugByIdWithEmail = `
+SELECT id, vid, reason, action, by_email FROM videos_bugs WHERE id = ?
+`;
+
 const getAllVideosRequests = `
 SELECT *, 'hidden' AS by_email FROM videos_requests
 `;
@@ -228,6 +232,7 @@ const query = {
     createNewVideosRequests,
     getAllUsers,
     createNewVideoBug,
+    getVideoBugByIdWithEmail,
     getCountryByID,
     getUsersByRole,
     getVideoBugById,

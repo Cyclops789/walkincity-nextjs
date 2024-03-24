@@ -1,5 +1,8 @@
+import { bugFixed } from '@/helpers/mail';
 import executeQuery from '@/lib/db';
+import { sendMailAsAdmin } from '@/lib/mail';
 import query from '@/utils/db';
+import secrets from '@/utils/secrets';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface IEditVideoBugReq_ {
@@ -30,27 +33,40 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
         }
     
         const videoBug = await executeQuery({
-            query: query.getVideoBugById,
+            query: query.getVideoBugByIdWithEmail,
             values: [id],
         }) as any[];
 
         if(videoBug.length >= 1) {
 
             const options = [
-                (action !== 'delete') ? {
+                {
                     name: 'action',
                     value: action
-                } : {
+                },
+                {
                     name: 'hide',
-                    value: 1
+                    value: (action == 'resolved' || action == 'not_resolved' || action == 'delete') ? 1 : 0
                 }
             ];
 
-            try {
+            try {                
                 await executeQuery({
                     query: query.updateField('videos_bugs', id, options),
                     values: [id],
                 }) as any[];
+
+                if(videoBug[0].by_email && action == 'resolved') {
+                    await sendMailAsAdmin({
+                        subject: "Bug #"+videoBug[0].id+" has been fixed.",
+                        to: videoBug[0].by_email,
+                        template: bugFixed(
+                            videoBug[0].id,
+                            videoBug[0].reason,
+                            secrets.APP_URL as string
+                        ),
+                    });
+                }
 
                 return res.json({ success: true });
 

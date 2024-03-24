@@ -27,10 +27,19 @@ function BugCard({ bug, action }: { bug: IVideosBug, action: string | null }) {
         })
     }));
 
-    const removeBug = () => {
+    const markAsNotResolved = () => {
         axios.post('/api/admin/bugs/action', {
             id: bug.id,
-            action: 'delete'
+            action: 'not_resolved'
+        }).finally(() => {
+            refreshRouteSilenced(router);
+        })
+    }
+
+    const markAsResolved = () => {
+        axios.post('/api/admin/bugs/action', {
+            id: bug.id,
+            action: 'resolved'
         }).finally(() => {
             refreshRouteSilenced(router);
         })
@@ -53,10 +62,16 @@ function BugCard({ bug, action }: { bug: IVideosBug, action: string | null }) {
                 )}
                 {(dropDown.id == bug.id && dropDown.state) && (
                     <div  className={'relative cursor-default'}>
-                        <div  className={'absolute right-7 top-2 bg-[#626060] hover:bg-[#858484] rounded text-sm cursor-pointer'}>
-                            <div className='p-2'>
-                                <div onClick={removeBug}>
-                                    Delete
+                        <div  className={'absolute right-7 top-2 bg-[#626060] rounded text-sm overflow-hidden w-[150px]'}>
+                            <div className='p-2 cursor-pointer hover:bg-[#858484]'>
+                                <div onClick={markAsResolved}>
+                                    Mark as resolved
+                                </div>
+                            </div>
+
+                            <div className='p-2 cursor-pointer hover:bg-[#858484]'>
+                                <div onClick={markAsNotResolved}>
+                                    Mark as not resolved
                                 </div>
                             </div>
                         </div>

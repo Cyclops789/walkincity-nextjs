@@ -148,12 +148,11 @@ export default function Layout({
           {/* SideBar */}
           <section
             style={{
-              backgroundColor: 'hsl(0, 0%, 22%)',
               transition: 'all 0.3s ease',
             }}
-            className={`${sideBarOpen === "1" ? "w-[20%]" : "w-[70px]"}`}
+            className={`${sideBarOpen === "1" ? "w-[20%]" : "w-[70px]"} bg-[hsl(0,0%,22%)]`}
           >
-            <div style={{ backgroundColor: 'hsl(0, 0%, 15%)' }} className={'w-full h-[50px] text-center text-2xl items-center flex justify-center'}>
+            <Link href={'/'} className={'w-full h-[50px] text-center text-2xl items-center flex justify-center bg-[#262626] hover:bg-[#1d1d1d]'}>
               <Image
                 src={'/favicon.ico'}
                 width={35}
@@ -167,7 +166,7 @@ export default function Layout({
                 </span>
               )}
 
-            </div>
+            </Link>
             <hr className='text-[var(--primary-text-color)]' style={{ borderTop: '2px dashed' }} />
             <div className='p-3 space-y-3'>
               {sideBarOpen === "1" && (
@@ -208,8 +207,8 @@ export default function Layout({
           </section>
           {/* Content */}
 
-          <section style={{ backgroundColor: 'hsl(0, 0%, 8%)' }} className={`w-[100%] h-full overflow-auto`}>
-            <div style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='w-full h-[50px] flex justify-between'>
+          <section className={`w-[100%] h-full overflow-auto bg-[hsl(0,0%,8%)]`}>
+            <div className='w-full h-[50px] flex justify-between bg-[hsl(0,0%,22%)]'>
               <div className={'flex justify-start'}>
                 <div className={'px-2 py-1'}>
                   <div
