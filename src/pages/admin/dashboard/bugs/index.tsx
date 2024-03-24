@@ -28,7 +28,7 @@ export default function videos({ bugs }: { bugs: IVideosBugs[] }) {
             <div className={'bg-[#262626] w-full h-full rounded'}>
                 <div className={'pb-1'}></div>
                 <DndProvider backend={HTML5Backend}>
-                    <div className={'flex w-full space-x-4'}>
+                    <div className={'sm:flex w-full sm:space-x-4'}>
                         <BugList bugs={bugs} name={'To Fix'} action='to_fix' />
                         <BugList bugs={bugs} name={'In Progress'} action='in_progress' />
                         <BugList bugs={bugs} name={'Done'} action='done' />

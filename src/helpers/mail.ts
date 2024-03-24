@@ -318,3 +318,80 @@ export const accountCreated = (
     </html>
     `;
 };
+
+export const bugFixed = (
+    id: number,
+    bugReason: string,
+    base_url: string
+) => {
+    return `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Fixed</title>
+    <style>
+        /* Reset styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        /* Container styles */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        /* Header styles */
+        .header {
+            background-color: #d50c2d;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        /* Content styles */
+        .content {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 0 0 8px 8px;
+        }
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            background-color: #d50c2d;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #ac0b26;
+        }
+    </style>
+    </head>
+    <body>
+    <div class="container">
+        <div class="header">
+            <h2>Bug Fixed</h2>
+        </div>
+        <div class="content">
+            <p>Thank you! The bug that you have reported has been fixed.</p>
+            <p></p>
+            <p><strong>Bug ID:</strong> ${id}</p>
+            <p><strong>Bug Reason:</strong> ${bugReason}</p>
+            <p></p>
+            <a href="${base_url}" style="font-weight: bold; color: black; text-decoration: none;">Walkin<span style="font-size: 30px; color:red; border-radius: 25px">.</span>City</a>
+        </div>
+    </div>
+    </body>
+    </html>
+    `;
+};
