@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  domains: ['gravatar.com' ,'eoimages.gsfc.nasa.gov'],
+  images: {
+    domains: ['gravatar.com', 'eoimages.gsfc.nasa.gov'],
+  }
 }
 
 module.exports = nextConfig
