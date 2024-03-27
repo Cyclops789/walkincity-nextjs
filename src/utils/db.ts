@@ -155,6 +155,22 @@ const getWeekVideosRequestsByEmail = `
 SELECT * FROM videos_requests WHERE by_email = ? AND created_on >= DATE_SUB(NOW(), INTERVAL 7 DAY)
 `;
 
+const getAllPages = `
+SELECT * FROM pages
+`;
+
+const getAllEnabledPages = `
+SELECT * FROM pages WHERE enabled = 1
+`;
+
+const getPageById = `
+SELECT * FROM pages WHERE id = 1
+`;
+
+const getPageByName = `
+SELECT * FROM pages WHERE id = 1
+`;
+
 const getCountryByID = `
 SELECT * FROM countries WHERE id = ?
 `;
@@ -222,6 +238,10 @@ const query = {
     getRoleByID,
     getAllVideosRequests,
     createNewNotification,
+    getAllEnabledPages,
+    getAllPages,
+    getPageById,
+    getPageByName,
     getNotificationsByUserID,
     getVideosRequestsOfThisMonth,
     getVideosOfThisMonth,

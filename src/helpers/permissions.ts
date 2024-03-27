@@ -122,6 +122,32 @@ const permissions = [
         dashboardPath: '/admin/dashboard/bugs',
         apiPath: '/api/admin/bugs/action'
     },
+
+    // Pages
+    {
+        id: 20,
+        name: 'read_pages',
+        dashboardPath: '/admin/dashboard/pages',
+        apiPath: ''
+    },
+    {
+        id: 21,
+        name: 'edit_pages',
+        dashboardPath: '/admin/dashboard/pages/{id}',
+        apiPath: '/api/admin/pages/edit'
+    },
+    {
+        id: 22,
+        name: 'delete_pages',
+        dashboardPath: '',
+        apiPath: '/api/admin/pages/delete'
+    },
+    {
+        id: 23,
+        name: 'create_pages',
+        dashboardPath: '/admin/dashboard/pages/new',
+        apiPath: '/api/admin/pages/new'
+    },
 ];
 
 export default permissions;
