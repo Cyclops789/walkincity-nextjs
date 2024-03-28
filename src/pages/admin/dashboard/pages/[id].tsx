@@ -16,12 +16,16 @@ const Layout = dynamic(import('@/components/Layouts/Dashboard')),
 
 interface IFormData {
     name?: string;
+    route?: string;
+    enabled?: boolean;
 }
 
 interface IPage {
     id: number;
     content: string;
     name: string;
+    route: string;
+    enabled: boolean;
 }
 
 interface IEditor {
@@ -31,26 +35,29 @@ interface IEditor {
 
 export default function newRole({ page  }: { page: IPage }) {
     const router = useRouter();
+    const pageId = router.query.id;
     const editorRef = useRef<IEditor>(null);
     const [modal, setModalData] = useState<any>();
     const [form, setFormData] = useState<IFormData>();
     const [notify, setNotify] = useState<INotificationType>({ open: false, type: 'info', text: 'Simple' });
 
-
     const onSubmitForm = (e: React.MouseEvent<HTMLFormElement, MouseEvent>) => {
         e.preventDefault();
 
         const content = editorRef.current?.getContent();
-
+        console.log(content)
         if (!form ||
             form.name === '' || 
+            form.route === '' ||
+            form.enabled === undefined ||
+            form.enabled === null ||
             content === '' ||
             content === undefined
         ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });
 
         setModalData({
             open: true,
-            text: 'Are you sure you want to create this page?',
+            text: 'Are you sure you want to save this page?',
             type: 'create',
             button: {
                 accept: 'Yes, Im sure',
@@ -58,8 +65,11 @@ export default function newRole({ page  }: { page: IPage }) {
             },
             onAccept: () => {
                 axios.post('/api/admin/pages/edit', {
+                    id: page.id,
                     name: form.name,
                     content: content,
+                    route: form.route,
+                    enabled: form.enabled
                 }).then((res) => {
                     setModalData((prevData: any) => ({ ...prevData, open: false }));
                     if (res.data.success) {
@@ -88,13 +98,14 @@ export default function newRole({ page  }: { page: IPage }) {
 
     useEffect(() => {
         setFormData({
-            'name': '',
+            'name': page.name,
+            'enabled': page.enabled,
+            'route': page.route
         });
     }, []);
 
     return (
-        <Layout title={`New Role`}>
-
+        <Layout title={`Page - ${pageId}`}>
             <Notification
                 setNotify={setNotify}
                 open={notify.open}
@@ -117,18 +128,48 @@ export default function newRole({ page  }: { page: IPage }) {
             <div style={{ backgroundColor: 'hsl(0, 0%, 22%)'}} className='p-3 rounded-lg mt-3'>
                 <form onSubmit={onSubmitForm} action="" className='space-y-4'>
 
-                    <div className="space-y-2 grid">
-                        <div className='space-y-2'>
-                            <div>
-                                <label className={'font-semibold'} htmlFor="name">Name</label>
+                <div className="space-y-2">
+                        <div className='space-x-2 flex w-full'>
+                            <div className='w-full'>
+                                <div className='mb-2'>
+                                    <label className={'font-semibold'} htmlFor="name">Name</label>
+                                </div>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    defaultValue={form?.name}
+                                    onChange={(e) => updateFormData({ name: 'name', value: e.target.value })}
+                                    className='p-2 rounded bg-[#262626] text-white w-full'
+                                    required
+                                />
                             </div>
-                            <input
-                                type="text"
-                                id="name"
-                                onChange={(e) => updateFormData({ name: 'name', value: e.target.value })}
-                                className='p-2 rounded bg-[#262626] text-white w-full'
-                                required
-                            />
+
+                            <div className='w-full'>
+                                <div className='mb-2'>
+                                    <label className={'font-semibold'} htmlFor="route">Route</label>
+                                </div>
+                                <input
+                                    type="text"
+                                    id="route"
+                                    defaultValue={form?.route}
+                                    onChange={(e) => updateFormData({ name: 'route', value: e.target.value })}
+                                    className='p-2 rounded bg-[#262626] text-white w-full'
+                                    required
+                                />
+                            </div>
+
+                            <div className=''>
+                                <div className='mb-2'>
+                                    <label className={'font-semibold'} htmlFor="enabled">Enabled</label>
+                                </div>
+                                <input
+                                    type="checkbox"
+                                    id="enabled"
+                                    onChange={(e) => updateFormData({ name: 'enabled', value: e.target.checked })}
+                                    className='p-2 rounded cursor-pointer w-[39px] h-[39px]'
+                                    
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -139,14 +180,17 @@ export default function newRole({ page  }: { page: IPage }) {
                             </div>
 
                             <div id="content" className={'text-black'}>
-                                <Editor editorRef={editorRef} />
+                                <Editor 
+                                    editorRef={editorRef}
+                                    initialValue={page.content}
+                                />
                             </div>
                         </div>
                     </div>
 
                     <div className="flex justify-center mt-3">
                         <button type='submit' className='px-8 py-3 text-center bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded'>
-                            Create
+                            Save
                         </button>
                     </div>
                 </form>
