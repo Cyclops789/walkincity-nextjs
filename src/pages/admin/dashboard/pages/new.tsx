@@ -62,6 +62,12 @@ export default function newPage({ }: {}) {
                     if (res.data.success) {
                         setNotify({ open: true, type: 'success', text: res.data.message });
 
+                        setTimeout(() => {
+                            router.push({
+                                pathname: '/admin/dashboard/pages/' + res.data.page,
+                            });
+                        }, 5000);
+
                     } else if (res.data.error?.message) {
                         setNotify({ open: true, type: 'warning', text: res.data.error.message });
                     }

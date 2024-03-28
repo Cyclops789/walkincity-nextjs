@@ -33,7 +33,7 @@ interface IEditor {
     getContent(): string;
 }
 
-export default function newRole({ page  }: { page: IPage }) {
+export default function editPage({ page  }: { page: IPage }) {
     const router = useRouter();
     const pageId = router.query.id;
     const editorRef = useRef<IEditor>(null);
@@ -74,12 +74,6 @@ export default function newRole({ page  }: { page: IPage }) {
                     setModalData((prevData: any) => ({ ...prevData, open: false }));
                     if (res.data.success) {
                         setNotify({ open: true, type: 'success', text: res.data.message });
-
-                        setTimeout(() => {
-                            router.push({
-                                pathname: '/admin/dashboard/pages/' + res.data.role,
-                            });
-                        }, 5000);
 
                     } else if (res.data.error?.message) {
                         setNotify({ open: true, type: 'warning', text: res.data.error.message });
@@ -167,7 +161,6 @@ export default function newRole({ page  }: { page: IPage }) {
                                     id="enabled"
                                     onChange={(e) => updateFormData({ name: 'enabled', value: e.target.checked })}
                                     className='p-2 rounded cursor-pointer w-[39px] h-[39px]'
-                                    
                                 />
                             </div>
                         </div>

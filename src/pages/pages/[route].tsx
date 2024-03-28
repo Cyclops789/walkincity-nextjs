@@ -3,6 +3,7 @@ import { executeQueryReturnsJSON } from '@/lib/db';
 import query from '@/utils/db';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
+import ReactHtmlParser from 'react-html-parser';
 
 const Layout = dynamic(import("@/components/Layouts/Pages"));
 
@@ -16,7 +17,7 @@ interface IPage {
 export default function Page({ page } : { page: IPage }) {
     return (
         <Layout title={page.name}>
-            <div dangerouslySetInnerHTML={{ __html: page.content }} />
+            {ReactHtmlParser(page.content)}
         </Layout>
     )
 }
