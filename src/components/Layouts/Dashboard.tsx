@@ -187,7 +187,7 @@ export default function Layout({
               {DashboardRoutes.map((route) => (
                 (user.role.permissions.includes(String(route.permissionID)) || route.permissionID === null) && (
                   <>
-                    {GroupsRoutes.map((group) => (((sideBarOpen === "1") && (group.before === route.permissionID)) && <div className={' font-semibold text-[var(--primary-text-color)]'}>{group.name}</div>) )}
+                    {GroupsRoutes.map((group) => (((sideBarOpen === "1") && (group.before === route.permissionID)) && <div className={' font-semibold text-[var(--primary-text-color)]'}>{group.name}</div>))}
                     <Link
                       href={route.path}
                       key={route.name}

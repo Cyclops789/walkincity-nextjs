@@ -4,13 +4,16 @@ import Link from 'next/link';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
+import { format, formatDistance, formatRelative, subDays } from 'date-fns'
 
 interface IPagesReturn {
     id: number;
     name: string;
     content: string;
+    route: string;
+    enabled: boolean | 0 | 1;
     created_at: string;
-    enabled: boolean;
+    updated_at: string;
 }
 
 const Layout = dynamic(import('@/components/Layouts/Dashboard'));
@@ -24,7 +27,7 @@ export default function pages({ pages }: { pages: IPagesReturn[] }) {
     const currentPages = pages?.slice(startIndex, endIndex);
 
     return (
-        <Layout title={'Roles'}>
+        <Layout title={'Pages'}>
             <div className={'flex justify-end'}>
                 <Link href={'/admin/dashboard/pages/new'} className={'bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] p-3 rounded font-bold'}>
                     Add new page
@@ -42,7 +45,13 @@ export default function pages({ pages }: { pages: IPagesReturn[] }) {
                                 Name
                             </th>
                             <th scope="col" className="px-6 py-3">
-                                Permissions
+                                Enabled
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Created At
+                            </th>
+                            <th scope="col" className="px-6 py-3">
+                                Updated At
                             </th>
                             <th scope="col" className="px-6 py-3">
                                 Actions
@@ -55,14 +64,20 @@ export default function pages({ pages }: { pages: IPagesReturn[] }) {
                                 <th scope="row" className="px-6 py-4 font-medium text-gray-300 whitespace-nowrap">
                                     {page.id}
                                 </th>
-                                <td className="px-6 py-4">
-                                    {page.name}
-                                </td>
                                 <td className="px-6 py-4 text-[#d50c2dcb] font-bold">
-                                    {page.enabled}
+                                    <a target='_blank' href={`${process.env.NEXT_PUBLIC_APP_URL}/pages/${page.route}`}>{page.name}</a>
                                 </td>
                                 <td className="px-6 py-4">
-                                <Link
+                                    {page.enabled == 1  ? "Yes" : "No"}
+                                </td>
+                                <td className="px-6 py-4 capitalize">
+                                    {formatDistance(page.created_at, new Date(), { addSuffix: true })}
+                                </td>
+                                <td className="px-6 py-4 capitalize">
+                                    {formatDistance(page.updated_at, new Date(), { addSuffix: true })}
+                                </td>
+                                <td className="px-6 py-4">
+                                    <Link
                                         className={'bg-[#d50c2d46] text-center items-center justify-center rounded border border-[var(--primary-text-color)] w-full'}
                                         href={`/admin/dashboard/pages/${page.id}`}
                                     >

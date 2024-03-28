@@ -164,11 +164,19 @@ SELECT * FROM pages WHERE enabled = 1
 `;
 
 const getPageById = `
-SELECT * FROM pages WHERE id = 1
+SELECT * FROM pages WHERE id = ?
 `;
 
 const getPageByName = `
-SELECT * FROM pages WHERE id = 1
+SELECT name, content, route FROM pages WHERE name = ?
+`;
+
+const getPageByRoute = `
+SELECT name, content, route FROM pages WHERE route = ?
+`;
+
+const createNewPage = `
+INSERT INTO pages (content, name, enabled, route) VALUES (?, ?, ?, ?)
 `;
 
 const getCountryByID = `
@@ -215,7 +223,7 @@ SELECT * FROM icons
 `;
 
 const updateField = (table: string, id: number | string, options: IOptions[] = [], additionalQuery: string = ''): string => {
-    const setClauses = options.map((option) => `${option.name} = ${escape(`${option.value}`)}`).join(', ');
+    const setClauses = options.map((option) => `${option.name} = ${typeof option.value !== 'boolean' ? escape(`${option.value}`) : option.value}`).join(', ');
     
     return `UPDATE ${table} SET ${setClauses} WHERE id = ${id} ${additionalQuery}`;
 }
@@ -256,6 +264,7 @@ const query = {
     getCountryByID,
     getUsersByRole,
     getVideoBugById,
+    getPageByRoute,
     getWeekVideosRequestsByEmail,
     getAllAcceptedVideosRequests,
     getAllRejectedVideosRequests,
@@ -268,6 +277,7 @@ const query = {
     getAllIcons,
     createNewUser,
     createNewVideo,
+    createNewPage,
     getAllAvailableVideosRequests,
     getCountryByShortName,
     getVideosByVerified,

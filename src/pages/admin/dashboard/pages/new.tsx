@@ -14,6 +14,8 @@ const Layout = dynamic(import('@/components/Layouts/Dashboard')),
 
 interface IFormData {
     name?: string;
+    enabled?: boolean;
+    route?: string;
 }
 
 interface IEditor {
@@ -21,22 +23,24 @@ interface IEditor {
     getContent(): string;
 }
 
-export default function newPage({  }: {  }) {
+export default function newPage({ }: {}) {
     const router = useRouter();
     const editorRef = useRef<IEditor>(null);
     const [modal, setModalData] = useState<any>();
     const [form, setFormData] = useState<IFormData>();
     const [notify, setNotify] = useState<INotificationType>({ open: false, type: 'info', text: 'Simple' });
 
-
     const onSubmitForm = (e: React.MouseEvent<HTMLFormElement, MouseEvent>) => {
         e.preventDefault();
 
         const content = editorRef.current?.getContent();
+
         if (!form ||
-            form.name === '' || 
+            form.name === '' ||
             content === '' ||
-            content === undefined
+            content === undefined ||
+            form.enabled === undefined ||
+            form.enabled === null
         ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });
 
         setModalData({
@@ -50,17 +54,13 @@ export default function newPage({  }: {  }) {
             onAccept: () => {
                 axios.post('/api/admin/pages/new', {
                     name: form.name,
+                    enabled: form.enabled,
+                    route: form.route,
                     content: content,
                 }).then((res) => {
                     setModalData((prevData: any) => ({ ...prevData, open: false }));
                     if (res.data.success) {
                         setNotify({ open: true, type: 'success', text: res.data.message });
-
-                        setTimeout(() => {
-                            router.push({
-                                pathname: '/admin/dashboard/pages/' + res.data.page,
-                            });
-                        }, 5000);
 
                     } else if (res.data.error?.message) {
                         setNotify({ open: true, type: 'warning', text: res.data.error.message });
@@ -80,8 +80,11 @@ export default function newPage({  }: {  }) {
     useEffect(() => {
         setFormData({
             'name': '',
+            'enabled': false,
+            'route': ''
         });
     }, []);
+
     return (
         <Layout title={`New Page`}>
 
@@ -104,21 +107,49 @@ export default function newPage({  }: {  }) {
                 </button>
             </div>
 
-            <div style={{ backgroundColor: 'hsl(0, 0%, 22%)'}} className='p-3 rounded-lg mt-3'>
+            <div style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='p-3 rounded-lg mt-3'>
                 <form onSubmit={onSubmitForm} action="" className='space-y-4'>
 
-                    <div className="space-y-2 grid">
-                        <div className='space-y-2'>
-                            <div>
-                                <label className={'font-semibold'} htmlFor="name">Name</label>
+                    <div className="space-y-2">
+                        <div className='space-x-2 flex w-full'>
+                            <div className='w-full'>
+                                <div className='mb-2'>
+                                    <label className={'font-semibold'} htmlFor="name">Name</label>
+                                </div>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    onChange={(e) => updateFormData({ name: 'name', value: e.target.value })}
+                                    className='p-2 rounded bg-[#262626] text-white w-full'
+                                    required
+                                />
                             </div>
-                            <input
-                                type="text"
-                                id="name"
-                                onChange={(e) => updateFormData({ name: 'name', value: e.target.value })}
-                                className='p-2 rounded bg-[#262626] text-white w-full'
-                                required
-                            />
+
+                            <div className='w-full'>
+                                <div className='mb-2'>
+                                    <label className={'font-semibold'} htmlFor="route">Route</label>
+                                </div>
+                                <input
+                                    type="text"
+                                    id="route"
+                                    onChange={(e) => updateFormData({ name: 'route', value: e.target.value })}
+                                    className='p-2 rounded bg-[#262626] text-white w-full'
+                                    required
+                                />
+                            </div>
+
+                            <div className=''>
+                                <div className='mb-2'>
+                                    <label className={'font-semibold'} htmlFor="enabled">Enabled</label>
+                                </div>
+                                <input
+                                    type="checkbox"
+                                    id="enabled"
+                                    onChange={(e) => updateFormData({ name: 'enabled', value: e.target.checked })}
+                                    className='p-2 rounded cursor-pointer w-[39px] h-[39px]'
+                                    
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -150,4 +181,4 @@ export const getServerSideProps = (async () => {
         props: {
         }
     }
-}) satisfies GetServerSideProps<{ }>
+}) satisfies GetServerSideProps<{}>
