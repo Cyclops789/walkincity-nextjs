@@ -80,14 +80,14 @@ export default function Layout({
     const sidebar = localStorage.getItem("sidebar");
 
     if (sidebar == "0") {
-      setSideBarOpen("0")
+      setSideBarOpen("0");
     } else if (sidebar == "1") {
-      setSideBarOpen("1")
-    } else {
       if (window.innerWidth < 1314) {
-        setSideBarOpen("0")
+        setSideBarOpen("0");
+      } else if (window.innerWidth > 1314) {
+        setSideBarOpen("1");
       } else {
-        setSideBarOpen("1")
+        setSideBarOpen("1");
       }
     }
   }, []);
@@ -130,8 +130,7 @@ export default function Layout({
       if (notifications === null) {
         const res = await axios.get('/api/admin/account/notifications');
         const notificationsResponse = res.data.notifications as INotification[];
-        //console.log(notificationsResponse);
-        setNotifications(notificationsResponse)
+        setNotifications(notificationsResponse);
       }
     })();
   }, [notifications])
@@ -245,7 +244,11 @@ export default function Layout({
                   <NotificationArea markNotificationAsRead={markNotificationAsRead} notifications={notifications} open={openNotifications} />
                 </div>
 
-                <div ref={userButtonRef} onClick={() => setOpen(!open)} className='border border-[var(--primary-text-color)] rounded flex justify-center h-[40px] overflow-hidden mx-2 mt-1 cursor-pointer'>
+                <div 
+                  ref={userButtonRef} 
+                  onClick={() => setOpen(!open)} 
+                  className={'border border-[var(--primary-text-color)] rounded flex justify-center h-[40px] overflow-hidden mx-2 mt-1 cursor-pointer'}
+                >
                   <div>
                     <Image
                       className='mr-1'
@@ -258,7 +261,7 @@ export default function Layout({
 
                   <div className={'items-center mr-1'}>
                     <div className={'text-start text-[12px]'}>
-                      <div className='text-blue-500 capitalize'>
+                      <div className={'text-blue-500 capitalize'}>
                         {user?.username}
                       </div>
                       <div className=''>
