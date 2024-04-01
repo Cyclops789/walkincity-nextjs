@@ -28,7 +28,7 @@ function info() {
 
             </div>
         </Layout>
-    )
+    );
 };
 
 export default info;
