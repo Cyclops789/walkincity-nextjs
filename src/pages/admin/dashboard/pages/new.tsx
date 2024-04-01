@@ -19,7 +19,7 @@ interface IFormData {
 }
 
 interface IEditor {
-    setContent(content: string): void | string | any;
+    setContent(content: string): void;
     getContent(): string;
 }
 

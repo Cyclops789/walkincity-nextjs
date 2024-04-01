@@ -59,12 +59,10 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             ];
 
             try {
-                const editPages = await executeQuery({
+                await executeQuery({
                     query: query.updateField('pages', id, options),
                     values: [id],
                 }) as any;
-
-                console.log(query.updateField('pages', id, options))
 
                 return res.json({ success: true, message: 'Modifications has been saved successfully!' });
 
