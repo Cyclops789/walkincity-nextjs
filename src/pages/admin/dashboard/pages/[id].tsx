@@ -45,7 +45,7 @@ export default function editPage({ page  }: { page: IPage }) {
         e.preventDefault();
 
         const content = editorRef.current?.getContent();
-        console.log(content)
+
         if (!form ||
             form.name === '' || 
             form.route === '' ||
@@ -159,6 +159,7 @@ export default function editPage({ page  }: { page: IPage }) {
                                 <input
                                     type="checkbox"
                                     id="enabled"
+                                    defaultChecked={form?.enabled as any}
                                     onChange={(e) => updateFormData({ name: 'enabled', value: e.target.checked })}
                                     className='p-2 rounded cursor-pointer w-[39px] h-[39px]'
                                 />
