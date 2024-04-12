@@ -48,7 +48,6 @@ function BugList({ bugs, name, action }: { bugs: IVideosBug[], name: string, act
 
             <div
                 ref={drop}
-                //style={{ width: 'calc((100% / 3) - 17px)' }}
                 className={`space-y-4 w-[calc(100%-17px)] sm:w-[calc((100%/3)-17px)]`}
             >
                 <div className={`ml-2 text-2xl font-semibold uppercase ${(canDrop && isOver) && 'text-[var(--primary-text-color)]'}`}>{name}</div>
