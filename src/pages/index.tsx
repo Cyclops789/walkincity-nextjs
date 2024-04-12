@@ -6,9 +6,8 @@ import query from '@/utils/db';
 import { useRouter } from 'next/router';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
-import { INotificationType } from '@/components/Notification';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBug, faPlus, faX, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faBug, faPlus, faX, faEye, faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import useClickOutside from '@/components/Dashboard/useClickOutside';
 
 const Reactions = dynamic(import('@/components/Reactions'));
@@ -16,7 +15,6 @@ const Layout = dynamic(import('@/components/Layouts/Main'));
 const Video = dynamic(import('@/components/Video'));
 const SideBar = dynamic(import('@/components/SideBar'));
 const PlayerButtons = dynamic(import('@/components/PlayerButtons'));
-const Notification = dynamic(import('@/components/Notification'));
 
 export default function WatchPage({ countries }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const handleFullScreen = useFullScreenHandle();
@@ -37,11 +35,6 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
   const actionRef = useRef(null);
   const actionButtonRef = useRef(null);
   const [volume, setVolume] = useState('0');
-  const [notify, setNotify] = useState<INotificationType>({
-    open: false,
-    type: 'info',
-    text: 'Simple'
-  });
 
   useClickOutside(actionRef, () => setActionOpen(false), actionButtonRef);
 
@@ -71,8 +64,8 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
                     <button onClick={() => router.push('/request')} className={'hover:shadow-xl font-[500] bg-[var(--primary-text-color)] disabled:bg-slate-700 hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'}>
                       <FontAwesomeIcon className={'w-[20px]'} icon={faPlus} /> Request a video
                     </button>
-                    <button disabled className={'hover:shadow-xl font-[500] bg-[var(--primary-text-color)] disabled:bg-slate-700 hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'}>
-                      <FontAwesomeIcon className={'w-[20px]'} icon={faPlus} /> Request an account
+                    <button onClick={() => router.push('/info')} className={'hover:shadow-xl font-[500] bg-[var(--primary-text-color)] disabled:bg-slate-700 hover:bg-[var(--primary-text-color-hover)] p-2 rounded text-1xl w-full uppercase'}>
+                      <FontAwesomeIcon className={'w-[20px]'} icon={faCircleQuestion} /> Info
                     </button>
                   </div>
                 </div>
@@ -123,7 +116,6 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
             setCurrentCountry={setCurrentCountry}
             setCurrentVideo={setCurrentVideo}
             currentVideo={currentVideo}
-            setNotify={setNotify}
             handleFullScreen={handleFullScreen}
           />
 
@@ -147,14 +139,6 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
               </div>
             </div>
           )}
-
-          <Notification
-            setNotify={setNotify}
-            open={notify.open}
-            type={notify.type}
-            text={notify.text}
-            duration={notify.duration}
-          />
         </div>
       </Layout>
     </FullScreen>
