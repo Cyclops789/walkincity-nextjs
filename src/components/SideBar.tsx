@@ -21,6 +21,7 @@ import {
 import { useRouter } from 'next/router';
 import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
+import { useClickOutsideNoIgnore } from './Dashboard/useClickOutside';
 
 export interface ICountryRes {
     id: number;
@@ -106,20 +107,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
             setCurrentCountry(countries[randomCountryIndex]);
             setCurrentVideo(countries[randomCountryIndex].videos[randomVideoIndex]);
         }
-    }, [ended])
-
-    useEffect(() => {
-        function handleClickOutside(event: any) {
-            // @ts-ignore
-            if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-                setOpen(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, [wrapperRef]);
+    }, [ended]);
 
     // Filter Countries using the search input
     useEffect(() => {
@@ -191,6 +179,8 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
             };
         })
     }, []);
+
+    useClickOutsideNoIgnore(wrapperRef, () => setOpen(false));
 
     return (
         <div
