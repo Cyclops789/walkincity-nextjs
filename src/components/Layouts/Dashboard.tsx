@@ -143,7 +143,7 @@ export default function Layout({
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       {user && (
-        <div className={`flex w-screen text-white ${className}`}>
+        <div className={`flex h-screen w-screen text-white ${className}`}>
           {/* SideBar */}
           <section
             style={{
