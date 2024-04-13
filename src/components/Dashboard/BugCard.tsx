@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useDrag } from 'react-dnd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import { useRouter } from 'next/router';
 import { refreshRouteSilenced } from '@/helpers/routes';
 

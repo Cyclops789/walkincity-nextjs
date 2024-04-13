@@ -9,7 +9,7 @@ import dynamic from 'next/dynamic';
 import React, { useRef, useEffect, useState } from 'react';
 import { faChartLine, faBell } from '@fortawesome/free-solid-svg-icons';
 import { useUserStore } from '@/store/userStore';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import { useNotificationsStore } from '@/store/notificationsStore';
 import { INotification } from '@/store/notificationsStore';
 import useClickOutside from '@/components/Dashboard/useClickOutside';

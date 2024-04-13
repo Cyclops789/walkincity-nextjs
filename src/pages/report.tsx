@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import dynamic from 'next/dynamic';
 import ReCAPTCHA from 'react-google-recaptcha';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import { INotificationType } from '@/components/Dashboard/Notification';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { IVideosRes } from '@/components/SideBar';

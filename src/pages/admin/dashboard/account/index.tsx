@@ -4,7 +4,7 @@ import { useUserStore } from '@/store/userStore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloudArrowUp } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import { refreshRouteSilenced } from '@/helpers/routes';
 import { useRouter } from 'next/router';
 import { INotificationType } from '@/components/Notification';
