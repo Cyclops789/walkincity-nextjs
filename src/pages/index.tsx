@@ -5,8 +5,6 @@ import { useRef, useState } from "react";
 import query from '@/utils/db';
 import { useRouter } from 'next/router';
 import { executeQueryReturnsJSON } from '@/lib/db';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBug, faPlus, faX, faEye, faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import useClickOutside from '@/components/Dashboard/useClickOutside';
 
 const Reactions = dynamic(import('@/components/Reactions'));
