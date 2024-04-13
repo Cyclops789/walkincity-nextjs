@@ -12,6 +12,7 @@ interface IEditVideoReq_ {
     type: string | undefined;
     continent: string | undefined;
     seekTo: string | number | undefined;
+    endsat: string | number | undefined;
     verified: string | number | undefined;
     latitude: string | number | undefined;
     longitude: string | number | undefined;
@@ -20,9 +21,9 @@ interface IEditVideoReq_ {
 
 export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { id, vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude }: IEditVideoReq_ = _req.body
+        const { id, vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude, endsat }: IEditVideoReq_ = _req.body
     
-        if (!id || !vid || !country || !place || !weather || !type || !continent || !seekTo || verified === undefined || verified === '' || !latitude || !longitude) {
+        if (!id || !vid || !country || !place || !weather || !type || !continent || !seekTo || !endsat || verified === undefined || verified === '' || !latitude || !longitude) {
             return res.json({ 
                 success: false,
                 error: { 
@@ -40,7 +41,12 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             });
         }
 
-        if(Number.isNaN(latitude) && Number.isNaN(longitude) || Number.isNaN(parseFloat(`${latitude}`)) && Number.isNaN(parseFloat(`${longitude}`))) {
+        if( Number.isNaN(latitude) && 
+            Number.isNaN(longitude) || 
+            Number.isNaN(parseFloat(`${latitude}`)) && 
+            Number.isNaN(parseFloat(`${longitude}`))
+        
+        ) {
             return res.json({ 
                 success: false,
                 error: { 
@@ -119,6 +125,10 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                 {
                     name: 'longitude',
                     value: longitude
+                },
+                {
+                    name: 'endsat',
+                    value: endsat
                 }
             ];
 

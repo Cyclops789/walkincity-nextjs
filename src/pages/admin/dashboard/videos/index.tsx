@@ -18,6 +18,7 @@ export interface IVideosRes {
     weather: string;
     type: string;
     seekTo: number;
+    endsat: number;
     latitude: number;
     longitude: number;
     verified: string | number;

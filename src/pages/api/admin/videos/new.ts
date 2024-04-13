@@ -10,6 +10,7 @@ interface IEditVideoReq_ {
     type: string | undefined;
     continent: string | undefined;
     seekTo: string | number | undefined;
+    endsat: string | number | undefined;
     verified: string | number | undefined;
     latitude: string | number | undefined;
     longitude: string | number | undefined;
@@ -18,9 +19,9 @@ interface IEditVideoReq_ {
 
 export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude }: IEditVideoReq_ = _req.body
+        const { vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude, endsat }: IEditVideoReq_ = _req.body
 
-        if (!vid || !country || !place || !weather || !type || !continent || !seekTo || verified === undefined || verified === '' || !latitude || !longitude) {
+        if (!vid || !country || !place || !weather || !type || !continent || !seekTo || !endsat || verified === undefined || verified === '' || !latitude || !longitude) {
             return res.json({
                 success: false,
                 error: {
@@ -70,7 +71,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
 
                 const newVideo = await executeQuery({
                     query: query.createNewVideo,
-                    values: [vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude],
+                    values: [vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude, endsat],
                 }) as any;
 
                 const getVideo = await executeQuery({

@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faVolumeHigh, faShuffle, faCompress, faVolumeOff, faExpand, faShare, faVolumeLow, faSliders, faInfo } from '@fortawesome/free-solid-svg-icons'
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { FullScreenHandle } from 'react-full-screen';
-import { INotificationType } from './Notification';
 import { ICountryRes, IVideosRes } from '@/components/SideBar';
 import { MutableRefObject } from 'react';
 import useClickOutside, { useClickOutsideNoIgnore } from './Dashboard/useClickOutside';
@@ -29,10 +28,11 @@ interface IPlayerButtons {
 
 function PlayerButtons({ handleFullScreen, currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef, reactionsShow, setReactionsShow, viewersShow, setViewersShow }: IPlayerButtons) {
     const [fullScreen, setFullScreen] = useState(false);
-    const [openVolume, setOpenVolume] = useState(false);
+    const [openVolume, setOpenVolume] = useState<boolean | undefined>();
     const [openSetting, setOpenSetting] = useState(false);
     const [copyContent, setCopyContent] = useState('Click to copy the link');
-    const wrapperRef = useRef(null);
+    const volumeRef = useRef(null);
+    const volumeInputRef = useRef(null);
     const settingsRef = useRef(null);
     const settingsRefButton = useRef(null);
 
@@ -79,19 +79,20 @@ function PlayerButtons({ handleFullScreen, currentCountry, currentVideo, setVolu
         setViewersShow(viewers)
     }, []);
 
-    useClickOutsideNoIgnore(wrapperRef, () => setOpenVolume(false));
+    useClickOutside(volumeRef, () => setOpenVolume(false), volumeInputRef);
     useClickOutside(settingsRef, () => setOpenSetting(false), settingsRefButton);
 
     return (
         <>
             <Tooltip className={'bg-white text-black'} content="Volume" placement="left">
-                <div ref={wrapperRef} className={`fixed top-[50px] right-3 cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black h-9 flex rounded-full items-center justify-center ${openVolume ? 'w-52 bg-white text-black border-black' : 'w-9 text-white'} transition-all duration-100 ease-in-out`}>
+                <div ref={volumeRef} className={`fixed top-[50px] right-3 cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black h-9 flex rounded-full items-center justify-center ${openVolume ? 'w-52 bg-white text-black border-black' : 'w-9 text-white'} transition-all duration-100 ease-in-out`}>
                     <div onClick={() => setOpenVolume(!openVolume)} className='fixed top-[50px] right-3 w-9 h-9 z-10' />
                     <FontAwesomeIcon
                         className={`${parseInt(volume) >= 50 ? 'w-[20px]' : parseInt(volume) >= 20 ? 'w-[15px]' : 'w-[10px]'} fixed ${parseInt(volume) >= 50 ? 'right-5' : parseInt(volume) >= 20 ? 'right-6' : 'right-7'} z-0`}
                         icon={parseInt(volume) >= 50 ? (faVolumeHigh) : parseInt(volume) >= 20 ? (faVolumeLow) : faVolumeOff}
                     />
                     <input
+                        ref={volumeInputRef}
                         min={-1}
                         max={100}
                         step={10}
@@ -153,4 +154,4 @@ function PlayerButtons({ handleFullScreen, currentCountry, currentVideo, setVolu
     )
 }
 
-export default PlayerButtons
+export default PlayerButtons;

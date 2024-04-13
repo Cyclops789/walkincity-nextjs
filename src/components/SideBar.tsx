@@ -40,6 +40,7 @@ export interface IVideosRes {
     continent: string;
     weather: string;
     seekTo: number;
+    endsat: number;
     latitude?: number;
     longitude?: number;
     type: 'walk' | 'drive';

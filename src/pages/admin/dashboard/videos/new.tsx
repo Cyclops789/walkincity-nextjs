@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import Router, { useRouter } from 'next/router'
 import dynamic from 'next/dynamic';
 import query from '@/utils/db';
@@ -7,6 +7,10 @@ import { IVideosRes } from '@/pages/admin/dashboard/videos';
 import { ICountryRes } from '@/components/SideBar';
 import { GetServerSideProps } from 'next';
 import axios from 'axios';
+import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHourglassEnd, faHourglassStart } from '@fortawesome/free-solid-svg-icons';
+import { Tooltip } from '@material-tailwind/react';
 
 const Layout = dynamic(import('@/components/Layouts/Dashboard')),
     Notification = dynamic(import('@/components/Dashboard/Notification')),
@@ -25,6 +29,7 @@ interface IFormData {
     weather?: string;
     type?: string;
     seekTo?: string | number;
+    endsat?: string | number;
     verified?: string | number;
     latitude?: number;
     longitude?: number;
@@ -34,10 +39,93 @@ export default function newVideo({ countries }: IVideo) {
     const router = useRouter();
     const { country, place, weather, type, seekTo, verified }: IFormData = router.query;
 
+    const playerRef = useRef<YouTubePlayer>(null);
     const [createAnOther, setCreateAnOther] = useState(false);
     const [form, setFormData] = useState<IFormData>();
     const [notify, setNotify] = useState<any>();
     const [modal, setModalData] = useState<any>();
+
+    const onReady: YouTubeProps['onReady'] = (e) => {
+    }
+
+    const onError: YouTubeProps['onError'] = (e) => {
+        switch (e.data) {
+            /**
+             * The request contains an invalid parameter value. 
+             * For example, this error occurs if you specify a video ID that does not 
+             * have 11 characters, or if the video ID contains invalid characters, 
+             * such as exclamation points or asterisks.
+             */
+            case 2:
+                break;
+            /**
+             * The requested content cannot be played in 
+             * an HTML5 player or another error related 
+             * to the HTML5 player has occurred.
+             */
+            case 5:
+                break;
+            /**
+             * The video requested was not found. 
+             * This error occurs when a video has been removed 
+             * (for any reason) or has been marked as private.
+             */
+            case 100:
+                break;
+
+            /**
+             * The owner of the requested video does not allow it 
+             * to be played in embedded players.
+             */
+            case 101:
+                break;
+            /**
+             * This error is the same as 101. 
+             * It's just a 101 error in disguise!
+             */
+            case 150:
+                break;
+        }
+    }
+    
+    const onStateChange: YouTubeProps['onStateChange'] = (e) => {
+        playerRef.current = e.target;
+        switch (e.target.getPlayerState()) {
+            case -1: // unstarted
+                break;
+            case 0: // ended
+                break;
+            case 1: // playing
+                break;
+            case 2: // paused
+                break;
+            case 3: // buffering
+                break;
+        }
+    }
+
+    const setTimerFromVideo = (pos: 'start' | 'end') => {
+
+        if(playerRef.current == null) {
+            return setNotify({ open: true, type: 'warning', text: 'Please start the video first!' });
+        } else {
+            if (playerRef.current.getPlayerState() != 2) { 
+                // unstarted
+                return setNotify({ open: true, type: 'warning', text: 'Please pause the video first!' });
+            }
+
+
+            const currentTime = parseInt(playerRef.current.getCurrentTime());
+            
+            if(pos == 'start') {
+                updateFormData({ name: 'seekTo', value: currentTime });
+            }
+
+            if(pos == 'end') {
+                updateFormData({ name: 'endsat', value: currentTime });
+            }
+        }
+    }
 
     const onSubmitForm = (e: React.MouseEvent<HTMLFormElement, MouseEvent>) => {
         e.preventDefault();
@@ -146,63 +234,123 @@ export default function newVideo({ countries }: IVideo) {
                     <div style={{ backgroundColor: 'hsl(0, 0%, 22%)' }} className='p-3 rounded-lg mt-3'>
                         <form onSubmit={onSubmitForm} action="" className='space-y-4'>
                             <div className='space-y-2'>
-                                <div className='space-y-2'>
-                                    <div>
-                                        <label className={'font-semibold'} htmlFor="vid">Video id or link:</label>
+                                <div className={'flex justify-between space-x-2'}>
+                                    <div className={'w-[50%]'}>
+                                        <div className='space-y-2'>
+                                            <div>
+                                                <label className={'font-semibold'} htmlFor="vid">Video id or link:</label>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                onChange={(e) => updateFormData({ name: 'vid', value: e.target.value })}
+                                                defaultValue={form.vid}
+                                                className='p-2 rounded bg-[#262626] text-white w-full'
+                                                id='vid'
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="flex justify-between space-x-2">
+                                            <div className='space-y-2 '>
+                                                <div>
+                                                    <label className={'font-semibold'} htmlFor="seekto">Start at:</label>
+                                                </div>
+                                                <input
+                                                    type="number"
+                                                    onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.valueAsNumber })}
+                                                    value={form.seekTo}
+                                                    className='p-2 rounded bg-[#262626] text-white w-full'
+                                                    id='seekto'
+                                                    min={1}
+                                                    required
+                                                />
+                                            </div>
+
+                                            <div className='space-y-2 mt-auto'>
+                                                <Tooltip content="Set the start time from the video" placement="top">
+                                                    <button onClick={() => setTimerFromVideo('start')} type='button' className='py-[8px] px-5 text-center bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded'>
+                                                        <FontAwesomeIcon icon={faHourglassStart} />
+                                                    </button>
+                                                </Tooltip>
+                                            </div>
+
+                                            <div className='space-y-2 '>
+                                                <div>
+                                                    <label className={'font-semibold'} htmlFor="endsat">Ends at:</label>
+                                                </div>
+                                                <input
+                                                    type="number"
+                                                    onChange={(e) => updateFormData({ name: 'endsat', value: e.target.valueAsNumber })}
+                                                    value={form.endsat}
+                                                    className='p-2 rounded bg-[#262626] text-white w-full'
+                                                    id='endsat'
+                                                    min={1}
+                                                    required
+                                                />
+                                            </div>
+                                            <div className='space-y-2 mt-auto'>
+                                                <Tooltip content="Set the end time from the video" placement="top">
+                                                    <button onClick={() => setTimerFromVideo('end')} type='button' className='py-[8px] px-5 text-center bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded'>
+                                                        <FontAwesomeIcon icon={faHourglassEnd} />
+                                                    </button>
+                                                </Tooltip>
+                                            </div>
+                                        </div>
+
+                                        <div className='space-y-2'>
+                                            <div>
+                                                <label className={'font-semibold'} htmlFor="place">Place:</label>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                onChange={(e) => updateFormData({ name: 'place', value: e.target.value })}
+                                                className='p-2 rounded bg-[#262626] text-white w-full'
+                                                defaultValue={form.place}
+                                                id='place'
+                                                required
+                                            />
+                                        </div>
+                                
+                                        <div className='space-y-2'>
+                                            <div>
+                                                <label className={'font-semibold'} htmlFor="country">Select a country:</label>
+                                            </div>
+                                            <select
+                                                id="country"
+                                                onChange={(e) => updateFormData({ name: 'country', value: e.target.value })}
+                                                value={form.country}
+                                                className="p-2 bg-[#262626] text-white rounded w-full"
+                                                required
+                                            >
+                                                {countries?.map((country) => (
+                                                    <option key={country.short_name} value={country.long_name}>{country.long_name}</option>
+                                                ))}
+                                            </select>
+                                        </div>
                                     </div>
-                                    <input
-                                        type="text"
-                                        onChange={(e) => updateFormData({ name: 'vid', value: e.target.value })}
-                                        defaultValue={form.vid}
-                                        className='p-2 rounded bg-[#262626] text-white w-full'
-                                        id='vid'
-                                        required
-                                    />
-                                </div>
-                                <div className='space-y-2'>
-                                    <div>
-                                        <label className={'font-semibold'} htmlFor="seekto">Seek the video to:</label>
+
+                                    {/* Youtube Iframe */}
+                                    <div className={'w-[50%] pt-[10px] overflow-hidden rounded-lg'}>
+                                        {form.vid == '' && (
+                                            <div className={'w-full rounded-lg h-[288px] bg-black flex justify-center items-center'}>
+                                                <div className="custom-loader"></div>
+                                            </div>
+                                        )}
+                                        <YouTube
+                                            iframeClassName={`w-full rounded-lg h-[288px] ${form.vid == '' && 'hidden'}`}
+                                            opts={{
+                                                playerVars: {
+                                                    autoplay: 0
+                                                },
+                                            }}
+                                            onReady={onReady}
+                                            onError={onError}
+                                            onStateChange={onStateChange}
+                                            videoId={form.vid}
+                                        />
                                     </div>
-                                    <input
-                                        type="number"
-                                        onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.valueAsNumber })}
-                                        className='p-2 rounded bg-[#262626] text-white w-full'
-                                        defaultValue={form.seekTo}
-                                        min={1}
-                                        id='seekto'
-                                        required
-                                    />
                                 </div>
 
-                                <div className='space-y-2'>
-                                    <div>
-                                        <label className={'font-semibold'} htmlFor="place">Place:</label>
-                                    </div>
-                                    <input
-                                        type="text"
-                                        onChange={(e) => updateFormData({ name: 'place', value: e.target.value })}
-                                        className='p-2 rounded bg-[#262626] text-white w-full'
-                                        defaultValue={form.place}
-                                        id='place'
-                                        required
-                                    />
-                                </div>
-                                <div className='space-y-2'>
-                                    <div>
-                                        <label className={'font-semibold'} htmlFor="country">Select a country:</label>
-                                    </div>
-                                    <select
-                                        id="country"
-                                        onChange={(e) => updateFormData({ name: 'country', value: e.target.value })}
-                                        value={form.country}
-                                        className="p-2 bg-[#262626] text-white rounded w-full"
-                                        required
-                                    >
-                                        {countries?.map((country) => (
-                                            <option key={country.short_name} value={country.long_name}>{country.long_name}</option>
-                                        ))}
-                                    </select>
-                                </div>
                                 <div className='space-y-2'>
                                     <div>
                                         <label className={'font-semibold'} htmlFor="weather">Weather:</label>
@@ -221,7 +369,6 @@ export default function newVideo({ countries }: IVideo) {
                                         <option value={'weather-snow-'}>Snowing</option>
                                     </select>
                                 </div>
-
 
                                 <div className='space-y-2'>
                                     <div>

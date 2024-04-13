@@ -97,12 +97,12 @@ VALUES (?, ?);
 `;
 
 const createNewVideo = `
-INSERT INTO videos (vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO videos (vid, country, place, weather, type, continent, seekTo, verified, latitude, longitude, endsat)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 `;
 
 const createNewCountry = `
-INSERT INTO videos (short_name, long_name, border_color, continent)
+INSERT INTO countries (short_name, long_name, border_color, continent)
 VALUES (?, ?, ?, ?);
 `;
 
@@ -124,7 +124,7 @@ SELECT * FROM videos WHERE verified = 1 AND hide = 0
 `;
 
 const getAllVerifiedVideosForProduction = `
-SELECT id, vid, country, place, weather, type, continent, seekTo, latitude, longitude FROM videos WHERE verified = 1 AND hide = 0
+SELECT id, vid, country, place, weather, type, continent, seekTo, endsat, latitude, longitude FROM videos WHERE verified = 1 AND hide = 0
 `;
 
 const getVideoById = `

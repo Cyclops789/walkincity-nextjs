@@ -87,7 +87,7 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                 setEnded(!ended);
                 break;
             case 1: // playing - enable in production
-                setPlaying(false);
+                setPlaying(true);
                 break;
             case 2: // paused
                 setPlaying(false);
@@ -124,12 +124,20 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
     useEffect(() => {
         if (ytPlayer.current) {
             if (volume == '-1') {
-                ytPlayer.current.mute();
+                try {
+                    ytPlayer.current.mute();
+                } catch (error) {
+                    console.error('There was an error trying to Mute the player', error);
+                }
             }
 
             if (volume != '0') {
-                ytPlayer.current.unMute();
-                ytPlayer.current.setVolume(parseInt(volume));
+                try {
+                    ytPlayer.current.unMute();
+                    ytPlayer.current.setVolume(parseInt(volume));   
+                } catch (error) {
+                    console.error('There was an error trying to unMute or change the volume of the player', error);
+                }
             }
         }
     }, [volume, ytPlayer.current])
@@ -146,7 +154,6 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                 {!playing && (
                     <div className={`w-full h-full bg-black flex justify-center items-center`}>
                         <div className="custom-loader">
-
                         </div>
                     </div>
                 )}
@@ -163,9 +170,11 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                             'web-share': 1,
                             controls: 0,
                             start: currentVideo?.seekTo || 1,
+                            end: currentVideo?.endsat || '',
                             origin: originURL
                         },
                     }}
+
                     videoId={currentVideo?.vid}
                     onStateChange={onStateChange}
                     onError={onError}
