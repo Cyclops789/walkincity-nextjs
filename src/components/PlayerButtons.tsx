@@ -36,10 +36,10 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
 
     const toggleFullScreen = (elem: any) => {
         const doc = document as unknown as any;
-        
+
         if ((doc.fullScreenElement !== undefined && doc.fullScreenElement === null) ||
-            (doc.msFullscreenElement !== undefined && doc.msFullscreenElement === null) || 
-            (doc.mozFullScreen !== undefined && !doc.mozFullScreen) || 
+            (doc.msFullscreenElement !== undefined && doc.msFullscreenElement === null) ||
+            (doc.mozFullScreen !== undefined && !doc.mozFullScreen) ||
             (doc.webkitIsFullScreen !== undefined && !doc.webkitIsFullScreen)
         ) {
             try {
@@ -52,7 +52,7 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
                 } else if (elem.msRequestFullscreen) {
                     elem.msRequestFullscreen();
                 }
-                setFullScreen(true);  
+                setFullScreen(true);
             } catch (error) {
                 console.error('There was an error requesting requestFullscreen: ', error);
             }
@@ -67,7 +67,7 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
                 } else if (doc.msExitFullscreen) {
                     doc.msExitFullscreen();
                 }
-                setFullScreen(false);   
+                setFullScreen(false);
             } catch (error) {
                 console.error('There was an error requesting cancelFullscreen: ', error);
             }
@@ -80,7 +80,7 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
 
     const copyToClipBoard = () => {
         navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_URL}/?v=${currentVideo?.id}&c=${currentCountry?.id}`);
-        
+
         setCopyContent('Copied!');
         setTimeout(() => {
             setCopyContent('Click to copy the link');
@@ -92,7 +92,7 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
     }
 
     const changeUserSetting = (key: string, value: any) => {
-        if(window !== undefined) {
+        if (window !== undefined) {
             localStorage.setItem(key, `${value}`);
         }
     }
@@ -101,8 +101,8 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
         const reactions = localStorage.getItem('reactions') == 'false' ? false : true;
         const viewers = localStorage.getItem('viewers') == 'false' ? false : true;
 
-        setReactionsShow(reactions)
-        setViewersShow(viewers)
+        setReactionsShow(reactions);
+        setViewersShow(viewers);
     }, []);
 
     useClickOutside(volumeRef, () => setOpenVolume(false), volumeInputRef);
@@ -127,7 +127,7 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
                         type="range"
                         className={`${!openVolume && 'hidden'} w-[170px] mr-6`}
                     />
-                </div>             
+                </div>
             </Tooltip>
 
             <Tooltip className={'bg-white text-black'} content="Random video" placement="left">
@@ -151,7 +151,7 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
                     )}
                 </div>
             </Tooltip>
-            
+
             <Tooltip className={'bg-white text-black'} content={copyContent} placement="left">
                 <div onClick={copyToClipBoard} className='fixed top-[250px] right-3 cursor-pointer text-white border border-white hover:bg-white hover:border-black hover:text-black w-9 h-9 flex rounded-full items-center justify-center'>
                     <FontAwesomeIcon className='w-[20px]' icon={faShare} />
@@ -172,8 +172,8 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
 
             <div ref={settingsRef} className={`${openSetting ? 'fixed' : 'hidden'} top-[380px] right-[50px] bg-white rounded w-[200px] z-[9999]`}>
                 <div className={'p-3'}>
-                    <div className='flex justify-between'>Reactions <input type="checkbox" checked={reactionsShow} onChange={(e) => {setReactionsShow(e.target.checked); changeUserSetting('reactions', e.target.checked)}} /></div>
-                    <div className='flex justify-between'>Viewers <input type="checkbox" checked={viewersShow} onChange={(e) => {setViewersShow(e.target.checked); changeUserSetting('viewers', e.target.checked)}} /></div>
+                    <div className='flex justify-between'>Reactions <input type="checkbox" checked={reactionsShow} onChange={(e) => { setReactionsShow(e.target.checked); changeUserSetting('reactions', e.target.checked) }} /></div>
+                    <div className='flex justify-between'>Viewers <input type="checkbox" checked={viewersShow} onChange={(e) => { setViewersShow(e.target.checked); changeUserSetting('viewers', e.target.checked) }} /></div>
                 </div>
             </div>
         </>
