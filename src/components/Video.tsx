@@ -191,37 +191,4 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
     )
 }
 
-/*
-
-        <div className={`w-full h-full`}>
-            <div className='w-screen h-screen bg-black justify-center items-center flex overflow-hidden pointer-events-none'>
-                {!playing && (
-                    <div className="custom-loader"></div>
-                )}
-                <YouTube
-                    iframeClassName={`w-screen h-screen ${!playing && 'hidden'} pointer-events-none`}
-                    opts={{
-                        playerVars: {
-                            autoplay: 1,
-                            accelerometer: 1,
-                            'clipboard-write': 1,
-                            'encrypted-media': 1,
-                            gyroscope: 1,
-                            'picture-in-picture': 1,
-                            'web-share': 1,
-                            controls: 0,
-                            start: currentVideo?.seekTo || 1,
-                            origin: originURL
-                        },
-                    }}
-                    videoId={currentVideo?.vid}
-                    onStateChange={onStateChange}
-                    onError={onError}
-                    onReady={onReady}
-                    style={{ pointerEvents: 'none' }}
-                />
-            </div>
-        </div>
-*/
-
-export default video
+export default video;
