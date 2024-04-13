@@ -8,8 +8,11 @@ import { ICountryRes } from '@/components/SideBar';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
 import YouTubeVideoId from '@/helpers/youtube';
-import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
+import YouTube, { YouTubeProps, YouTubePlayer } from 'react-youtube';
 import Link from 'next/link';
+import { Tooltip } from '@material-tailwind/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHourglassStart, faHourglassEnd } from '@fortawesome/free-solid-svg-icons';
 
 interface INewVideoForm {
     vid?: string;
@@ -18,6 +21,7 @@ interface INewVideoForm {
     type?: string;
     weather?: string;
     seekTo?: number;
+    endsat?: number;
     email?: string;
 }
 
@@ -26,6 +30,7 @@ const Layout = dynamic(import('@/components/Layouts/Main')),
 
 export default function request({ countries }: { countries: ICountryRes[] }) {
     const ref = useRef<any>(null);
+    const playerRef = useRef<YouTubePlayer>(null);
     const [form, setForm] = useState<INewVideoForm>();
     const [tested, setTested] = useState('');
     const [videoError, setVideoError] = useState('');
@@ -51,7 +56,9 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
             form.weather === '' ||
             form.email === '' ||
             form.seekTo === undefined ||
-            form.seekTo === null
+            form.seekTo === null || 
+            form.endsat === undefined || 
+            form.endsat === null
         ) return;
 
         if (YouTubeVideoId(form.vid as string) === 'invalid_url') {
@@ -67,6 +74,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
         }
 
         setSending(true);
+
         axios.post('/api/request/new', {
             token,
             vid: form.vid,
@@ -74,6 +82,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
             place: form.place,
             type: form.type,
             weather: form.weather,
+            endsat: form.endsat,
             continent: countries.filter((country) => country.long_name.toLowerCase() === form.country?.toLowerCase())[0].continent,
             seekTo: form.seekTo,
             by_email: form.email
@@ -105,6 +114,30 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
             setTested(form.vid);
         }
     }
+
+    const setTimerFromVideo = (pos: 'start' | 'end') => {
+        if(playerRef.current == null) {
+            return setNotify({ open: true, type: 'warning', text: 'Please set the video first!' });
+        } else {
+            if (playerRef.current.getPlayerState() != 2 && playerRef.current.getPlayerState() != 1) {
+                return setNotify({ open: true, type: 'warning', text: 'Please start the video first!' });
+            } else if (playerRef.current.getPlayerState() != 2) { 
+                // unstarted
+                return setNotify({ open: true, type: 'warning', text: 'Please pause the video first!' });
+            }
+
+
+            const currentTime = parseInt(playerRef.current.getCurrentTime());
+            
+            if(pos == 'start') {
+                updateFormData({ name: 'seekTo', value: currentTime });
+            }
+
+            if(pos == 'end') {
+                updateFormData({ name: 'endsat', value: currentTime });
+            }
+        }
+    }   
 
     const onReady: YouTubeProps['onReady'] = (e) => {
         setVideoState('Ready');
@@ -156,6 +189,8 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
     }
     
     const onStateChange: YouTubeProps['onStateChange'] = (e) => {
+        playerRef.current = e.target;
+
         switch (e.target.getPlayerState()) {
             case -1: // unstarted
                 setVideoState('Video is ready but unstarted, play to verfiy.')
@@ -202,6 +237,7 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
             'weather': 'weather-normal-morning',
             'type': 'walk',
             'seekTo': 0,
+            'endsat': 0
         });
     }, [])
 
@@ -315,9 +351,30 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
                             </select>
                         </div>
 
-                        <div className='space-y-2'>
-                            <label htmlFor='seekTo'>Seek the video to (in seconds) <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>When the walk starts.</span></label>
-                            <input id='seekTo' onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.valueAsNumber })} className='rounded p-2 bg-[#262626] text-white w-full' type="number" required />
+                        <div className={'flex space-x-1'}>
+                            <div className='space-y-2'>
+                                <label htmlFor='seekTo'>Start <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>When the walk starts.</span></label>
+                                <div className={'flex space-x-1'}>
+                                <input id='seekTo' value={form?.seekTo} onChange={(e) => updateFormData({ name: 'seekTo', value: e.target.valueAsNumber })} className='rounded p-2 bg-[#262626] text-white w-full' type="number" required />
+                                    <Tooltip content="Set the start time from the video" placement="top">
+                                        <button onClick={() => setTimerFromVideo('start')} type='button' className='py-[8px] px-5 text-center bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded'>
+                                            <FontAwesomeIcon icon={faHourglassStart} />
+                                        </button>
+                                    </Tooltip>
+                                </div>
+                            </div>
+
+                            <div className='space-y-2'>
+                                <label htmlFor='endsat'>End <span className='text-red-600'>*</span> <span className='font-thin text-sm mt-[-5px]'>When the walk ends.</span></label>
+                                <div className={'flex space-x-1'}>
+                                    <input id='endsat' value={form?.endsat} onChange={(e) => updateFormData({ name: 'endsat', value: e.target.valueAsNumber })} className='rounded p-2 bg-[#262626] text-white w-full' type="number" required />
+                                    <Tooltip content="Set the end time from the video" placement="top">
+                                        <button onClick={() => setTimerFromVideo('end')} type='button' className='py-[8px] px-5 text-center bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded'>
+                                            <FontAwesomeIcon icon={faHourglassEnd} />
+                                        </button>
+                                    </Tooltip>
+                                </div>
+                            </div>
                         </div>
 
                         <div className='space-y-2'>

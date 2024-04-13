@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
 import { ICountryRes } from '@/components/SideBar';
-import { useRouter } from 'next/router';
 
 export interface IVideosRes {
     id: number;
@@ -94,7 +92,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 </option>
 
                                 {countries?.map((country) => (
-                                    <option value={country.long_name}>
+                                    <option key={country.id} value={country.long_name}>
                                         {country.long_name}
                                     </option>
                                 ))}
