@@ -78,8 +78,8 @@ SELECT * FROM videos_requests WHERE by_email = ?
 `;
 
 const createNewVideosRequests = `
-INSERT INTO videos_requests (vid, country, place, weather, type, seekTo, continent, by_email)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+INSERT INTO videos_requests (vid, country, place, weather, type, seekTo, continent, by_email, endsat)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 `;
 
 const getAllRoles = `

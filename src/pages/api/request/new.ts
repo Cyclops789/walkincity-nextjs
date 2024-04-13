@@ -17,12 +17,13 @@ interface INewVideoRequest_ {
     weather: string | undefined;
     continent: string | undefined;
     seekTo: string | undefined;
+    endsat: string | undefined;
     by_email: string | undefined;
 }
 
 export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { vid, country, place, token, type, weather, continent, seekTo, by_email }: INewVideoRequest_ = _req.body
+        const { vid, country, place, token, type, weather, continent, seekTo, by_email, endsat }: INewVideoRequest_ = _req.body
 
         if (!token) {
             return res.json({
@@ -33,7 +34,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
             });
         }
 
-        if (!vid || !country || !place || !type || !weather || !continent || !seekTo || !by_email) {
+        if (!vid || !country || !place || !type || !weather || !continent || !seekTo || !by_email || !endsat) {
             return res.json({
                 success: false,
                 error: {
@@ -111,7 +112,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                     try {
                         const newRequestVideo = await executeQuery({
                             query: query.createNewVideosRequests,
-                            values: [youtube_id, country, place, weather, type, seekTo, continent, by_email],
+                            values: [youtube_id, country, place, weather, type, seekTo, continent, by_email, endsat],
                         }) as any[] | any;
 
                         const token = await generateToken({ videoID: newRequestVideo.insertId });

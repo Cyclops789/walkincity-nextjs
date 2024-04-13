@@ -42,3 +42,13 @@
   50% { transform: translateX(5px) }
   100% { transform: translateX(0) }
 }
+
+@media (min-width: 200px) and (max-width: 300px){
+  .info-images {
+    width: 50px !important;
+  }
+
+  .info-title {
+    font-size: 30px !important;
+  }
+}

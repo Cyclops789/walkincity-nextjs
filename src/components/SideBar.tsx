@@ -22,6 +22,7 @@ import { useRouter } from 'next/router';
 import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { useClickOutsideNoIgnore } from './Dashboard/useClickOutside';
+import { Tooltip } from '@material-tailwind/react';
 
 export interface ICountryRes {
     id: number;
@@ -195,144 +196,173 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
         >
             <div className='max-w-[260px]'>
                 <div className="flex flex-wrap space-x-2 space-y-2  justify-between">
-                    <div
-                        onClick={() => {
-                            if (continentFilter == 'Africa') {
-                                setContinentFilter('');
-                            } else {
-                                setContinentFilter('Africa');
-                            }
-                        }}
-                        title="Africa"
-                        className={`rounded ml-2 mt-2 px-3 py-2 cursor-pointer ${continentFilter == 'Africa' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                    >
-                        <FontAwesomeIcon
-                            size='lg'
-                            icon={faEarthAfrica}
-                        />
-                    </div>
-                    <div
-                        onClick={() => {
-                            if (continentFilter == 'Asia') {
-                                setContinentFilter('');
-                            } else {
-                                setContinentFilter('Asia');
-                            }
-                        }}
-                        title="Asia"
-                        className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Asia' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                    >
-                        <FontAwesomeIcon
-                            size='lg'
-                            icon={faEarthAsia}
-                        />
-                    </div>
-                    <div
-                        onClick={() => {
-                            if (continentFilter == 'Europe') {
-                                setContinentFilter('');
-                            } else {
-                                setContinentFilter('Europe');
-                            }
-                        }}
-                        title="Europe"
-                        className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Europe' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                    >
-                        <FontAwesomeIcon
-                            size='lg'
-                            icon={faEarthEurope}
-                        />
-                    </div>
-                    <div
-                        onClick={() => {
-                            if (continentFilter == 'Americas') {
-                                setContinentFilter('');
-                            } else {
-                                setContinentFilter('Americas');
-                            }
-                        }}
-                        title="Americas"
-                        className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Americas' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                    >
-                        <FontAwesomeIcon
-                            size='lg'
-                            icon={faEarthAmericas}
-                        />
-                    </div>
-                    <div
-                        onClick={() => {
-                            if (continentFilter == 'Oceania') {
-                                setContinentFilter('');
-                            } else {
-                                setContinentFilter('Oceania');
-                            }
-                        }}
-                        title="Oceania"
-                        className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Oceania' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                    >
-                        <FontAwesomeIcon
-                            size='lg'
-                            icon={faEarthOceania}
-                        />
-                    </div>
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Africa" placement="bottom">
+                        <div
+                            onClick={() => {
+                                if (continentFilter == 'Africa') {
+                                    setContinentFilter('');
+                                } else {
+                                    setContinentFilter('Africa');
+                                }
+                            }}
+                            title='Africa'
+                            className={`rounded ml-2 mt-2 px-3 py-2 cursor-pointer ${continentFilter == 'Africa' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                        >
+                            <FontAwesomeIcon
+                                size='lg'
+                                icon={faEarthAfrica}
+                            />
+                        </div>
+                    </Tooltip>
+
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Asia" placement="bottom">
+                        <div
+                            onClick={() => {
+                                if (continentFilter == 'Asia') {
+                                    setContinentFilter('');
+                                } else {
+                                    setContinentFilter('Asia');
+                                }
+                            }}
+                            title='Asia'
+                            className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Asia' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                        >
+                            <FontAwesomeIcon
+                                size='lg'
+                                icon={faEarthAsia}
+                            />
+                        </div>
+                    </Tooltip>
+
+
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Europe" placement="bottom">
+                        <div
+                            onClick={() => {
+                                if (continentFilter == 'Europe') {
+                                    setContinentFilter('');
+                                } else {
+                                    setContinentFilter('Europe');
+                                }
+                            }}
+                            title='Europe'
+                            className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Europe' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                        >
+                            <FontAwesomeIcon
+                                size='lg'
+                                icon={faEarthEurope}
+                            />
+                        </div>
+                    </Tooltip>
+
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Americas" placement="bottom">
+                        <div
+                            onClick={() => {
+                                if (continentFilter == 'Americas') {
+                                    setContinentFilter('');
+                                } else {
+                                    setContinentFilter('Americas');
+                                }
+                            }}
+                            title='Americas'
+                            className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Americas' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                        >
+                            <FontAwesomeIcon
+                                size='lg'
+                                icon={faEarthAmericas}
+                            />
+                        </div>
+                    </Tooltip>
+
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Oceania" placement="bottom">
+                        <div
+                            onClick={() => {
+                                if (continentFilter == 'Oceania') {
+                                    setContinentFilter('');
+                                } else {
+                                    setContinentFilter('Oceania');
+                                }
+                            }}
+                            title="Oceania"
+                            className={`rounded px-3 py-2 cursor-pointer ${continentFilter == 'Oceania' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                        >
+                            <FontAwesomeIcon
+                                size='lg'
+                                icon={faEarthOceania}
+                            />
+                        </div>
+                    </Tooltip>
                 </div>
 
                 <div className="flex flex-wrap space-x-2 space-y-2 pb-2 justify-between">
-                    <div
-                        title="Day"
-                        className={`rounded ml-2 mt-2 px-3 py-2 cursor-pointer ${weatherFilter == 'weather-normal-morning' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => { changeWeatherFilter('weather-normal-morning') }}
-                    >
-                        <FontAwesomeIcon
-                            className='w-[20px]'
-                            size='lg'
-                            icon={faSun}
-                        />
-                    </div>
-                    <div
-                        title="Night"
-                        className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-normal-night' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => { changeWeatherFilter('weather-normal-night') }}
-                    >
-                        <FontAwesomeIcon
-                            className='w-[20px]'
-                            size='lg'
-                            icon={faMoon}
-                        />
-                    </div>
-                    <div
-                        title="Raining"
-                        className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-rain-' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => { changeWeatherFilter('weather-rain-') }}
-                    >
-                        <FontAwesomeIcon
-                            className='w-[20px]'
-                            size='lg'
-                            icon={faCloudRain}
-                        />
-                    </div>
-                    <div
-                        title="Cloudy"
-                        className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-cloud-morning' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => { changeWeatherFilter('weather-cloud-morning') }}
-                    >
-                        <FontAwesomeIcon
-                            className='w-[20px]'
-                            size='lg'
-                            icon={faCloud}
-                        />
-                    </div>
-                    <div
-                        title="Snowing"
-                        className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-snow-' ? 'bg-gray-800 text-white' : 'bg-white'}`}
-                        onClick={() => { changeWeatherFilter('weather-snow-') }}
-                    >
-                        <FontAwesomeIcon
-                            className='w-[20px]'
-                            size='lg'
-                            icon={faSnowflake}
-                        />
-                    </div>
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Day" placement="bottom">
+                        <div
+                            title="Day"
+                            className={`rounded ml-2 mt-2 px-3 py-2 cursor-pointer ${weatherFilter == 'weather-normal-morning' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                            onClick={() => { changeWeatherFilter('weather-normal-morning') }}
+                        >
+                            <FontAwesomeIcon
+                                className='w-[20px]'
+                                size='lg'
+                                icon={faSun}
+                            />
+                        </div>
+                    </Tooltip>
+
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Night" placement="bottom">
+                        <div
+                            title="Night"
+                            className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-normal-night' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                            onClick={() => { changeWeatherFilter('weather-normal-night') }}
+                        >
+                            <FontAwesomeIcon
+                                className='w-[20px]'
+                                size='lg'
+                                icon={faMoon}
+                            />
+                        </div>
+                    </Tooltip>
+
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Raining" placement="bottom">
+                        <div
+                            title="Raining"
+                            className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-rain-' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                            onClick={() => { changeWeatherFilter('weather-rain-') }}
+                        >
+                            <FontAwesomeIcon
+                                className='w-[20px]'
+                                size='lg'
+                                icon={faCloudRain}
+                            />
+                        </div>
+                    </Tooltip>
+
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Cloudy" placement="bottom">
+                        <div
+                            title="Cloudy"
+                            className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-cloud-morning' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                            onClick={() => { changeWeatherFilter('weather-cloud-morning') }}
+                        >
+                            <FontAwesomeIcon
+                                className='w-[20px]'
+                                size='lg'
+                                icon={faCloud}
+                            />
+                        </div>
+                    </Tooltip>
+
+                    <Tooltip className={'border border-red-600 text-red-600'} content="Snowing" placement="bottom">
+                        <div
+                            title="Snowing"
+                            className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-snow-' ? 'bg-gray-800 text-white' : 'bg-white'}`}
+                            onClick={() => { changeWeatherFilter('weather-snow-') }}
+                        >
+                            <FontAwesomeIcon
+                                className='w-[20px]'
+                                size='lg'
+                                icon={faSnowflake}
+                            />
+                        </div>
+                    </Tooltip>
                 </div>
 
                 <form action={''} onSubmit={(e) => { e.preventDefault(); setSearch(!search) }} className='ml-2 pb-2 flex space-x-2'>
