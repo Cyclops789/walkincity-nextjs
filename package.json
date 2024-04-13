@@ -70,7 +70,6 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",
-    "react-full-screen": "^1.1.1",
     "react-globe.gl": "^2.27.2",
     "react-google-recaptcha": "^3.1.0",
     "react-html-parser": "^2.0.2",

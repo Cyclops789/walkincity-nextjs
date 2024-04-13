@@ -2,7 +2,6 @@ import React, { useState, SetStateAction, Dispatch, useEffect, useRef } from 're
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faVolumeHigh, faShuffle, faCompress, faVolumeOff, faExpand, faShare, faVolumeLow, faSliders, faInfo } from '@fortawesome/free-solid-svg-icons'
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { FullScreenHandle } from 'react-full-screen';
 import { ICountryRes, IVideosRes } from '@/components/SideBar';
 import { MutableRefObject } from 'react';
 import useClickOutside, { useClickOutsideNoIgnore } from './Dashboard/useClickOutside';
@@ -16,7 +15,6 @@ interface IPlayerButtons {
     setActionOpen: Dispatch<SetStateAction<boolean>>;
     currentVideo: IVideosRes | undefined;
     currentCountry: ICountryRes | undefined;
-    handleFullScreen: FullScreenHandle;
     setCurrentCountry: Dispatch<SetStateAction<ICountryRes | undefined>>;
     setCurrentVideo: Dispatch<SetStateAction<IVideosRes | undefined>>;
     setVolume: Dispatch<SetStateAction<string>>;
@@ -26,7 +24,7 @@ interface IPlayerButtons {
     viewersShow: boolean;
 }
 
-function PlayerButtons({ handleFullScreen, currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef, reactionsShow, setReactionsShow, viewersShow, setViewersShow }: IPlayerButtons) {
+function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef, reactionsShow, setReactionsShow, viewersShow, setViewersShow }: IPlayerButtons) {
     const [fullScreen, setFullScreen] = useState(false);
     const [openVolume, setOpenVolume] = useState<boolean | undefined>();
     const [openSetting, setOpenSetting] = useState(false);
@@ -36,15 +34,43 @@ function PlayerButtons({ handleFullScreen, currentCountry, currentVideo, setVolu
     const settingsRef = useRef(null);
     const settingsRefButton = useRef(null);
 
-    const toggleFullScreen = () => {
-        if (handleFullScreen.active) {
-            handleFullScreen.exit().finally(() => {
-                setFullScreen(false);
-            })
+    const toggleFullScreen = (elem: any) => {
+        const doc = document as unknown as any;
+        
+        if ((doc.fullScreenElement !== undefined && doc.fullScreenElement === null) ||
+            (doc.msFullscreenElement !== undefined && doc.msFullscreenElement === null) || 
+            (doc.mozFullScreen !== undefined && !doc.mozFullScreen) || 
+            (doc.webkitIsFullScreen !== undefined && !doc.webkitIsFullScreen)
+        ) {
+            try {
+                if (elem.requestFullScreen) {
+                    elem.requestFullScreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullScreen) {
+                    elem.webkitRequestFullScreen((Element as any).ALLOW_KEYBOARD_INPUT);
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+                setFullScreen(true);  
+            } catch (error) {
+                console.error('There was an error requesting requestFullscreen: ', error);
+            }
         } else {
-            handleFullScreen.enter().finally(() => {
-                setFullScreen(true);
-            })
+            try {
+                if (doc.cancelFullScreen) {
+                    doc.cancelFullScreen();
+                } else if (doc.mozCancelFullScreen) {
+                    doc.mozCancelFullScreen();
+                } else if (doc.webkitCancelFullScreen) {
+                    doc.webkitCancelFullScreen();
+                } else if (doc.msExitFullscreen) {
+                    doc.msExitFullscreen();
+                }
+                setFullScreen(false);   
+            } catch (error) {
+                console.error('There was an error requesting cancelFullscreen: ', error);
+            }
         }
     }
 
@@ -117,7 +143,7 @@ function PlayerButtons({ handleFullScreen, currentCountry, currentVideo, setVolu
             </Tooltip>
 
             <Tooltip className={'bg-white text-black'} content="Toggle full-screen" placement="left">
-                <div onClick={toggleFullScreen} className='fixed top-[200px] right-3 cursor-pointer text-white border border-white hover:bg-white hover:border-black hover:text-black w-9 h-9 flex rounded-full items-center justify-center'>
+                <div onClick={() => toggleFullScreen(document.body)} className='fixed top-[200px] right-3 cursor-pointer text-white border border-white hover:bg-white hover:border-black hover:text-black w-9 h-9 flex rounded-full items-center justify-center'>
                     {fullScreen ? (
                         <FontAwesomeIcon className='w-[20px]' icon={faCompress} />
                     ) : (
