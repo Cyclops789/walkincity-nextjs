@@ -1,6 +1,6 @@
 import executeQuery from '@/lib/db';
 import query from '@/utils/db';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface INewVideoRequest_ {

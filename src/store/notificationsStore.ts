@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 
 export interface INotification {
     id: number;

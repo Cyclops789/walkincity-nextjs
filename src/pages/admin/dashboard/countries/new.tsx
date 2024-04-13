@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import query from '@/utils/db';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 
 export interface IContinentsRes {
     id: number;

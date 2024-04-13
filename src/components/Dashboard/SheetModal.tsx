@@ -3,7 +3,7 @@ import React from 'react'
 import { CurrentEditVideo } from '@/pages/admin/dashboard/requests';
 import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
 import { ICountryRes } from '../SideBar';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import dynamic from 'next/dynamic';
 import { INotificationType } from '../Notification';
 import { refreshRouteSilenced } from '@/helpers/routes';
