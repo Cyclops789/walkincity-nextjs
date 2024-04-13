@@ -38,7 +38,7 @@ type LayoutProps = {
 
 const ParentComponent = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className={'p-3 h-auto'}>
+    <div className={'p-3'}>
       {children}
     </div>
   )
@@ -143,7 +143,7 @@ export default function Layout({
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       {user && (
-        <div className={`flex h-screen w-screen text-white ${className}`}>
+        <div className={`flex w-screen text-white ${className}`}>
           {/* SideBar */}
           <section
             style={{
@@ -174,7 +174,7 @@ export default function Layout({
               <Link
                 href={'/admin/dashboard'}
                 key={'Dashboard'}
-                className={`${'/admin/dashboard' === router.pathname ? "bg-[#1a1919]" : "bg-[#262626] hover:bg-[#1a1919]"} h-10 py-2 px-5 flex space-x-3  items-center rounded-lg ${sideBarOpen === "0" && "justify-center"}`}
+                className={`border-l-[4px] ${'/admin/dashboard' === router.pathname ? "bg-[#1a1919] border-[var(--primary-text-color)]" : "bg-[#262626] hover:bg-[#1a1919] border-transparent"} h-10 py-2 px-5 flex space-x-3  items-center rounded-lg ${sideBarOpen === "0" && "justify-center"}`}
               >
                 <FontAwesomeIcon className='w-[20px]' icon={faChartLine} />
                 {sideBarOpen === "1" && (
@@ -206,7 +206,7 @@ export default function Layout({
           </section>
           {/* Content */}
 
-          <section className={`w-[100%] h-full overflow-auto bg-[hsl(0,0%,8%)]`}>
+          <section className={`w-[100%] overflow-auto bg-[hsl(0,0%,8%)]`}>
             <div className='w-full h-[50px] flex justify-between bg-[hsl(0,0%,22%)]'>
               <div className={'flex justify-start'}>
                 <div className={'px-2 py-1'}>
