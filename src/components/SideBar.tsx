@@ -49,12 +49,15 @@ export interface IVideosRes {
 
 interface ISideBar {
     countries: ICountryRes[];
+    cn: string | undefined;
     setCurrentCountry: Dispatch<SetStateAction<ICountryRes | undefined>>;
     currentCountry: ICountryRes | undefined;
     currentVideo: IVideosRes | undefined;
     setCurrentVideo: Dispatch<SetStateAction<IVideosRes | undefined>>;
     ended: boolean;
     setEnded: Dispatch<SetStateAction<boolean>>;
+    setSideBarOpen: Dispatch<SetStateAction<boolean>>;
+    sideBarOpen: boolean;
 }
 
 interface IUserCountSideBar {
@@ -62,10 +65,9 @@ interface IUserCountSideBar {
     connectors: string;
 }
 
-function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, setCurrentCountry, currentCountry }: ISideBar) {
+function sideBar({ cn, countries, currentVideo, setCurrentVideo, ended, setEnded, setCurrentCountry, currentCountry, setSideBarOpen, sideBarOpen }: ISideBar) {
     const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
     const [connectors, setConnectors] = useState<IUserCountSideBar[]>();
-    const [open, setOpen] = useState(false);
     const [weatherFilter, setWeatherFilter] = useState('');
     const [countryFilter, setCountryFilter] = useState('');
     const [continentFilter, setContinentFilter] = useState('');
@@ -169,11 +171,18 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
     }, [weatherFilter]);
 
     useEffect(() => {
+        if (cn) {
+            setSearch(!search);
+            setCountryFilter(cn);
+        }
+    }, [cn])
+
+    useEffect(() => {
         fetch("/api/socket/io").finally(() => {
             socketRef.current = io();
 
             socketRef.current.on(`usersCount`, (usersCount: IUserCountSideBar[]) => {
-                setConnectors(usersCount)
+                setConnectors(usersCount);
             });
 
             return () => {
@@ -182,16 +191,16 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
         })
     }, []);
 
-    useClickOutsideNoIgnore(wrapperRef, () => setOpen(false));
+    useClickOutsideNoIgnore(wrapperRef, () => setSideBarOpen(false));
 
     return (
         <div
             ref={wrapperRef}
-            className={`fixed ${open ? 'bg-[rgba(0,0,0,.7)] overflow-auto' : ''} h-screen max-w-[320px] w-[320px] flex`}
+            className={`fixed ${sideBarOpen ? 'bg-[rgba(0,0,0,.7)] overflow-auto' : ''} h-screen max-w-[320px] w-[320px] flex`}
             style={{
                 transition: 'all 0.7s ease',
                 zIndex: 10,
-                transform: open ? 'translate(0)' : 'translate(-83%)',
+                transform: sideBarOpen ? 'translate(0)' : 'translate(-83%)',
             }}
         >
             <div className='max-w-[260px]'>
@@ -447,7 +456,7 @@ function sideBar({ countries, currentVideo, setCurrentVideo, ended, setEnded, se
             </div>
             <div className='flex justify-center w-[60px]'>
                 <div className={`text-white mt-3`}>
-                    <FontAwesomeIcon className='cursor-pointer' size={"2x"} icon={faBars} onClick={() => setOpen(!open)} />
+                    <FontAwesomeIcon className='cursor-pointer' size={"2x"} icon={faBars} onClick={() => setSideBarOpen(!sideBarOpen)} />
                 </div>
             </div>
         </div>
