@@ -71,7 +71,7 @@ function info() {
     return (
         <Layout title={'WalkIn City | Info'}>
             <div className={'h-screen w-screen text-white bg-white overflow-auto'}>
-                <div className={`bg-black border-2 border-red-500 w-[calc(100vw-30px)] m-3 min-h-[calc((100vh-47px)/3)] rounded-lg`}>
+                <div className={`bg-black w-[calc(100vw-30px)] m-3 min-h-[calc((100vh-47px)/3)] rounded-lg`}>
                     <div className={'p-3'}>
                         <div className={'text-[40px] font-extrabold text-red-500 underline mb-1 info-title'}>Technologies</div>
                         <div className={'text-[20px] grid grid-cols-[repeat(3,max-content)] sm:grid-cols-[repeat(5,max-content)] gap-2 h-full w-full'}>
@@ -94,7 +94,7 @@ function info() {
                     </div>
                 </div>
 
-                <div className={`bg-black border-2 border-red-500 w-[calc(100vw-30px)] m-3 min-h-[calc((100vh-47px)/3)] rounded-lg`}>
+                <div className={`bg-black w-[calc(100vw-30px)] m-3 min-h-[calc((100vh-47px)/3)] rounded-lg`}>
                     <div className={'p-3'}>
                         <div className={'text-[40px] font-extrabold text-red-500 underline info-title'}>Contacts</div>
                         <div className={'text-[20px] sm:text-[30px] md:text-[25px]'}>
@@ -114,7 +114,7 @@ function info() {
                     </div>
                 </div>
 
-                <div className={`bg-black border-2 border-red-500 w-[calc(100vw-30px)] m-3 min-h-[calc((100vh-47px)/3)] rounded-lg`}>
+                <div className={`bg-black w-[calc(100vw-30px)] m-3 min-h-[calc((100vh-47px)/3)] rounded-lg`}>
                     <div className={'p-3'}>
                         <div className={'text-[40px] font-extrabold text-red-500 underline info-title'}>Disclaimer</div>
                         <div className={'text-[20px] sm:text-[30px] md:text-[25px]'}>
@@ -123,7 +123,7 @@ function info() {
                     </div>
                 </div>
 
-                <div className={`bg-black border-2 border-red-500 w-[calc(100vw-30px)] m-3 min-h-[calc((100vh-47px)/3)] rounded-lg`}>
+                <div className={`bg-black w-[calc(100vw-30px)] m-3 min-h-[calc((100vh-47px)/3)] rounded-lg`}>
                     <div className={'p-3'}>
                         <div className={'text-[40px] font-extrabold text-red-500 underline info-title'}>About Me</div>
                         <div className={'text-[20px] sm:text-[30px] md:text-[25px]'}>
