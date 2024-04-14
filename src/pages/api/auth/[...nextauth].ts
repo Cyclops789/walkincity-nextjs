@@ -5,7 +5,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { NextApiRequest, NextApiResponse } from "next";
 import type { NextAuthOptions } from 'next-auth';
 import { verifyHash } from "@/lib/password";
-import axios from "axios";
+import { http as axios } from '@/helpers/http';
 
 interface IUserReturns {
     id: number;

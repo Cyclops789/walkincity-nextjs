@@ -7,7 +7,7 @@ import { IPermissionsReturns } from '@/pages/admin/dashboard/roles';
 import { GetServerSideProps } from 'next';
 import { INotificationType } from '@/components/Dashboard/Notification';
 import permissions from '@/helpers/permissions';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import Select from 'react-select'
 
 const Layout = dynamic(import('@/components/Layouts/Dashboard')),

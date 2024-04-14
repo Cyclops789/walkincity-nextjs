@@ -3,7 +3,7 @@ import Router, { useRouter } from 'next/router'
 import dynamic from 'next/dynamic';
 import { GetServerSideProps } from 'next';
 import { INotificationType } from '@/components/Dashboard/Notification';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import query from '@/utils/db';
 

@@ -1,6 +1,6 @@
 import executeQuery from '@/lib/db';
 import query from '@/utils/db';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import { NextApiRequest, NextApiResponse } from 'next';
 import YouTubeVideoId from '@/helpers/youtube';
 import { generateToken } from '@/lib/token';

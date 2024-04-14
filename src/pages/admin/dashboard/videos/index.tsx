@@ -5,7 +5,7 @@ import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
 import { ICountryRes } from '@/components/SideBar';
-import axios from 'axios'
+import { http as axios } from '@/helpers/http';
 import { useRouter } from 'next/router';
 import { refreshRouteSilenced } from '@/helpers/routes';
 

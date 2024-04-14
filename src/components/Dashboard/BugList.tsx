@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import dynamic from 'next/dynamic';
 import { useDrop } from 'react-dnd';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import { refreshRouteSilenced } from '@/helpers/routes';
 import { useRouter } from 'next/router';
 
