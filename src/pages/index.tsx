@@ -25,6 +25,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
   const [currentCountry, setCurrentCountry] = useState<ICountryRes>();
   const [reactionsShow, setReactionsShow] = useState(false);
   const [viewersShow, setViewersShow] = useState(false);
+  const [sideBarOpen, setSideBarOpen] = useState(false);
   const [connectors, setConnectors] = useState('0');
   const [playing, setPlaying] = useState(false);
   const [title, setTitle] = useState('Some, Where');
@@ -44,6 +45,9 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
 
       <div className="flex">
         <SideBar
+          cn={cn}
+          sideBarOpen={sideBarOpen}
+          setSideBarOpen={setSideBarOpen}
           ended={ended}
           setEnded={setEnded}
           currentCountry={currentCountry}
@@ -60,6 +64,8 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
           volume={volume}
           countries={countries}
           ended={ended}
+          sideBarOpen={sideBarOpen}
+          setSideBarOpen={setSideBarOpen}
           setEnded={setEnded}
           setCurrentCountry={setCurrentCountry}
           currentCountry={currentCountry}

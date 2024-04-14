@@ -19,9 +19,11 @@ export interface IVideoComponent {
     currentVideo: IVideosRes | undefined;
     ended: boolean;
     setEnded: Dispatch<SetStateAction<boolean>>;
+    setSideBarOpen: Dispatch<SetStateAction<boolean>>;
+    sideBarOpen: boolean;
 }
 
-function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo, setCurrentCountry, currentCountry, countries, c, volume, setEnded, ended, cn }: IVideoComponent) {
+function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo, setCurrentCountry, currentCountry, countries, c, volume, setEnded, ended, cn, setSideBarOpen, sideBarOpen }: IVideoComponent) {
     const [originURL, setOriginURL] = useState('');
     const ytPlayer = useRef<YouTubePlayer | null>(null);
 
@@ -105,18 +107,22 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
     useEffect(() => {
         let foundCountry: ICountryRes[];
 
-        if (cn) {
-            foundCountry = countries.filter((country) => (country.long_name.toLowerCase() == cn.toLowerCase()))
+        if((cn || c) && !v) {
+            setSideBarOpen(true);
         } else {
-            foundCountry = countries.filter((country) => (country.id == c))
-        }
-
-        if (foundCountry.length >= 1) {
-            const foundVideo = foundCountry[0].videos.filter((video) => (video.id == v))
-
-            if (foundVideo.length >= 1) {
-                setCurrentCountry(foundCountry[0]);
-                setCurrentVideo(foundVideo[0]);
+            if (cn) {
+                foundCountry = countries.filter((country) => (country.long_name.toLowerCase() == cn.toLowerCase()))
+            } else {
+                foundCountry = countries.filter((country) => (country.id == c))
+            }
+    
+            if (foundCountry.length >= 1) {
+                const foundVideo = foundCountry[0].videos.filter((video) => (video.id == v))
+    
+                if (foundVideo.length >= 1) {
+                    setCurrentCountry(foundCountry[0]);
+                    setCurrentVideo(foundVideo[0]);
+                }
             }
         }
     }, [c, v, cn]);
@@ -174,7 +180,6 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                             origin: originURL
                         },
                     }}
-
                     videoId={currentVideo?.vid}
                     onStateChange={onStateChange}
                     onError={onError}

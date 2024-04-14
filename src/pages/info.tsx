@@ -34,38 +34,7 @@ function info() {
         },
     ];
 
-    const pageStyle: string = `
-    /* ===== Scrollbar CSS ===== */
-    /* Firefox */
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: #000000 #ffffff;
-    }
-  
-    /* Chrome, Edge, and Safari */
-    *::-webkit-scrollbar {
-      width: 16px;
-    }
-  
-    *::-webkit-scrollbar-track {
-      background: #ffffff;
-      border-radius: 5px;
-      background-color: #F80000;
-    }
-
-    *::-webkit-scrollbar-track:hover {
-        background-color: #F80000;
-    }
-      
-    *::-webkit-scrollbar-track:active {
-        background-color: #F80000;
-    }
-  
-    *::-webkit-scrollbar-thumb {
-      background-color: #000000;
-      border-radius: 10px;
-      border: 8px none #ffffff;
-    }
+    const pageStyle: string = `*{scrollbar-width: thin;scrollbar-color:#000000 #ffffff;} *::-webkit-scrollbar {width:16px;} *::-webkit-scrollbar-track{background:#ffffff;border-radius:5px;background-color:#F80000;} *::-webkit-scrollbar-track:hover{background-color:#F80000;} *::-webkit-scrollbar-track:active{background-color:#F80000;} *::-webkit-scrollbar-thumb{background-color:#000000;border-radius:10px;border: 8px none #ffffff;}
     `;
 
     return (
