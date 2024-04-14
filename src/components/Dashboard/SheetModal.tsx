@@ -124,6 +124,8 @@ export default function SheetModal({
         setFormData((prevData) => ({ ...prevData, [name]: value }))
     }
 
+
+
     useEffect(() => {
         setFormData({
             id: currentEditVideo?.video?.id || 0,
@@ -164,7 +166,7 @@ export default function SheetModal({
                         <div className={"p-3"}>
                             <div className='pt-[40px] pb-4 space-y-2'>
                                 <div className='bg-black sm:w-[395px] sm:h-[226px] justify-center items-center flex rounded-md overflow-hidden'>
-                                    {!validVideo || !currentEditVideo?.video?.vid && (
+                                    {!currentEditVideo?.video?.vid && (
                                         <div className="custom-loader"></div>
                                     )}
 
