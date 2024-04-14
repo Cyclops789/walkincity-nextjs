@@ -76,6 +76,7 @@
     "react-no-ssr": "^1.1.0",
     "react-select": "^5.8.0",
     "react-youtube": "https://pkg.csb.dev/tjallingt/react-youtube/commit/1783f91e/react-youtube",
+    "sass": "^1.75.0",
     "serverless-mysql": "^1.5.5",
     "sha256": "^0.2.0",
     "sharp": "^0.33.2",
