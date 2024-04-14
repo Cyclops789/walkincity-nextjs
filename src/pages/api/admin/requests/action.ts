@@ -12,15 +12,15 @@ interface IRequestVideo {
     country?: string;
     place?: string;
     weather?: string;
-    seekTo?: string | number;
-
+    seekTo?: string;
+    endsat?: string;
     reason?: string;
 }
 
 
 export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { id, action, country, place, weather, seekTo, reason }: IRequestVideo = _req.body
+        const { id, action, country, place, weather, seekTo, reason, endsat }: IRequestVideo = _req.body
 
         if (!id || !action) {
             return res.json({
@@ -98,6 +98,7 @@ export default async function POST(_req: NextApiRequest, res: NextApiResponse) {
                         requestedVideo[0].type,
                         requestedVideo[0].continent,
                         seekTo ? seekTo : requestedVideo[0].seekTo,
+                        endsat ? endsat : requestedVideo[0].endsat,
                         1
                     ],
                 }) as any[] | any;
