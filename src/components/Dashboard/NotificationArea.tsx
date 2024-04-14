@@ -4,7 +4,7 @@ import { faCheck, faBell } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from "@material-tailwind/react";
 import { INotification, useNotificationsStore } from '@/store/notificationsStore';
 import Link from 'next/link';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import { refreshRouteSilenced } from '@/helpers/routes';
 import { useRouter } from 'next/router';
 

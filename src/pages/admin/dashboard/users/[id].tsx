@@ -6,7 +6,7 @@ import { executeQueryReturnsJSON } from '@/lib/db';
 import { IUserReturns, IRoleReturns } from '@/pages/admin/dashboard/users';
 import { GetServerSideProps } from 'next';
 import { INotificationType } from '@/components/Dashboard/Notification';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 
 const Layout = dynamic(import('@/components/Layouts/Dashboard')),
     Notification = dynamic(import('@/components/Dashboard/Notification'));

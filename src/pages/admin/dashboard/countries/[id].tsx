@@ -5,7 +5,7 @@ import query from '@/utils/db';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
 import colorNames from 'colornames';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 
 interface ICountry {
     id: number;

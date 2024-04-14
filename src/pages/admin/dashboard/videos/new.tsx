@@ -6,7 +6,7 @@ import { executeQueryReturnsJSON } from '@/lib/db';
 import { IVideosRes } from '@/pages/admin/dashboard/videos';
 import { ICountryRes } from '@/components/SideBar';
 import { GetServerSideProps } from 'next';
-import axios from 'axios';
+import { http as axios } from '@/helpers/http';
 import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHourglassEnd, faHourglassStart } from '@fortawesome/free-solid-svg-icons';
