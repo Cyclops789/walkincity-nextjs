@@ -142,7 +142,7 @@ export default function newVideo({ countries }: IVideo) {
             form.verified == '' ||
             !form.latitude || form.latitude === 0 ||
             !form.longitude || form.longitude === 0
-        ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });;
+        ) return setNotify({ open: true, type: 'warning', text: 'All fields are required, rejecting!' });
 
         setModalData({
             open: true,

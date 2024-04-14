@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
@@ -15,6 +15,7 @@ export interface IVideosRes {
     weather: string;
     continent: string;
     seekTo: string;
+    endsat: string;
     by_email: string;
 }
 
@@ -29,10 +30,11 @@ const Layout = dynamic(import('@/components/Layouts/Dashboard')),
     SheetModal = dynamic(import('@/components/Dashboard/SheetModal'));
 
 export default function videos({ videos, countries }: { videos: IVideosRes[], countries: ICountryRes[] }) {
+    const checkButtonRef = useRef(null);
     const [modal, setModalData] = useState<any>();
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
-    const [currentEditVideo, setCurrentEditVideo] = useState<CurrentEditVideo>();
+    const [currentEditVideo, setCurrentEditVideo] = useState<CurrentEditVideo | null | undefined>();
     const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
     const [filteredVideos, setFilteredVideos] = useState<IVideosRes[]>([]);
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -72,9 +74,9 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
             />
 
             <SheetModal 
+                checkButtonRef={checkButtonRef}
                 countries={countries} 
                 currentEditVideo={currentEditVideo} 
-                /* @ts-ignore */
                 setCurrentEditVideo={setCurrentEditVideo}
             />
 
@@ -162,6 +164,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 </td>
                                 <td className="px-6 py-4 space-x-2">
                                     <div
+                                        ref={checkButtonRef}
                                         onClick={() => setCurrentEditVideo({
                                             video,
                                             open: true
