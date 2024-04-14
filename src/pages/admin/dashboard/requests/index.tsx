@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { executeQueryReturnsJSON } from '@/lib/db';
 import { GetServerSideProps } from 'next';
 import query from '@/utils/db';
-import { ICountryRes } from '@/components/SideBar';
+import { ICountryRes } from '@/components/SideBar';import { useRouter } from 'next/router';
 
 export interface IVideosRes {
     id: number;
@@ -31,6 +31,9 @@ const Layout = dynamic(import('@/components/Layouts/Dashboard')),
 
 export default function videos({ videos, countries }: { videos: IVideosRes[], countries: ICountryRes[] }) {
     const checkButtonRef = useRef(null);
+    const router = useRouter();
+    const { query } = router;
+    const id = query.id as string | undefined;
     const [modal, setModalData] = useState<any>();
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -65,6 +68,18 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
     const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCountry(event.target.value || null);
     };
+
+    useEffect(() => {
+        if(id) {
+            const foundVideo = videos.filter((video) => video.id === parseInt(id))?.[0];
+            if(foundVideo) {
+                setCurrentEditVideo({
+                    video: foundVideo,
+                    open: true
+                });
+            }
+        }
+    }, [id]);
 
     return (
         <Layout title={'Videos'}>
@@ -169,9 +184,10 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                             video,
                                             open: true
                                         })}
-                                        className={'bg-[#d50c2d46] text-center items-center justify-center rounded border border-[var(--primary-text-color)] w-full cursor-pointer'}
+                                        draggable
+                                        className={'bg-[#d50c2d46] text-center items-center justify-center rounded border border-[var(--primary-text-color)] w-[100px] cursor-pointer'}
                                     >
-                                        <span className={'font-bold text-[var(--primary-text-color)] p-2 w-full'}>
+                                        <span className={'font-bold text-[var(--primary-text-color)] p-2 w-[100px]'}>
                                             Check
                                         </span>
                                     </div>
