@@ -1,2 +1,5 @@
-node_modules
 .next
+
+node_modules/*
+# Save it because we need it
+!node_modules/react-youtube/

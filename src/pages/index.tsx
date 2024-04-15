@@ -27,6 +27,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
   const [viewersShow, setViewersShow] = useState(false);
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [connectors, setConnectors] = useState('0');
+  const [playerVolume, setPlayerVolume] = useState('');
   const [playing, setPlaying] = useState(false);
   const [title, setTitle] = useState('Some, Where');
   const [ended, setEnded] = useState(false);
@@ -55,12 +56,16 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
           currentVideo={currentVideo}
           setCurrentVideo={setCurrentVideo}
           countries={countries}
+          setPlaying={setPlaying}
+          playing={playing}
         />
 
         <Video
           v={v}
           c={c}
           cn={cn}
+          playerVolume={playerVolume}
+          setPlayerVolume={setPlayerVolume}
           volume={volume}
           countries={countries}
           ended={ended}

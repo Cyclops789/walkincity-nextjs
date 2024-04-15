@@ -7,7 +7,7 @@ import { IVideosRes } from '@/pages/admin/dashboard/videos';
 import { ICountryRes } from '@/components/SideBar';
 import { GetServerSideProps } from 'next';
 import { http as axios } from '@/helpers/http';
-import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
+import YouTube, { YouTubeProps, YouTubePlayer } from 'react-youtube';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHourglassEnd, faHourglassStart } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from '@material-tailwind/react';
@@ -338,11 +338,6 @@ export default function newVideo({ countries }: IVideo) {
                                         )}
                                         <YouTube
                                             iframeClassName={`w-full rounded-lg h-[288px] ${form.vid == '' && 'hidden'}`}
-                                            opts={{
-                                                playerVars: {
-                                                    autoplay: 0
-                                                },
-                                            }}
                                             onReady={onReady}
                                             onError={onError}
                                             onStateChange={onStateChange}
