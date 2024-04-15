@@ -87,6 +87,7 @@
     "three": "^0.162.0",
     "tinymce": "^7.0.0",
     "ts-node": "^10.9.2",
+    "usehooks-ts": "^3.1.0",
     "uuid": "^9.0.1",
     "youtube-url": "^0.5.0",
     "zustand": "^4.5.1"

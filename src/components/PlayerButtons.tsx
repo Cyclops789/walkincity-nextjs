@@ -4,8 +4,9 @@ import { faVolumeHigh, faShuffle, faCompress, faVolumeOff, faExpand, faShare, fa
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { ICountryRes, IVideosRes } from '@/components/SideBar';
 import { MutableRefObject } from 'react';
-import useClickOutside, { useClickOutsideNoIgnore } from './Dashboard/useClickOutside';
 import { Tooltip } from "@material-tailwind/react";
+import { useOnClickOutside } from 'usehooks-ts';
+import useClickOutside from '@/components/Dashboard/useClickOutside';
 
 interface IPlayerButtons {
     ended: boolean;
@@ -105,14 +106,14 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
         setViewersShow(viewers);
     }, []);
 
-    useClickOutside(volumeRef, () => setOpenVolume(false), volumeInputRef);
+    useOnClickOutside(volumeRef, () => setOpenVolume(false));
     useClickOutside(settingsRef, () => setOpenSetting(false), settingsRefButton);
 
     return (
         <>
             <Tooltip className={'bg-white text-black'} content="Volume" placement="left">
-                <div ref={volumeRef} className={`fixed top-[50px] right-3 cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black h-9 flex rounded-full items-center justify-center ${openVolume ? 'w-52 bg-white text-black border-black' : 'w-9 text-white'} transition-all duration-100 ease-in-out`}>
-                    <div onClick={() => setOpenVolume(!openVolume)} className='fixed top-[50px] right-3 w-9 h-9 z-10' />
+                <div className={`fixed top-[50px] right-3 cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black h-9 flex rounded-full items-center justify-center ${openVolume ? 'w-52 bg-white text-black border-black' : 'w-9 text-white'} transition-all duration-100 ease-in-out`}>
+                    <div ref={volumeRef} onClick={() => setOpenVolume(true)} className='fixed top-[50px] right-3 w-9 h-9 z-10' />
                     <FontAwesomeIcon
                         className={`${parseInt(volume) >= 50 ? 'w-[20px]' : parseInt(volume) >= 20 ? 'w-[15px]' : 'w-[10px]'} fixed ${parseInt(volume) >= 50 ? 'right-5' : parseInt(volume) >= 20 ? 'right-6' : 'right-7'} z-0`}
                         icon={parseInt(volume) >= 50 ? (faVolumeHigh) : parseInt(volume) >= 20 ? (faVolumeLow) : faVolumeOff}
@@ -165,13 +166,13 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
             </Tooltip>
 
             <Tooltip className={'bg-white text-black'} content="Preferences" placement="left">
-                <div ref={settingsRefButton} onClick={() => setOpenSetting(!openSetting)} className='fixed top-[350px] right-3 cursor-pointer text-white border border-white hover:bg-white hover:border-black hover:text-black w-9 h-9 flex rounded-full items-center justify-center'>
+                <div ref={settingsRefButton} onClick={() => setOpenSetting(!openSetting)} className='settings-ignore fixed top-[350px] right-3 cursor-pointer text-white border border-white hover:bg-white hover:border-black hover:text-black w-9 h-9 flex rounded-full items-center justify-center'>
                     <FontAwesomeIcon className='w-[15px]' icon={faSliders} />
                 </div>
             </Tooltip>
 
-            <div ref={settingsRef} className={`${openSetting ? 'fixed' : 'hidden'} top-[380px] right-[50px] bg-white rounded w-[200px] z-[9999]`}>
-                <div className={'p-3'}>
+            <div className={`${openSetting ? 'fixed' : 'hidden'} top-[380px] right-[50px] bg-white rounded w-[200px] z-[9999]`}>
+                <div ref={settingsRef} className={'p-3'}>
                     <div className='flex justify-between'>Reactions <input type="checkbox" checked={reactionsShow} onChange={(e) => { setReactionsShow(e.target.checked); changeUserSetting('reactions', e.target.checked) }} /></div>
                     <div className='flex justify-between'>Viewers <input type="checkbox" checked={viewersShow} onChange={(e) => { setViewersShow(e.target.checked); changeUserSetting('viewers', e.target.checked) }} /></div>
                 </div>
