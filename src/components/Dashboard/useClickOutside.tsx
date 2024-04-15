@@ -18,10 +18,6 @@ const useClickOutside = (
 ) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      console.log(`(ref.current && ignoreRef.current): `, (ref?.current), (ignoreRef?.current));
-      console.log(`!(ref.current.contains(event.target): `, !(ref?.current?.contains(event?.target)))
-      console.log(`!(ignoreRef.current.contains(event.target))`, !(ignoreRef?.current?.contains(event?.target)));
-
       if ((ref.current && ignoreRef.current) && (!ref.current.contains(event.target) && !ignoreRef.current.contains(event.target))) {
         callback();
       }

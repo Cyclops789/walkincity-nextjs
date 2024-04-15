@@ -284,11 +284,6 @@ export default function request({ countries }: { countries: ICountryRes[] }) {
                             )}
                             <YouTube
                                 iframeClassName={`w-full h-[170px] sm:w-[460px] sm:h-[226px] ${(!tested) && 'hidden'}`}
-                                opts={{
-                                    playerVars: {
-                                        autoplay: 0
-                                    },
-                                }}
                                 onReady={onReady}
                                 onError={onError}
                                 onStateChange={onStateChange}

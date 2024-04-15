@@ -1,5 +1,4 @@
 const secrets = {
-    APP_MODE: process.env.APP_MODE,
     APP_URL: process.env.APP_URL,
     
     MYSQL_HOST: process.env.MYSQL_HOST,

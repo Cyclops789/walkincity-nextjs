@@ -11,5 +11,5 @@
 - [DONE] Overlayer in global
 - [DONE] Add report bug in main page
 - [DONE] Add option for hiding reactions
-- [CURRENT] Add info page, edit able in dashboard area
-- Set seek to for all videos
+- ~~Add info page, edit able in dashboard area~~
+- [CURRENT] Set seek to for all videos

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import React from 'react'
 import { CurrentEditVideo } from '@/pages/admin/dashboard/requests';
-import YouTube, { YouTubeProps, YouTubePlayer, YouTubeEvent } from 'react-youtube';
+import YouTube, { YouTubeProps, YouTubePlayer } from 'react-youtube';
 import { ICountryRes } from '../SideBar';
 import { http as axios } from '@/helpers/http';
 import dynamic from 'next/dynamic';
@@ -172,11 +172,6 @@ export default function SheetModal({
 
                                     <YouTube
                                         iframeClassName={`sm:w-[395px] sm:h-[226px] ${(!validVideo || !currentEditVideo?.video?.vid) && 'hidden'}`}
-                                        opts={{
-                                            playerVars: {
-                                                autoplay: 0
-                                            },
-                                        }}
                                         videoId={currentEditVideo?.video?.vid}
                                         onStateChange={onStateChange}
                                     />

@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import YouTube, { YouTubeProps, YouTubePlayer } from 'react-youtube';
 import { Dispatch, SetStateAction } from 'react';
 import { IVideosRes, ICountryRes } from '@/components/SideBar';
+import useKeyPress from './useKeyClick';
 
 export interface IVideoComponent {
     v: number | undefined;
@@ -21,10 +22,13 @@ export interface IVideoComponent {
     setEnded: Dispatch<SetStateAction<boolean>>;
     setSideBarOpen: Dispatch<SetStateAction<boolean>>;
     sideBarOpen: boolean;
+    playerVolume: string;
+    setPlayerVolume: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo, setCurrentCountry, currentCountry, countries, c, volume, setEnded, ended, cn, setSideBarOpen, sideBarOpen }: IVideoComponent) {
+function video({ playerVolume, setPlayerVolume, v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo, setCurrentCountry, currentCountry, countries, c, volume, setEnded, ended, cn, setSideBarOpen, sideBarOpen }: IVideoComponent) {
     const [originURL, setOriginURL] = useState('');
+    const DPressed = useKeyPress('d');
     const ytPlayer = useRef<YouTubePlayer | null>(null);
 
     const onReady: YouTubeProps['onReady'] = (e) => {
@@ -90,6 +94,10 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
                 break;
             case 1: // playing - enable in production
                 setPlaying(true);
+                if(playerVolume != '0') {
+                    ytPlayer.current.unMute();
+                    ytPlayer.current.setVolume(parseInt(playerVolume));
+                }
                 break;
             case 2: // paused
                 setPlaying(false);
@@ -140,7 +148,8 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
             if (volume != '0') {
                 try {
                     ytPlayer.current.unMute();
-                    ytPlayer.current.setVolume(parseInt(volume));   
+                    ytPlayer.current.setVolume(parseInt(volume));
+                    setPlayerVolume(volume);
                 } catch (error) {
                     console.error('There was an error trying to unMute or change the volume of the player', error);
                 }
@@ -153,6 +162,14 @@ function video({ v, setPlaying, playing, setTitle, currentVideo, setCurrentVideo
         setTitle(`${currentVideo?.country}, ${currentVideo?.place}`);
         setOriginURL(window.location.origin)
     }, [currentVideo]);
+
+    useEffect(() => {
+        if(process.env.NEXT_PUBLIC_APP_MODE == 'local') {
+            if(DPressed) setPlaying(!playing);
+        } else if (process.env.NEXT_PUBLIC_APP_MODE != 'local' && DPressed) {
+            console.log('[D] This action is not allowed in production! I used to hide the video using D key, so I won`t get embarrassed when someone walks next to me ;|')
+        }
+    }, [DPressed])
 
     return (
         <div className={`w-full h-full`}>

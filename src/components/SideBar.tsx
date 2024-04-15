@@ -58,6 +58,8 @@ interface ISideBar {
     setEnded: Dispatch<SetStateAction<boolean>>;
     setSideBarOpen: Dispatch<SetStateAction<boolean>>;
     sideBarOpen: boolean;
+    setPlaying: Dispatch<SetStateAction<boolean>>;
+    playing: boolean;
 }
 
 interface IUserCountSideBar {
@@ -65,7 +67,7 @@ interface IUserCountSideBar {
     connectors: string;
 }
 
-function sideBar({ cn, countries, currentVideo, setCurrentVideo, ended, setEnded, setCurrentCountry, currentCountry, setSideBarOpen, sideBarOpen }: ISideBar) {
+function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, ended, setEnded, setCurrentCountry, currentCountry, setSideBarOpen, sideBarOpen }: ISideBar) {
     const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
     const [connectors, setConnectors] = useState<IUserCountSideBar[]>();
     const [weatherFilter, setWeatherFilter] = useState('');
@@ -104,13 +106,12 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, ended, setEnded
     }, []);
 
     useEffect(() => {
-        if (ended) {
-            // pick random video
-            const randomCountryIndex = Math.floor(Math.random() * countries.length);
-            const randomVideoIndex = Math.floor(Math.random() * countries[randomCountryIndex].videos.length);
-            setCurrentCountry(countries[randomCountryIndex]);
-            setCurrentVideo(countries[randomCountryIndex].videos[randomVideoIndex]);
-        }
+        setPlaying(false);
+        // pick random video
+        const randomCountryIndex = Math.floor(Math.random() * countries.length);
+        const randomVideoIndex = Math.floor(Math.random() * countries[randomCountryIndex].videos.length);
+        setCurrentCountry(countries[randomCountryIndex]);
+        setCurrentVideo(countries[randomCountryIndex].videos[randomVideoIndex]);
     }, [ended]);
 
     // Filter Countries using the search input
