@@ -21,8 +21,8 @@ import {
 import { useRouter } from 'next/router';
 import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
-import { useClickOutsideNoIgnore } from './Dashboard/useClickOutside';
 import { Tooltip } from '@material-tailwind/react';
+import { useOnClickOutside } from 'usehooks-ts';
 
 export interface ICountryRes {
     id: number;
@@ -191,8 +191,8 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, ended, setEnded
         })
     }, []);
 
-    useClickOutsideNoIgnore(wrapperRef, () => setSideBarOpen(false));
-
+    useOnClickOutside(wrapperRef, () => setSideBarOpen(false));
+    
     return (
         <div
             ref={wrapperRef}
