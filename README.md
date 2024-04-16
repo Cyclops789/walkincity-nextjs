@@ -12,4 +12,5 @@
 - [DONE] Add report bug in main page
 - [DONE] Add option for hiding reactions
 - ~~Add info page, edit able in dashboard area~~
-- [CURRENT] Set seek to for all videos
+- [CURRENT] Fix image uploading, in production (replace with cdn)
+- Set seek to for all videos
