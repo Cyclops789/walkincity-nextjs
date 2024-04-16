@@ -6,6 +6,7 @@
     "build": "next build",
     "build:production": "rm -rf .next && next build",
     "start": "next start -p 5000",
+    "docker:start": "next start -p 5000",
     "stage": "yarn build; yarn start",
     "type-check": "tsc",
     "db:migrate": "node db/scripts/migrate.js",
