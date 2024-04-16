@@ -4,9 +4,10 @@ FROM node:20-alpine AS BUILD_IMAGE
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json ./
+COPY yarn.lock ./
 
-RUN npm i -g yarn
+# RUN npm i -g yarn
 
 RUN yarn
 
@@ -24,7 +25,9 @@ COPY --from=BUILD_IMAGE /app/.env ./.env
 
 COPY --from=BUILD_IMAGE /app/next.config.js ./next.config.js
 
-COPY --from=BUILD_IMAGE /app/package*.json ./
+COPY --from=BUILD_IMAGE /app/package.json ./package.json
+
+COPY --from=BUILD_IMAGE /app/yarn.lock ./yarn.lock
 
 COPY --from=BUILD_IMAGE /app/.next ./.next
 
