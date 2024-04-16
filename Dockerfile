@@ -21,7 +21,7 @@ FROM node:20-alpine AS PRODUCTION_STAGE
 
 WORKDIR /app
 
-COPY --from=BUILD_IMAGE /app/.env ./.env
+COPY --from=BUILD_IMAGE /app/.env.production ./.env.production
 
 COPY --from=BUILD_IMAGE /app/next.config.js ./next.config.js
 
