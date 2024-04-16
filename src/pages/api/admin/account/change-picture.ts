@@ -101,7 +101,7 @@ const handler: NextApiHandler = async (req, res) => {
 
             res.json({
                 success: true,
-                message: 'Profile has been updated successfully.'
+                message: 'Account has been updated successfully.'
             });
         })
         .catch((e) => {
