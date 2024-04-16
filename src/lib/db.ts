@@ -8,8 +8,14 @@ const db = mysql({
         database: secrets.MYSQL_DATABASE,
         user: secrets.MYSQL_USER,
         password: secrets.MYSQL_PASSWORD
+    },
+    onConnectError(e: any) {
+        console.log("There was an error connecting to mysql! ", e)
+    },
+    onConnect() {
+        console.log("Connected to mysql with success!")
     }
-});
+})
 
 interface IQuery {
     query: string;
