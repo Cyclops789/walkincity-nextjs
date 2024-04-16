@@ -5,7 +5,6 @@ import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { ICountryRes, IVideosRes } from '@/components/SideBar';
 import { MutableRefObject } from 'react';
 import { Tooltip } from "@material-tailwind/react";
-import { useOnClickOutside } from 'usehooks-ts';
 import useClickOutside, { useClickOutsideNoIgnore } from '@/components/Dashboard/useClickOutside';
 
 interface IPlayerButtons {
@@ -103,15 +102,14 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
 
     useClickOutside(volumeRef, () => setOpenVolume(false), volumeInputRef);
     useClickOutsideNoIgnore(settingsRef, () => setOpenSetting(false));
-    //useOnClickOutside(settingsRef, () => setOpenSetting(false));
 
     return (
         <>
-            <Tooltip className={'bg-white text-black'} content="Volume" placement="left">
+            <Tooltip className={`${openVolume && 'hidden'} bg-white text-black`} content="Volume" placement="left">
                 <div 
                     className={`fixed top-[50px] right-3 cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black h-9 flex rounded-full items-center justify-center ${openVolume ? 'w-52 bg-white text-black border-black' : 'w-9 text-white'} transition-all duration-100 ease-in-out`}
                 >
-                    <div ref={volumeRef} onClick={() => setOpenVolume(true)} className='fixed top-[50px] right-3 w-9 h-9 z-10' />
+                    <div ref={volumeRef} onClick={() => setOpenVolume(!openVolume)} className='fixed top-[50px] right-3 w-9 h-9 z-10' />
                     <FontAwesomeIcon
                         className={`${parseInt(volume) >= 50 ? 'w-[20px]' : parseInt(volume) >= 20 ? 'w-[15px]' : 'w-[10px]'} fixed ${parseInt(volume) >= 50 ? 'right-5' : parseInt(volume) >= 20 ? 'right-6' : 'right-7'} z-0`}
                         icon={parseInt(volume) >= 50 ? (faVolumeHigh) : parseInt(volume) >= 20 ? (faVolumeLow) : faVolumeOff}

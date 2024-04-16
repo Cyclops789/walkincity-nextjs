@@ -5,9 +5,8 @@ FROM node:20-alpine AS BUILD_IMAGE
 WORKDIR /app
 
 COPY package.json ./
-COPY yarn.lock ./
 
-# RUN npm i -g yarn
+COPY yarn.lock ./
 
 RUN yarn
 
