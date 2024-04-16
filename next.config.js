@@ -7,6 +7,9 @@ const nextConfig = {
       }, 
       {
         hostname: 'eoimages.gsfc.nasa.gov'
+      },
+      {
+        hostname: 'cdn.walkin.city'
       }
     ],
   }
