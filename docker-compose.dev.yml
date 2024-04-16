@@ -1,0 +1,6 @@
+services:
+  walkincity:
+    container_name: walkincity-nextjs
+    build: .
+    ports:
+      - "5000:5000"
