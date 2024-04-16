@@ -206,7 +206,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
         >
             <div className='max-w-[260px]'>
                 <div className="flex flex-wrap space-x-2 space-y-2  justify-between">
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Africa" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Africa" placement="bottom">
                         <div
                             onClick={() => {
                                 if (continentFilter == 'Africa') {
@@ -225,7 +225,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                         </div>
                     </Tooltip>
 
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Asia" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Asia" placement="bottom">
                         <div
                             onClick={() => {
                                 if (continentFilter == 'Asia') {
@@ -245,7 +245,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                     </Tooltip>
 
 
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Europe" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Europe" placement="bottom">
                         <div
                             onClick={() => {
                                 if (continentFilter == 'Europe') {
@@ -264,7 +264,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                         </div>
                     </Tooltip>
 
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Americas" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Americas" placement="bottom">
                         <div
                             onClick={() => {
                                 if (continentFilter == 'Americas') {
@@ -283,7 +283,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                         </div>
                     </Tooltip>
 
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Oceania" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Oceania" placement="bottom">
                         <div
                             onClick={() => {
                                 if (continentFilter == 'Oceania') {
@@ -304,7 +304,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                 </div>
 
                 <div className="flex flex-wrap space-x-2 space-y-2 pb-2 justify-between">
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Day" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Day" placement="bottom">
                         <div
                             title="Day"
                             className={`rounded ml-2 mt-2 px-3 py-2 cursor-pointer ${weatherFilter == 'weather-normal-morning' ? 'bg-gray-800 text-white' : 'bg-white'}`}
@@ -318,7 +318,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                         </div>
                     </Tooltip>
 
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Night" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Night" placement="bottom">
                         <div
                             title="Night"
                             className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-normal-night' ? 'bg-gray-800 text-white' : 'bg-white'}`}
@@ -332,7 +332,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                         </div>
                     </Tooltip>
 
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Raining" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Raining" placement="bottom">
                         <div
                             title="Raining"
                             className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-rain-' ? 'bg-gray-800 text-white' : 'bg-white'}`}
@@ -346,7 +346,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                         </div>
                     </Tooltip>
 
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Cloudy" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Cloudy" placement="bottom">
                         <div
                             title="Cloudy"
                             className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-cloud-morning' ? 'bg-gray-800 text-white' : 'bg-white'}`}
@@ -360,7 +360,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                         </div>
                     </Tooltip>
 
-                    <Tooltip className={'border border-red-600 text-red-600'} content="Snowing" placement="bottom">
+                    <Tooltip className={'border bg-white border-black text-black'} content="Snowing" placement="bottom">
                         <div
                             title="Snowing"
                             className={`rounded px-3 py-2 cursor-pointer ${weatherFilter == 'weather-snow-' ? 'bg-gray-800 text-white' : 'bg-white'}`}
@@ -383,10 +383,11 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
                         value={countryFilter}
                         onChange={(e) => setCountryFilter(e.target.value)}
                     />
-
-                    <button type='submit' className={'px-3 py-2 bg-white rounded cursor-pointer'}>
-                        <FontAwesomeIcon size='lg' icon={faMagnifyingGlass} />
-                    </button>
+                    <Tooltip className={'border bg-white border-black text-black'} content="Search" placement="bottom">
+                        <button type='submit' className={'px-3 py-2 bg-white rounded cursor-pointer'}>
+                            <FontAwesomeIcon size='lg' icon={faMagnifyingGlass} />
+                        </button>
+                    </Tooltip>
                 </form>
 
                 <div className='ml-2 space-y-2'>

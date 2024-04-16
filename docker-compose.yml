@@ -4,3 +4,5 @@ services:
     image: cyclops01/walkincity-next:production
     ports:
       - "5000:5000"
+    volumes:
+      - "./container/storage:/app/public/storage"
