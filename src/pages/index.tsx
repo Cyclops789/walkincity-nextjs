@@ -46,6 +46,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
 
       <div className="flex">
         <SideBar
+          v={v}
           cn={cn}
           sideBarOpen={sideBarOpen}
           setSideBarOpen={setSideBarOpen}
