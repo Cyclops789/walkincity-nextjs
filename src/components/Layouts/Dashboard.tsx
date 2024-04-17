@@ -146,10 +146,10 @@ export default function Layout({
         <div className={`flex h-screen w-screen text-white ${className}`}>
           {/* SideBar */}
           <section
+            className={`${sideBarOpen === "1" ? "w-[20%]" : "w-[70px]"} bg-[hsl(0,0%,22%)] overflow-auto h-full`}
             style={{
               transition: 'all 0.3s ease',
             }}
-            className={`${sideBarOpen === "1" ? "w-[20%]" : "w-[70px]"} bg-[hsl(0,0%,22%)]`}
           >
             <Link href={'/'} className={'w-full h-[50px] text-center text-2xl items-center flex justify-center bg-[#262626] hover:bg-[#1d1d1d]'}>
               <Image
@@ -167,7 +167,7 @@ export default function Layout({
 
             </Link>
             <hr className='text-[var(--primary-text-color)]' style={{ borderTop: '2px dashed' }} />
-            <div className='p-3 space-y-3'>
+            <div className='p-3 space-y-3 overflow-y-auto'>
               {sideBarOpen === "1" && (
                 <div className={' font-semibold text-[var(--primary-text-color)]'}>Dashboard</div>
               )}
@@ -206,7 +206,7 @@ export default function Layout({
           </section>
           {/* Content */}
 
-          <section className={`w-[100%] overflow-auto bg-[hsl(0,0%,8%)]`}>
+          <section className={`w-[100%] overflow-auto bg-[hsl(0,0%,8%)] h-full`}>
             <div className='w-full h-[50px] flex justify-between bg-[hsl(0,0%,22%)]'>
               <div className={'flex justify-start'}>
                 <div className={'px-2 py-1'}>
