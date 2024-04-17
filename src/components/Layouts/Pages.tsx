@@ -49,6 +49,7 @@ export default function Layout({
             <Head>
                 <title>{pageTitle}</title>
                 <meta charSet="utf-8" />
+                <script defer data-domain="walkin.city" src="https://analytics.walkin.city/js/script.js"></script>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <div className={`h-screen w-screen ${className}`}>
