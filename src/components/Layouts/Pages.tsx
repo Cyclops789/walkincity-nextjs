@@ -49,8 +49,13 @@ export default function Layout({
             <Head>
                 <title>{pageTitle}</title>
                 <meta charSet="utf-8" />
-                <script defer data-domain="walkin.city" src="https://analytics.walkin.city/js/script.js"></script>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <script 
+                    defer 
+                    data-domain={"walkin.city"} 
+                    data-api={`https://${process.env.NEXT_PUBLIC_CF_WORKER_HOSTNAME}/getvideos/videos`}
+                    src={`https://${process.env.NEXT_PUBLIC_CF_WORKER_HOSTNAME}/getvideos/script.js`}
+                ></script>
             </Head>
             <div className={`h-screen w-screen ${className}`}>
                 <div>

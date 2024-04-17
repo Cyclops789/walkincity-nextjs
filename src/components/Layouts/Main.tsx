@@ -15,8 +15,13 @@ export default function Layout({
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
-        <script defer data-domain="walkin.city" src="https://analytics.walkin.city/js/script.js"></script>
         <meta name="viewport" content="initial-scale=2.0, width=device-width" />
+        <script 
+          defer 
+          data-domain={"walkin.city"}
+          data-api={`https://${process.env.NEXT_PUBLIC_CF_WORKER_HOSTNAME}/getvideos/videos`}
+          src={`https://${process.env.NEXT_PUBLIC_CF_WORKER_HOSTNAME}/getvideos/script.js`}
+        ></script>
       </Head>
       {children}
     </div>
