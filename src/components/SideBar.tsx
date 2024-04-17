@@ -50,6 +50,7 @@ export interface IVideosRes {
 interface ISideBar {
     countries: ICountryRes[];
     cn: string | undefined;
+    v: number | undefined;
     setCurrentCountry: Dispatch<SetStateAction<ICountryRes | undefined>>;
     currentCountry: ICountryRes | undefined;
     currentVideo: IVideosRes | undefined;
@@ -67,7 +68,7 @@ interface IUserCountSideBar {
     connectors: string;
 }
 
-function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, ended, setEnded, setCurrentCountry, currentCountry, setSideBarOpen, sideBarOpen }: ISideBar) {
+function sideBar({ v, cn, countries, currentVideo, setCurrentVideo, setPlaying, ended, setEnded, setCurrentCountry, currentCountry, setSideBarOpen, sideBarOpen }: ISideBar) {
     const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
     const [connectors, setConnectors] = useState<IUserCountSideBar[]>();
     const [weatherFilter, setWeatherFilter] = useState('');
@@ -172,7 +173,7 @@ function sideBar({ cn, countries, currentVideo, setCurrentVideo, setPlaying, end
     }, [weatherFilter]);
 
     useEffect(() => {
-        if (cn) {
+        if (cn && (v == null || v == undefined)) {
             setSearch(!search);
             setCountryFilter(cn);
         }
