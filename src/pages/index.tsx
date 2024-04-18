@@ -108,7 +108,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
         )}
 
         {viewersShow && (
-          <Viewers connectors={connectors} />
+          <Viewers currentVideo={currentVideo} currentCountry={currentCountry} ended={ended} connectors={connectors} />
         )}
       </div>
     </Layout>
