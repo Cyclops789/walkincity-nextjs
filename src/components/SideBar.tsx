@@ -23,6 +23,7 @@ import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import { Tooltip } from '@material-tailwind/react';
 import { useOnClickOutside } from 'usehooks-ts';
+import dynamic from 'next/dynamic';
 
 export interface ICountryRes {
     id: number;
@@ -67,6 +68,8 @@ interface IUserCountSideBar {
     vid: string;
     connectors: string;
 }
+
+const EmbedPlaylists = dynamic(import('@/components/EmbedPlaylists'));
 
 function sideBar({ v, cn, countries, currentVideo, setCurrentVideo, setPlaying, ended, setEnded, setCurrentCountry, currentCountry, setSideBarOpen, sideBarOpen }: ISideBar) {
     const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
@@ -376,6 +379,8 @@ function sideBar({ v, cn, countries, currentVideo, setCurrentVideo, setPlaying, 
                     </Tooltip>
                 </div>
 
+
+
                 <form action={''} onSubmit={(e) => { e.preventDefault(); setSearch(!search) }} className='ml-2 pb-2 flex space-x-2'>
                     <input
                         type="text"
@@ -390,6 +395,10 @@ function sideBar({ v, cn, countries, currentVideo, setCurrentVideo, setPlaying, 
                         </button>
                     </Tooltip>
                 </form>
+
+                <div className={'pl-2 pb-2'}>
+                    <EmbedPlaylists />
+                </div>
 
                 <div className='ml-2 space-y-2'>
                     <div 

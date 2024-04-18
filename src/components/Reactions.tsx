@@ -56,7 +56,7 @@ function Reactions({ video, setConnectors, connectors }: { video: IVideosRes | u
 
     return (
         <>
-            <div className='fixed bottom-4 right-3 flex space-x-2 z-[10]'>
+            <div className='fixed bottom-4 xl:right-3 lg:right-3 right-14  flex space-x-2 z-[10]'>
                 {reactionsIcons.map((reaction) => (
                     <div
                         key={reaction.name}

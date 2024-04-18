@@ -15,7 +15,7 @@ const regex = /(youtube\.com\/watch\?v=|youtu\.be\/)([0-9A-Za-z_-]{10}[048AEIMQU
  * @param url - The URL or string.
  * @returns - The video ID.
  */
-export default function YouTubeVideoId(url: string): string {
+export default function YouTubeVideoId(url: string): string | 'invalid_url' {
     const match = url.match(regex);
 
     if (match?.length && match[2]) {
