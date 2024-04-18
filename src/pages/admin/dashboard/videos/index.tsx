@@ -139,7 +139,7 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 </option>
 
                                 {countries?.map((country) => (
-                                    <option value={country.long_name}>
+                                    <option key={country.id} value={country.long_name}>
                                         {country.long_name}
                                     </option>
                                 ))}

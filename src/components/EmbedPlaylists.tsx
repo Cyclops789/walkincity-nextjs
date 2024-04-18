@@ -123,7 +123,7 @@ function EmbedPlaylists() {
                             <div className='flex justify-center items-center my-2'>
                                 <div className={"dot-loader-white"}></div>
                             </div>
-                            Spotify will play the playlist in preview mode by default if you are not logged in to  <a target='_blank' className='text-[#1ED760]' href='https://spotify.com'>spotify.com</a>
+                            Spotify will play the playlist in preview mode by default if you are not logged in to <a target='_blank' className='text-[#1ED760]' href='https://spotify.com'>spotify.com</a>
                         </div>
                     </div>
                     <iframe 

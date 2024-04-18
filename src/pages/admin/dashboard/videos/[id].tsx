@@ -74,9 +74,7 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
                 return setNotify({ open: true, type: 'warning', text: 'Please pause the video first!' });
             }
 
-
-            const currentTime = parseInt(playerRef.current.getCurrentTime());
-            
+            const currentTime = parseInt(playerRef.current.getCurrentTime());            
             if(pos == 'start') {
                 updateFormData({ name: 'seekTo', value: currentTime });
             }
@@ -379,7 +377,7 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
                                         />
                                     </div>
                                 </div>
-                            </div>
+                            </div> 
 
                             <div className="flex justify-center mt-3">
                                 <button type='submit' className='px-8 py-3 text-center bg-[var(--primary-text-color)] hover:bg-[var(--primary-text-color-hover)] rounded'>
