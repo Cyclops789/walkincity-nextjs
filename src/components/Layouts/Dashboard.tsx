@@ -112,7 +112,7 @@ export default function Layout({
           username: userResponse.username,
           email: userResponse.email,
           created_at: userResponse.created_at || '',
-          image: `https://cdn.walkin.city/uploads/profiles/${userResponse.image}`,
+          image: `${(process.env.NEXT_PUBLIC_APP_MODE == 'production') ? 'https://cdn.walkin.city' : '/storage'}/uploads/profiles/${userResponse.image}`,
           role: {
             id: userResponse.role.id,
             name: userResponse.role.name,
