@@ -5,7 +5,7 @@ import { Tooltip } from '@material-tailwind/react';
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import type { Dispatch, SetStateAction } from 'react';
 
-function EmbedPlaylists({ setSavePlaylist, savePlaylist }:{ setSavePlaylist: Dispatch<SetStateAction<boolean>>; savePlaylist: boolean; }) {
+function EmbedPlaylists() {
     const [embedType, setEmbedType] = useState<'youtube' | 'spotify' | ''>('');
     const [embedID, setEmbedID] = useState('');
     const [embedHolderID, setEmebedHolderID] = useState('');
@@ -46,11 +46,12 @@ function EmbedPlaylists({ setSavePlaylist, savePlaylist }:{ setSavePlaylist: Dis
 
     useEffect(() => {
         const music_player = localStorage.getItem('music-player');
+        const playLastPlaylist = localStorage.getItem('play-last-playlist') == 'false' ? false : true; 
 
         if(music_player) {
             try {
                 const player = JSON.parse(music_player) as { provider: 'spotify' | 'youtube', playListID: string };
-                if(player.playListID && player.provider && savePlaylist) {
+                if(player.playListID && player.provider && playLastPlaylist) {
                     setEmebedHolderID(player.playListID);
                     setEmbedID(player.playListID);
                     setEmbedType(player.provider);

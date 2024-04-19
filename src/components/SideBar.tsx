@@ -62,8 +62,6 @@ interface ISideBar {
     sideBarOpen: boolean;
     setPlaying: Dispatch<SetStateAction<boolean>>;
     playing: boolean;
-    setSavePlaylist: Dispatch<SetStateAction<boolean>>
-    savePlaylist: boolean;
 }
 
 interface IUserCountSideBar {
@@ -73,7 +71,7 @@ interface IUserCountSideBar {
 
 const EmbedPlaylists = dynamic(import('@/components/EmbedPlaylists'));
 
-function sideBar({ savePlaylist, setSavePlaylist, v, cn, countries, currentVideo, setCurrentVideo, setPlaying, ended, setEnded, setCurrentCountry, currentCountry, setSideBarOpen, sideBarOpen }: ISideBar) {
+function sideBar({ v, cn, countries, currentVideo, setCurrentVideo, setPlaying, ended, setEnded, setCurrentCountry, currentCountry, setSideBarOpen, sideBarOpen }: ISideBar) {
     const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
     const [connectors, setConnectors] = useState<IUserCountSideBar[]>();
     const [weatherFilter, setWeatherFilter] = useState('');
@@ -399,7 +397,7 @@ function sideBar({ savePlaylist, setSavePlaylist, v, cn, countries, currentVideo
                 </form>
 
                 <div className={'pl-2 pb-2'}>
-                    <EmbedPlaylists savePlaylist={savePlaylist} setSavePlaylist={setSavePlaylist} />
+                    <EmbedPlaylists />
                 </div>
 
                 <div className='ml-2 space-y-2'>
