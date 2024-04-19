@@ -22,11 +22,11 @@ interface IPlayerButtons {
     setViewersShow: Dispatch<SetStateAction<boolean>>;
     reactionsShow: boolean;
     viewersShow: boolean;
-    setSavePlaylist: Dispatch<SetStateAction<boolean>>
-    savePlaylist: boolean;
+    setPlayLastPlaylist: Dispatch<SetStateAction<boolean>>
+    playLastPlaylist: boolean;
 }
 
-function PlayerButtons({ setSavePlaylist, savePlaylist, currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef, reactionsShow, setReactionsShow, viewersShow, setViewersShow }: IPlayerButtons) {
+function PlayerButtons({ setPlayLastPlaylist, playLastPlaylist, currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef, reactionsShow, setReactionsShow, viewersShow, setViewersShow }: IPlayerButtons) {
     const [fullScreen, setFullScreen] = useState(false);
     const [openVolume, setOpenVolume] = useState<boolean | undefined>();
     const [openSetting, setOpenSetting] = useState(false);
@@ -97,9 +97,9 @@ function PlayerButtons({ setSavePlaylist, savePlaylist, currentCountry, currentV
     useEffect(() => {
         const reactions = localStorage.getItem('reactions') == 'false' ? false : true;
         const viewers = localStorage.getItem('viewers') == 'false' ? false : true;
-        const sPlayList = localStorage.getItem('save-playlist') == 'false' ? false : true; 
+        const playLastPlaylist = localStorage.getItem('play-last-playlist') == 'false' ? false : true; 
 
-        setSavePlaylist(sPlayList);
+        setPlayLastPlaylist(playLastPlaylist);
         setReactionsShow(reactions);
         setViewersShow(viewers);
     }, []);
@@ -169,7 +169,7 @@ function PlayerButtons({ setSavePlaylist, savePlaylist, currentCountry, currentV
                 <div
                     ref={settingsRef}
 
-                    className={`transition-all duration-100 fixed top-[350px] right-3 ease-in-out ${openSetting ? 'w-[200px] h-[100px] rounded-lg bg-white text-black' : 'w-9 h-9 rounded-full text-white'} cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black`}
+                    className={`transition-all duration-100 fixed top-[350px] right-3 ease-in-out ${openSetting ? 'w-[220px] h-[130px] rounded-lg bg-white text-black' : 'w-9 h-9 rounded-full text-white'} cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black`}
                 >
                     <div
                         onClick={() => { if (!openSetting) { setOpenSetting(true) } else { setOpenSetting(false) } }}
@@ -180,7 +180,7 @@ function PlayerButtons({ setSavePlaylist, savePlaylist, currentCountry, currentV
                             icon={!openSetting ? faSliders : faXmark}
                         />
                     </div>
-                    <div className={`${!openSetting && 'hidden'} rounded w-[200px]`}>
+                    <div className={`${!openSetting && 'hidden'} rounded w-[220px]`}>
                         <div className={'p-3'}>
                             <div className={'flex justify-between'}>
                                 Reactions
@@ -201,11 +201,11 @@ function PlayerButtons({ setSavePlaylist, savePlaylist, currentCountry, currentV
                             </div>
 
                             <div className={'flex justify-between'}>
-                                Save last played playlist
+                                Play last played playlist
                                 <input
                                     type="checkbox"
-                                    checked={savePlaylist}
-                                    onChange={(e) => { setSavePlaylist(e.target.checked); changeUserSetting('save-playlist', e.target.checked) }}
+                                    checked={playLastPlaylist}
+                                    onChange={(e) => { setPlayLastPlaylist(e.target.checked); changeUserSetting('play-last-playlist', e.target.checked) }}
                                 />
                             </div>
                         </div>

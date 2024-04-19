@@ -30,7 +30,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
   // User Pres
   const [reactionsShow, setReactionsShow] = useState(false);
   const [viewersShow, setViewersShow] = useState(false);
-  const [savePlaylist, setSavePlaylist] = useState(false);
+  const [playLastPlaylist, setPlayLastPlaylist] = useState(false);
 
   // General states
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -70,8 +70,6 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
           countries={countries}
           setPlaying={setPlaying}
           playing={playing}
-          savePlaylist={savePlaylist}
-          setSavePlaylist={setSavePlaylist}
         />
 
         <Video
@@ -110,8 +108,8 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
           setCurrentCountry={setCurrentCountry}
           setCurrentVideo={setCurrentVideo}
           currentVideo={currentVideo}
-          savePlaylist={savePlaylist}
-          setSavePlaylist={setSavePlaylist}
+          playLastPlaylist={playLastPlaylist}
+          setPlayLastPlaylist={setPlayLastPlaylist}
         />
 
         {reactionsShow && (
