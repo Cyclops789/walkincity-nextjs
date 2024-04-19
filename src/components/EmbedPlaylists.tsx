@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpotify, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { Tooltip } from '@material-tailwind/react';
 import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import type { Dispatch, SetStateAction } from 'react';
 
-function EmbedPlaylists() {
+function EmbedPlaylists({ setSavePlaylist, savePlaylist }:{ setSavePlaylist: Dispatch<SetStateAction<boolean>>; savePlaylist: boolean; }) {
     const [embedType, setEmbedType] = useState<'youtube' | 'spotify' | ''>('');
     const [embedID, setEmbedID] = useState('');
     const [embedHolderID, setEmebedHolderID] = useState('');
@@ -47,17 +48,13 @@ function EmbedPlaylists() {
         const music_player = localStorage.getItem('music-player');
 
         if(music_player) {
-            console.log("MusicPlayer was found")
             try {
                 const player = JSON.parse(music_player) as { provider: 'spotify' | 'youtube', playListID: string };
-                if(player.playListID && player.provider) {
-                    console.log("PlayerListID and Provider are valid")
+                if(player.playListID && player.provider && savePlaylist) {
                     setEmebedHolderID(player.playListID);
                     setEmbedID(player.playListID);
                     setEmbedType(player.provider);
                     setShowEmbed(true);   
-                } else {
-                    console.log("PlayerListID and Provider are not valid", player)
                 }
             } catch (error) {
                 console.error("There was an error trying to set the initial music playlist: ", error)
