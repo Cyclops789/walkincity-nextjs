@@ -8,6 +8,7 @@ import { ICountryRes } from '@/components/SideBar';
 import { http as axios } from '@/helpers/http';
 import { useRouter } from 'next/router';
 import { refreshRouteSilenced } from '@/helpers/routes';
+import { calculatePlayableTime } from '@/helpers/time';
 
 export interface IVideosRes {
     id: number;
@@ -187,6 +188,9 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 Location
                             </th>
                             <th scope="col" className="px-6 py-3">
+                                Length
+                            </th>
+                            <th scope="col" className="px-6 py-3">
                                 Actions
                             </th>
                         </tr>
@@ -212,6 +216,9 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 </td>
                                 <td className={`px-6 py-4 ${(video.latitude && video.longitude) ? 'text-green-600' : 'text-red-600'}`}>
                                     {(video.latitude && video.longitude) ? 'Set' : 'Not set'}
+                                </td>
+                                <td className="px-6 py-4">
+                                    {calculatePlayableTime(video.seekTo, video.endsat)}
                                 </td>
                                 <td className="px-6 py-4 space-x-2">
                                     <Link
