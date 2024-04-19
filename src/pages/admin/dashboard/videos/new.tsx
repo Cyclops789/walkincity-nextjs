@@ -390,7 +390,7 @@ export default function newVideo({ countries }: IVideo) {
                                             type="text"
                                             onChange={(e) => updateFormData({ name: 'latitude', value: e.target.value })}
                                             className='p-2 rounded bg-[#262626] text-white w-full'
-                                            defaultValue={form.place}
+                                            defaultValue={form.latitude}
                                             id='latitude'
                                             required
                                         />
@@ -403,7 +403,7 @@ export default function newVideo({ countries }: IVideo) {
                                             type="text"
                                             onChange={(e) => updateFormData({ name: 'longitude', value: e.target.value })}
                                             className='p-2 rounded bg-[#262626] text-white w-full'
-                                            defaultValue={form.place}
+                                            defaultValue={form.longitude}
                                             id='longitude'
                                             required
                                         />
