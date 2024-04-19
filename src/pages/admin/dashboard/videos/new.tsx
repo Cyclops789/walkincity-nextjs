@@ -37,7 +37,7 @@ interface IFormData {
 
 export default function newVideo({ countries }: IVideo) {
     const router = useRouter();
-    const { country, place, weather, type, seekTo, verified }: IFormData = router.query;
+    const { country, place, weather, type, seekTo, verified, latitude, longitude }: IFormData = router.query;
 
     const playerRef = useRef<YouTubePlayer>(null);
     const [createAnOther, setCreateAnOther] = useState(false);
@@ -203,8 +203,8 @@ export default function newVideo({ countries }: IVideo) {
             'type': type || '',
             'seekTo': seekTo || '',
             'verified': verified || 0,
-            'latitude': 0,
-            'longitude': 0
+            'latitude': latitude || 0,
+            'longitude': longitude || 0
         });
     }, []);
 
@@ -387,7 +387,7 @@ export default function newVideo({ countries }: IVideo) {
                                             <label className={'font-semibold'} htmlFor="latitude">Latitude:</label>
                                         </div>
                                         <input
-                                            type="number"
+                                            type="text"
                                             onChange={(e) => updateFormData({ name: 'latitude', value: e.target.value })}
                                             className='p-2 rounded bg-[#262626] text-white w-full'
                                             defaultValue={form.place}
@@ -400,7 +400,7 @@ export default function newVideo({ countries }: IVideo) {
                                             <label className={'font-semibold'} htmlFor="longitude">Longitude:</label>
                                         </div>
                                         <input
-                                            type="number"
+                                            type="text"
                                             onChange={(e) => updateFormData({ name: 'longitude', value: e.target.value })}
                                             className='p-2 rounded bg-[#262626] text-white w-full'
                                             defaultValue={form.place}

@@ -156,8 +156,9 @@ export default function editVideo({ currentVideo, countries }: IVideo) {
                     'place': form.place,
                     'weather': form.weather,
                     'type': form.type,
-                    'seekTo': form.seekTo,
-                    'verified': form.verified
+                    'verified': form.verified,
+                    'latitude': video.latitude,
+                    'longitude': video.longitude
                 },
             });
         }
