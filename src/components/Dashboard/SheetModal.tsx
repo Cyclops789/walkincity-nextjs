@@ -124,8 +124,6 @@ export default function SheetModal({
         setFormData((prevData) => ({ ...prevData, [name]: value }))
     }
 
-
-
     useEffect(() => {
         setFormData({
             id: currentEditVideo?.video?.id || 0,
@@ -165,6 +163,7 @@ export default function SheetModal({
                         </button>
                         <div className={"p-3"}>
                             <div className='pt-[40px] pb-4 space-y-2'>
+                                {/* Youtube Player */}
                                 <div className='bg-black sm:w-[395px] sm:h-[226px] justify-center items-center flex rounded-md overflow-hidden'>
                                     {!currentEditVideo?.video?.vid && (
                                         <div className="custom-loader"></div>
@@ -228,6 +227,26 @@ export default function SheetModal({
                                         id='place'
                                         required
                                     />
+                                </div>
+
+                                {/* Reason */}
+                                <div className='space-y-2'>
+                                    <div>
+                                        <label className={'font-semibold'} htmlFor="country">Reason</label>
+                                    </div>
+                                    <select 
+                                        onChange={(e) => updateFormData({ name: 'reason', value: e.target.value })}
+                                        className={`bg-[#262626] ${form.reason == '' ? 'text-white' : 'text-[#656b78]'} p-2 rounded w-full`}
+                                    >
+                                        <option value={""}>Specify a reason if you are going to reject</option>
+                                        <option value={"Invalid Video"}>Invalid Video</option>
+                                        <option value={"Country in the video is not available"}>Country in the video is not available</option>
+                                        <option value={"It's not a valid walking video"}>It's not a valid walking video</option>
+                                        <option value={"Invalid place or place doesnt exist"}>Invalid place or place doesnt exist</option>
+                                        <option value={"Duplicated video"}>Duplicated video</option>
+                                        <option value={"Video is a spam"}>Video is a spam</option>
+                                        <option value={"Video must be at least 15min"}>Video must be at least 15min</option>
+                                    </select>
                                 </div>
 
                                 {/* Starts / Ends */}
