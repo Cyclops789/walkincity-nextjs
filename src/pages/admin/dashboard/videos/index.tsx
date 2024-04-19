@@ -9,6 +9,8 @@ import { http as axios } from '@/helpers/http';
 import { useRouter } from 'next/router';
 import { refreshRouteSilenced } from '@/helpers/routes';
 import { calculatePlayableTime } from '@/helpers/time';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 export interface IVideosRes {
     id: number;
@@ -214,8 +216,8 @@ export default function videos({ videos, countries }: { videos: IVideosRes[], co
                                 <td className="px-6 py-4">
                                     {video.place}
                                 </td>
-                                <td className={`px-6 py-4 ${(video.latitude && video.longitude) ? 'text-green-600' : 'text-red-600'}`}>
-                                    {(video.latitude && video.longitude) ? 'Set' : 'Not set'}
+                                <td className={`px-6 py-4 ${(video.latitude && video.longitude) ? 'text-green-600' : 'text-red-600'} `}>
+                                    {(video.latitude && video.longitude) ? <FontAwesomeIcon icon={faCircleCheck} /> : <FontAwesomeIcon icon={faCircleXmark} />}
                                 </td>
                                 <td className="px-6 py-4">
                                     {calculatePlayableTime(video.seekTo, video.endsat)}
