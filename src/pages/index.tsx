@@ -18,23 +18,34 @@ const Info = dynamic(import('@/components/Info'));
 export default function WatchPage({ countries }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const { query } = router;
+  // Video queries
   const v = query.v as number | undefined;
   const c = query.c as number | undefined;
   const cn = query.cn as string | undefined;
+
+  // Video Data
   const [currentVideo, setCurrentVideo] = useState<IVideosRes>();
   const [currentCountry, setCurrentCountry] = useState<ICountryRes>();
+
+  // User Pres
   const [reactionsShow, setReactionsShow] = useState(false);
   const [viewersShow, setViewersShow] = useState(false);
+  const [savePlaylist, setSavePlaylist] = useState(false);
+
+  // General states
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [connectors, setConnectors] = useState('0');
   const [playerVolume, setPlayerVolume] = useState('');
   const [playing, setPlaying] = useState(false);
-  const [title, setTitle] = useState('Some, Where');
   const [ended, setEnded] = useState(false);
+  const [volume, setVolume] = useState('0');
   const [actionOpen, setActionOpen] = useState(false);
+
+  // Page state
+  const [title, setTitle] = useState('Some, Where');
+  
   const actionRef = useRef(null);
   const actionButtonRef = useRef(null);
-  const [volume, setVolume] = useState('0');
 
   useClickOutside(actionRef, () => setActionOpen(false), actionButtonRef);
 
@@ -59,6 +70,8 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
           countries={countries}
           setPlaying={setPlaying}
           playing={playing}
+          savePlaylist={savePlaylist}
+          setSavePlaylist={setSavePlaylist}
         />
 
         <Video
@@ -97,6 +110,8 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
           setCurrentCountry={setCurrentCountry}
           setCurrentVideo={setCurrentVideo}
           currentVideo={currentVideo}
+          savePlaylist={savePlaylist}
+          setSavePlaylist={setSavePlaylist}
         />
 
         {reactionsShow && (

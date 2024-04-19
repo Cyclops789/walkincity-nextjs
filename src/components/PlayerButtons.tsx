@@ -22,9 +22,11 @@ interface IPlayerButtons {
     setViewersShow: Dispatch<SetStateAction<boolean>>;
     reactionsShow: boolean;
     viewersShow: boolean;
+    setSavePlaylist: Dispatch<SetStateAction<boolean>>
+    savePlaylist: boolean;
 }
 
-function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef, reactionsShow, setReactionsShow, viewersShow, setViewersShow }: IPlayerButtons) {
+function PlayerButtons({ setSavePlaylist, savePlaylist, currentCountry, currentVideo, setVolume, volume, ended, setEnded, setActionOpen, actionButtonRef, reactionsShow, setReactionsShow, viewersShow, setViewersShow }: IPlayerButtons) {
     const [fullScreen, setFullScreen] = useState(false);
     const [openVolume, setOpenVolume] = useState<boolean | undefined>();
     const [openSetting, setOpenSetting] = useState(false);
@@ -95,7 +97,9 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
     useEffect(() => {
         const reactions = localStorage.getItem('reactions') == 'false' ? false : true;
         const viewers = localStorage.getItem('viewers') == 'false' ? false : true;
+        const sPlayList = localStorage.getItem('save-playlist') == 'false' ? false : true; 
 
+        setSavePlaylist(sPlayList);
         setReactionsShow(reactions);
         setViewersShow(viewers);
     }, []);
@@ -106,7 +110,7 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
     return (
         <>
             <Tooltip className={`${openVolume && 'hidden'} bg-white text-black`} content="Volume" placement="left">
-                <div 
+                <div
                     className={`fixed top-[50px] right-3 cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black h-9 flex rounded-full items-center justify-center ${openVolume ? 'w-52 bg-white text-black border-black' : 'w-9 text-white'} transition-all duration-100 ease-in-out`}
                 >
                     <div ref={volumeRef} onClick={() => setOpenVolume(!openVolume)} className='fixed top-[50px] right-3 w-9 h-9 z-10' />
@@ -161,25 +165,49 @@ function PlayerButtons({ currentCountry, currentVideo, setVolume, volume, ended,
                 </div>
             </Tooltip>
 
-            <Tooltip className={`${openSetting && '!hidden' } bg-white text-black`} content="Preferences" placement="left">
-                <div 
-                    ref={settingsRef} 
+            <Tooltip className={`${openSetting && '!hidden'} bg-white text-black`} content="Preferences" placement="left">
+                <div
+                    ref={settingsRef}
 
-                    className={`transition-all duration-100 fixed top-[350px] right-3 ease-in-out ${openSetting ? 'w-[200px] h-[100px] rounded-lg bg-white text-black' : 'w-9 h-9 rounded-full text-white' } cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black`}
+                    className={`transition-all duration-100 fixed top-[350px] right-3 ease-in-out ${openSetting ? 'w-[200px] h-[100px] rounded-lg bg-white text-black' : 'w-9 h-9 rounded-full text-white'} cursor-pointer border border-white hover:bg-white hover:border-black hover:text-black`}
                 >
-                    <div 
-                        onClick={() => {if(!openSetting){setOpenSetting(true)}else{setOpenSetting(false)}}} 
+                    <div
+                        onClick={() => { if (!openSetting) { setOpenSetting(true) } else { setOpenSetting(false) } }}
                         className={'relative w-full h-[30px]'}
-                    >    
-                        <FontAwesomeIcon 
-                            className={'absolute z-[9998] top-[9px] right-[9px]'} 
-                            icon={!openSetting ? faSliders : faXmark} 
+                    >
+                        <FontAwesomeIcon
+                            className={'absolute z-[9998] top-[9px] right-[9px]'}
+                            icon={!openSetting ? faSliders : faXmark}
                         />
                     </div>
                     <div className={`${!openSetting && 'hidden'} rounded w-[200px]`}>
                         <div className={'p-3'}>
-                            <div className={'flex justify-between'}>Reactions <input type="checkbox" checked={reactionsShow} onChange={(e) => { setReactionsShow(e.target.checked); changeUserSetting('reactions', e.target.checked) }} /></div>
-                            <div className={'flex justify-between'}>Viewers <input type="checkbox" checked={viewersShow} onChange={(e) => { setViewersShow(e.target.checked); changeUserSetting('viewers', e.target.checked) }} /></div>
+                            <div className={'flex justify-between'}>
+                                Reactions
+                                <input
+                                    type="checkbox"
+                                    checked={reactionsShow}
+                                    onChange={(e) => { setReactionsShow(e.target.checked); changeUserSetting('reactions', e.target.checked) }}
+                                />
+                            </div>
+
+                            <div className={'flex justify-between'}>
+                                Viewers
+                                <input
+                                    type="checkbox"
+                                    checked={viewersShow}
+                                    onChange={(e) => { setViewersShow(e.target.checked); changeUserSetting('viewers', e.target.checked) }}
+                                />
+                            </div>
+
+                            <div className={'flex justify-between'}>
+                                Save last played playlist
+                                <input
+                                    type="checkbox"
+                                    checked={savePlaylist}
+                                    onChange={(e) => { setSavePlaylist(e.target.checked); changeUserSetting('save-playlist', e.target.checked) }}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
