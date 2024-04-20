@@ -32,6 +32,10 @@ function info() {
             image: 'threejs.png',
             link: 'https://threejs.org/'
         },
+        {
+            image: 'next-auth.jpeg',
+            link: 'https://next-auth.js.org/'
+        }
     ];
 
     const pageStyle: string = `*{scrollbar-width: thin;scrollbar-color:#000000 #ffffff;} *::-webkit-scrollbar {width:16px;} *::-webkit-scrollbar-track{background:#ffffff;border-radius:5px;background-color:#F80000;} *::-webkit-scrollbar-track:hover{background-color:#F80000;} *::-webkit-scrollbar-track:active{background-color:#F80000;} *::-webkit-scrollbar-thumb{background-color:#000000;border-radius:10px;border: 8px none #ffffff;}
@@ -43,7 +47,7 @@ function info() {
                 <div className={`bg-black w-[calc(100vw-30px)] m-3 min-h-[calc((100vh-47px)/3)] rounded-lg`}>
                     <div className={'p-3'}>
                         <div className={'text-[40px] font-extrabold text-red-500 underline mb-1 info-title'}>Technologies</div>
-                        <div className={'text-[20px] grid grid-cols-[repeat(3,max-content)] sm:grid-cols-[repeat(5,max-content)] gap-2 h-full w-full'}>
+                        <div className={'text-[20px] grid info-images-container gap-2 h-full w-full'}>
                             {technologies.map((image) =>
                                 <a
                                     target='_blank'
