@@ -47,7 +47,7 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "easy-peasy": "^6.0.4",
-    "formidable": "1.2.2",
+    "formidable": "3.2.4",
     "globe.gl": "^2.32.2",
     "glslify": "^7.1.1",
     "jose": "^5.2.0",
