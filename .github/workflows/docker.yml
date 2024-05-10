@@ -22,6 +22,39 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Set env variables
+        run: |
+          touch .env.production
+
+          echo 'NEXT_PUBLIC_APP_MODE = "${{ secrets.NEXT_PUBLIC_APP_MODE }}"' >> .env.production
+          echo 'APP_URL = "${{ secrets.APP_URL }}"' >> .env.production
+          echo 'NEXT_PUBLIC_APP_URL = "${{ secrets.APP_URL }}"' >> .env.production
+
+          echo 'MYSQL_HOST = "127.0.0.1"' >> .env.production
+          echo 'MYSQL_PORT = "3306"' >> .env.production
+          echo 'MYSQL_DATABASE = "${{ secrets.MYSQL_DATABASE }}"' >> .env.production
+          echo 'MYSQL_USER = "${{ secrets.MYSQL_USER }}"' >> .env.production
+          echo 'MYSQL_PASSWORD = "${{ secrets.MYSQL_PASSWORD }}"' >> .env.production
+
+          echo 'NEXTAUTH_URL = "${{ secrets.NEXTAUTH_URL }}"' >> .env.production
+          echo 'NEXTAUTH_SECRET = "${{ secrets.NEXTAUTH_SECRET }}"' >> .env.production
+
+          echo 'NEXT_PUBLIC_RECAPTCHA_SITE_KEY = "${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}"' >> .env.production
+          echo 'RECAPTCHA_SITE_SECRET = "${{ secrets.RECAPTCHA_SITE_SECRET }}"' >> .env.production
+
+          echo 'SMTP_HOSTNAME = "${{ secrets.SMTP_HOSTNAME }}"' >> .env.production
+          echo 'SMTP_PORT = "${{ secrets.SMTP_PORT }}"' >> .env.production
+          echo 'SMTP_TLS = "${{ secrets.SMTP_TLS }}"' >> .env.production
+
+          echo 'SMTP_VERIFY_USER = "${{ secrets.SMTP_VERIFY_USER }}"' >> .env.production
+          echo 'SMTP_VERIFY_PASSWORD = "${{ secrets.SMTP_VERIFY_PASSWORD }}"' >> .env.production
+
+          echo 'SMTP_ADMIN_USER = "${{ secrets.SMTP_ADMIN_USER }}"' >> .env.production
+          echo 'SMTP_ADMIN_PASSWORD = "${{ secrets.SMTP_ADMIN_PASSWORD }}"' >> .env.production
+
+          echo 'NEXT_PUBLIC_TINYMCE_KEY = "${{ secrets.NEXT_PUBLIC_TINYMCE_KEY }}"' >> .env.production
+          echo 'NEXT_PUBLIC_CF_WORKER_HOSTNAME = "${{ secrets.NEXT_PUBLIC_CF_WORKER_HOSTNAME }}"' >> .env.production
+
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v4
