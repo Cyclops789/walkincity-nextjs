@@ -4,9 +4,6 @@ const nextConfig = {
     remotePatterns: [
       {
         hostname: 'gravatar.com'
-      }, 
-      {
-        hostname: 'eoimages.gsfc.nasa.gov'
       },
       {
         hostname: 'cdn.walkin.city'

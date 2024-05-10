@@ -1,6 +1,9 @@
 .next
 tsconfig.tsbuildinfo
 
+*.env
+!*.env.example
+
 node_modules/*
 # Save it because we need it
 !node_modules/react-youtube/
