@@ -1,8 +1,9 @@
 .next
 tsconfig.tsbuildinfo
 
-*.env
-!*.env.example
+.env
+.env.production
+.env.development
 
 node_modules/*
 # Save it because we need it

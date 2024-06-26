@@ -43,7 +43,7 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
 
   // Page state
   const [title, setTitle] = useState('Some, Where');
-  
+
   const actionRef = useRef(null);
   const actionButtonRef = useRef(null);
 
@@ -54,76 +54,73 @@ export default function WatchPage({ countries }: InferGetServerSidePropsType<typ
       {actionOpen && (
         <Info actionRef={actionRef} setActionOpen={setActionOpen} vid={currentVideo?.vid} />
       )}
+      <SideBar
+        v={v}
+        cn={cn}
+        sideBarOpen={sideBarOpen}
+        setSideBarOpen={setSideBarOpen}
+        ended={ended}
+        setEnded={setEnded}
+        currentCountry={currentCountry}
+        setCurrentCountry={setCurrentCountry}
+        currentVideo={currentVideo}
+        setCurrentVideo={setCurrentVideo}
+        countries={countries}
+        setPlaying={setPlaying}
+        playing={playing}
+      />
 
-      <div className="flex">
-        <SideBar
-          v={v}
-          cn={cn}
-          sideBarOpen={sideBarOpen}
-          setSideBarOpen={setSideBarOpen}
-          ended={ended}
-          setEnded={setEnded}
-          currentCountry={currentCountry}
-          setCurrentCountry={setCurrentCountry}
-          currentVideo={currentVideo}
-          setCurrentVideo={setCurrentVideo}
-          countries={countries}
-          setPlaying={setPlaying}
-          playing={playing}
+      <Video
+        v={v}
+        c={c}
+        cn={cn}
+        playerVolume={playerVolume}
+        setPlayerVolume={setPlayerVolume}
+        volume={volume}
+        countries={countries}
+        ended={ended}
+        sideBarOpen={sideBarOpen}
+        setSideBarOpen={setSideBarOpen}
+        setEnded={setEnded}
+        setCurrentCountry={setCurrentCountry}
+        currentCountry={currentCountry}
+        setCurrentVideo={setCurrentVideo}
+        currentVideo={currentVideo}
+        setTitle={setTitle}
+        setPlaying={setPlaying}
+        playing={playing}
+      />
+
+      <PlayerButtons
+        ended={ended}
+        volume={volume}
+        actionButtonRef={actionButtonRef}
+        reactionsShow={reactionsShow}
+        setReactionsShow={setReactionsShow}
+        viewersShow={viewersShow}
+        setViewersShow={setViewersShow}
+        setEnded={setEnded}
+        setActionOpen={setActionOpen}
+        setVolume={setVolume}
+        currentCountry={currentCountry}
+        setCurrentCountry={setCurrentCountry}
+        setCurrentVideo={setCurrentVideo}
+        currentVideo={currentVideo}
+        playLastPlaylist={playLastPlaylist}
+        setPlayLastPlaylist={setPlayLastPlaylist}
+      />
+
+      {reactionsShow && (
+        <Reactions
+          connectors={connectors}
+          setConnectors={setConnectors}
+          video={currentVideo}
         />
+      )}
 
-        <Video
-          v={v}
-          c={c}
-          cn={cn}
-          playerVolume={playerVolume}
-          setPlayerVolume={setPlayerVolume}
-          volume={volume}
-          countries={countries}
-          ended={ended}
-          sideBarOpen={sideBarOpen}
-          setSideBarOpen={setSideBarOpen}
-          setEnded={setEnded}
-          setCurrentCountry={setCurrentCountry}
-          currentCountry={currentCountry}
-          setCurrentVideo={setCurrentVideo}
-          currentVideo={currentVideo}
-          setTitle={setTitle}
-          setPlaying={setPlaying}
-          playing={playing}
-        />
-
-        <PlayerButtons
-          ended={ended}
-          volume={volume}
-          actionButtonRef={actionButtonRef}
-          reactionsShow={reactionsShow}
-          setReactionsShow={setReactionsShow}
-          viewersShow={viewersShow}
-          setViewersShow={setViewersShow}
-          setEnded={setEnded}
-          setActionOpen={setActionOpen}
-          setVolume={setVolume}
-          currentCountry={currentCountry}
-          setCurrentCountry={setCurrentCountry}
-          setCurrentVideo={setCurrentVideo}
-          currentVideo={currentVideo}
-          playLastPlaylist={playLastPlaylist}
-          setPlayLastPlaylist={setPlayLastPlaylist}
-        />
-
-        {reactionsShow && (
-          <Reactions
-            connectors={connectors}
-            setConnectors={setConnectors}
-            video={currentVideo}
-          />
-        )}
-
-        {viewersShow && (
-          <Viewers currentVideo={currentVideo} currentCountry={currentCountry} ended={ended} connectors={connectors} />
-        )}
-      </div>
+      {viewersShow && (
+        <Viewers currentVideo={currentVideo} currentCountry={currentCountry} ended={ended} connectors={connectors} />
+      )}
     </Layout>
   )
 }

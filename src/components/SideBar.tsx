@@ -203,7 +203,7 @@ function sideBar({ v, cn, countries, currentVideo, setCurrentVideo, setPlaying, 
             ref={wrapperRef}
             className={`fixed ${sideBarOpen ? 'bg-[rgba(0,0,0,.7)] overflow-auto' : ''} h-screen max-w-[320px] w-[320px] flex`}
             style={{
-                transition: 'all 0.7s ease',
+                transition: 'all 0.3s ease',
                 zIndex: 10,
                 transform: sideBarOpen ? 'translate(0)' : 'translate(-83%)',
             }}

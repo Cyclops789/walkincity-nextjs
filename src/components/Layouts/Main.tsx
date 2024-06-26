@@ -16,7 +16,7 @@ export default function Layout({
       <Head>
         <title>{title}</title>
         <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=2.0, width=device-width" />
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <Script
           defer 
           data-domain={"walkin.city"}

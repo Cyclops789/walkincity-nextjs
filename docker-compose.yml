@@ -1,7 +1,7 @@
 services:
   walkincity:
     container_name: walkincity-nextjs
-    image: cyclops01/walkincity-next:production
+    build: .
     ports:
       - "5000:5000"
     volumes:
