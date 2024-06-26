@@ -30,7 +30,7 @@ jobs:
           echo 'APP_URL = "${{ secrets.APP_URL }}"' >> .env.production
           echo 'NEXT_PUBLIC_APP_URL = "${{ secrets.APP_URL }}"' >> .env.production
 
-          echo 'MYSQL_HOST = "127.0.0.1"' >> .env.production
+          echo 'MYSQL_HOST = "${{ secrets.MYSQL_HOST }}"' >> .env.production
           echo 'MYSQL_PORT = "3306"' >> .env.production
           echo 'MYSQL_DATABASE = "${{ secrets.MYSQL_DATABASE }}"' >> .env.production
           echo 'MYSQL_USER = "${{ secrets.MYSQL_USER }}"' >> .env.production
