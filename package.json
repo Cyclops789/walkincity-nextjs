@@ -57,7 +57,7 @@
     "mysql": "^2.18.1",
     "mysqldump": "^3.2.0",
     "nanoid": "^5.0.4",
-    "next": "^14.1.0",
+    "next": "^14.2.15",
     "next-auth": "^4.24.5",
     "nextjs-progressbar": "^0.0.16",
     "nodemailer": "^6.9.10",
